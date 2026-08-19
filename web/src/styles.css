@@ -1,0 +1,537 @@
+/*
+ * Visual design notes (the project statement asks for the HCI reasoning to be
+ * visible in the UI, section 4.1):
+ *
+ * Colour is used semantically, never decoratively. Every MCP message kind gets
+ * one hue and keeps it everywhere it appears, so the log becomes scannable
+ * without reading text:
+ *
+ *   violet  synchronization  the lifecycle handshake - a distinct phase
+ *   blue    request          outbound intent
+ *   green   response         a successful return
+ *   red     error            failure; the only alarming colour in the palette
+ *   amber   notification     one-way, nothing expected back
+ *
+ * Direction is encoded redundantly with an arrow glyph as well as colour, so
+ * the interface still reads correctly for colour-blind users and in greyscale
+ * print - which matters because these screenshots go into the report.
+ *
+ * Layout follows a two-column split: conversation on the left where attention
+ * rests, protocol log on the right as a supporting channel. The log is the
+ * evidence for requirement 3, so it is permanently visible rather than hidden
+ * behind a toggle.
+ */
+
+:root {
+  --bg: #0f1117;
+  --bg-panel: #161923;
+  --bg-elevated: #1d2130;
+  --bg-input: #11141d;
+  --border: #262b3a;
+  --border-strong: #333a4d;
+
+  --text: #e6e9f0;
+  --text-muted: #949cb0;
+  --text-faint: #667085;
+
+  --accent: #6c8cff;
+  --accent-soft: rgba(108, 140, 255, 0.14);
+
+  --kind-synchronization: #a78bfa;
+  --kind-request: #60a5fa;
+  --kind-response: #4ade80;
+  --kind-error: #f87171;
+  --kind-notification: #fbbf24;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------ shell */
+
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.brand h1 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.brand .subtitle {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.topbar-spacer {
+  flex: 1;
+}
+
+.model-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.server-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.pill .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--kind-response);
+}
+
+.pill.offline .dot {
+  background: var(--kind-error);
+}
+
+.pill .transport {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+/* ------------------------------------------------------------------ panes */
+
+.panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 38%);
+  min-height: 0;
+}
+
+.chat-pane {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.log-pane {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+  min-width: 0;
+  border-left: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+
+/* ------------------------------------------------------------- transcript */
+
+.transcript {
+  overflow-y: auto;
+  padding: 24px 24px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.empty-state {
+  margin: auto;
+  max-width: 460px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-state h2 {
+  font-size: 16px;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.suggestion {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.suggestion:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 760px;
+}
+
+.message.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.message .role {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.bubble {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.message.user .bubble {
+  background: var(--accent-soft);
+  border: 1px solid rgba(108, 140, 255, 0.3);
+}
+
+.message.assistant .bubble {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+}
+
+.message.system .bubble {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fca5a5;
+}
+
+/* Tool executions shown inline, so cause and effect stay adjacent. */
+.executions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.execution {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--kind-request);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+}
+
+.execution.failed {
+  border-left-color: var(--kind-error);
+  color: #fca5a5;
+}
+
+.execution .server {
+  color: var(--text-faint);
+}
+
+.execution .duration {
+  margin-left: auto;
+  color: var(--text-faint);
+}
+
+.typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  animation: blink 1.4s infinite both;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------- composer */
+
+.composer {
+  display: flex;
+  gap: 10px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.composer textarea {
+  flex: 1;
+  resize: none;
+  min-height: 44px;
+  max-height: 160px;
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.composer textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.composer textarea::placeholder {
+  color: var(--text-faint);
+}
+
+button {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated);
+  color: var(--text);
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0b0d13;
+  font-weight: 600;
+  align-self: flex-end;
+  height: 44px;
+  padding: 0 20px;
+}
+
+/* -------------------------------------------------------------------- log */
+
+.log-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.log-header h2 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.log-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.log-filter {
+  margin-left: auto;
+  background: var(--bg-input);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.legend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 2px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.legend-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.log-list {
+  overflow-y: auto;
+  padding: 8px 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.log-entry {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+
+.log-entry:hover {
+  background: var(--bg-elevated);
+}
+
+.log-entry .time {
+  color: var(--text-faint);
+}
+
+.log-entry .arrow {
+  font-weight: 600;
+}
+
+.log-entry .method {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.log-entry .server-tag {
+  color: var(--text-faint);
+  font-size: 10px;
+}
+
+.log-payload {
+  margin: 2px 0 8px 18px;
+  padding: 8px 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.log-empty {
+  color: var(--text-faint);
+  padding: 16px 8px;
+  font-family: var(--font-sans);
+}
+
+/* Responsive: the log drops below the chat when there is no room beside it. */
+@media (max-width: 900px) {
+  .panes {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+
+  .log-pane {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 40vh;
+  }
+}
