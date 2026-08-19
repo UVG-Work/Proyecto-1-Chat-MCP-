@@ -29,10 +29,25 @@ import { isJsonRpcMessage } from './jsonrpc.js';
 import type { Transport, TransportHandlers } from './transport.js';
 import { LATEST_PROTOCOL_VERSION, type JsonRpcMessage } from './types.js';
 
+/**
+ * Raised when the server reports that our session is gone (HTTP 404 with a
+ * session id attached). The specification requires the client to respond by
+ * starting a brand new session with a fresh `initialize`, so this is a distinct
+ * type that McpClient can recognise and recover from.
+ */
+export class McpSessionExpiredError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'McpSessionExpiredError';
+  }
+}
+
 export interface HttpTransportOptions {
   /** Full URL of the MCP endpoint. */
   url: string;
   headers?: Record<string, string>;
+  /** Attempts for transient infrastructure failures. Default 3. */
+  maxRetries?: number;
   /**
    * Path to write TLS session keys in NSS key log format. When set (and the URL
    * is https), Wireshark can decrypt the capture via
@@ -42,6 +57,18 @@ export interface HttpTransportOptions {
   /** Open the optional GET/SSE stream for server-initiated messages. */
   openServerStream?: boolean;
   requestTimeoutMs?: number;
+}
+
+/**
+ * Failures worth retrying: platform-level unavailability and the socket errors
+ * a cold-starting container produces. Protocol errors are never retried.
+ */
+function isTransient(error: Error): boolean {
+  const code = (error as NodeJS.ErrnoException).code;
+  if (code && ['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'EPIPE', 'EAI_AGAIN'].includes(code)) {
+    return true;
+  }
+  return /temporarily unreachable|HTTP 50[234]|timed out/i.test(error.message);
 }
 
 export class HttpClientTransport implements Transport {
@@ -80,7 +107,42 @@ export class HttpClientTransport implements Transport {
 
   async send(message: JsonRpcMessage): Promise<void> {
     if (this.closed) throw new Error(`HTTP transport to ${this.url.href} is closed`);
-    await this.post(message);
+    await this.postWithRetry(message);
+  }
+
+  /**
+   * Retry transient infrastructure failures.
+   *
+   * A hosted deployment is not a reliable pipe. The free tier used here
+   * intermittently answers with an edge-level 404 carrying
+   * `x-render-routing: no-server` when it has no instance to route to, and cold
+   * starts surface as connection resets. Neither is a protocol error, and
+   * failing the whole MCP session because of one is wrong.
+   *
+   * A session-expiry 404 is deliberately NOT retried here: it needs a new
+   * handshake, which is the client's job, not the transport's.
+   */
+  private async postWithRetry(message: JsonRpcMessage): Promise<void> {
+    const maxAttempts = this.options.maxRetries ?? 3;
+    let lastError: Error | undefined;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        await this.post(message);
+        return;
+      } catch (error) {
+        if (error instanceof McpSessionExpiredError) throw error;
+
+        lastError = error as Error;
+        if (!isTransient(lastError) || attempt === maxAttempts) throw lastError;
+
+        // Exponential backoff: 500ms, 1000ms, 2000ms ...
+        const delay = 500 * 2 ** (attempt - 1);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
+
+    throw lastError ?? new Error('Request failed');
   }
 
   /* ---------------------------------------------------------------------- */
@@ -160,11 +222,32 @@ export class HttpClientTransport implements Transport {
             return;
           }
 
-          // The session expired or was terminated server-side.
-          if (status === 404 && this.sessionId) {
-            this.sessionId = undefined;
-            response.resume();
-            reject(new Error('MCP session expired (HTTP 404); a new initialize is required'));
+          // A 404 is ambiguous: it is either our MCP session being gone, or the
+          // hosting edge having no instance to route to. They need opposite
+          // handling - re-handshake versus retry - so they are told apart by
+          // whether the platform tagged the response as a routing failure.
+          if (status === 404) {
+            const routingFailure = response.headers['x-render-routing'] !== undefined;
+            this.readBody(response)
+              .then((text) => {
+                if (routingFailure || !this.sessionId) {
+                  reject(
+                    new Error(
+                      `MCP endpoint ${this.url.href} is temporarily unreachable ` +
+                        `(HTTP 404, no instance available)`,
+                    ),
+                  );
+                  return;
+                }
+                this.sessionId = undefined;
+                reject(
+                  new McpSessionExpiredError(
+                    `MCP session no longer recognised by ${this.url.href}` +
+                      (text ? `: ${text.slice(0, 200)}` : ''),
+                  ),
+                );
+              })
+              .catch(reject);
             return;
           }
 

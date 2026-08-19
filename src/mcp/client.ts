@@ -20,6 +20,7 @@ import {
   makeRequest,
   makeError,
 } from './jsonrpc.js';
+import { McpSessionExpiredError } from './http-transport.js';
 import type { InteractionLog } from './log.js';
 import type { Transport } from './transport.js';
 import {
@@ -112,6 +113,15 @@ export class McpClient {
       onClose: () => this.failAllPending(new Error(`Connection to "${this.name}" closed`)),
     });
 
+    return this.performHandshake();
+  }
+
+  /**
+   * The initialization phase itself, separated from bringing the transport up
+   * so it can be replayed on an existing connection when a server forgets our
+   * session.
+   */
+  private async performHandshake(): Promise<InitializeResult> {
     const result = (await this.request(McpMethod.Initialize, {
       protocolVersion: LATEST_PROTOCOL_VERSION,
       capabilities: CLIENT_CAPABILITIES,
@@ -213,9 +223,17 @@ export class McpClient {
   /* JSON-RPC plumbing                                                      */
   /* ---------------------------------------------------------------------- */
 
+  /**
+   * @param allowSessionRecovery when the server reports that our session is
+   *        gone, re-run the handshake once and replay this request. The MCP
+   *        specification requires exactly this: a 404 against a request
+   *        carrying a session id means "start a new session". Set to false on
+   *        the replay so a persistently broken server cannot loop.
+   */
   private async request(
     method: string,
     params: Record<string, unknown>,
+    allowSessionRecovery = true,
   ): Promise<Record<string, unknown>> {
     if (this.closed) throw new Error(`Client "${this.name}" is closed`);
 
@@ -241,6 +259,19 @@ export class McpClient {
         clearTimeout(entry.timer);
         this.pending.delete(id);
       }
+
+      // The server no longer recognises our session - typically because a
+      // hosted instance restarted and its in-memory session store went with it.
+      // Re-handshake and replay rather than failing the user's request.
+      if (
+        error instanceof McpSessionExpiredError &&
+        allowSessionRecovery &&
+        method !== McpMethod.Initialize
+      ) {
+        await this.performHandshake();
+        return this.request(method, params, false);
+      }
+
       throw error;
     }
 

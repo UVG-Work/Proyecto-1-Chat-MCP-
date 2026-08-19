@@ -18,7 +18,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "probe": "tsx src/cli/probe.ts",
     "setup:demo": "node scripts/setup-demo.mjs",
-    "demo:session": "tsx src/cli/demo-session.ts"
+    "demo:session": "tsx src/cli/demo-session.ts",
+    "demo:chat": "tsx src/cli/demo-chat.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",

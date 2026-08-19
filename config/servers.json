@@ -27,7 +27,7 @@
       "name": "noc-local",
       "description": "Custom ISP/NOC support desk MCP server over stdio (requirement 5)",
       "transport": "stdio",
-      "enabled": true,
+      "enabled": false,
       "command": "npx",
       "args": [
         "tsx",
@@ -45,7 +45,7 @@
       "name": "noc-remote",
       "description": "The same NOC server deployed remotely over Streamable HTTP (requirement 6). Enable this and disable noc-local to exercise the remote path.",
       "transport": "http",
-      "enabled": false,
+      "enabled": true,
       "url": "${NOC_REMOTE_URL}"
     }
   ]
