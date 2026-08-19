@@ -7,7 +7,11 @@
       "transport": "stdio",
       "enabled": true,
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./sandbox"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "./sandbox"
+      ]
     },
     {
       "name": "git",
@@ -15,7 +19,9 @@
       "transport": "stdio",
       "enabled": true,
       "command": "uvx",
-      "args": ["mcp-server-git"]
+      "args": [
+        "mcp-server-git"
+      ]
     },
     {
       "name": "noc-local",
@@ -23,7 +29,17 @@
       "transport": "stdio",
       "enabled": true,
       "command": "npx",
-      "args": ["tsx", "./src/server/stdio-main.ts"]
+      "args": [
+        "tsx",
+        "./src/server/stdio-main.ts"
+      ]
+    },
+    {
+      "name": "noc-http-local",
+      "description": "The same NOC server over Streamable HTTP on loopback. Used to verify the HTTP transport before deploying, and as the plaintext capture target for the Wireshark analysis (requirement 7). Start it with: npm run noc:http",
+      "transport": "http",
+      "enabled": false,
+      "url": "http://127.0.0.1:8787/mcp"
     },
     {
       "name": "noc-remote",
