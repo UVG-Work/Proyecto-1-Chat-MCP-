@@ -217,6 +217,25 @@ npm run probe -- --verbose # print every frame as it is exchanged
 
 This needs no API key and is the fastest way to confirm the MCP layer works.
 
+### Reproducible demonstrations
+
+Each project requirement has a scripted scenario, so a demo does not depend on improvising prompts:
+
+```bash
+npm run demo:chat -- --scenario context     # req 1 + 2: LLM API and session context
+npm run demo:chat -- --scenario git         # req 4: Filesystem + Git official servers
+npm run demo:chat -- --scenario noc         # req 5/6: the custom NOC server
+npm run demo:chat -- --scenario outage      # the zone-outage diagnostic path
+npm run demo:chat -- --scenario suspended   # the suspended-account path
+npm run demo:chat -- --scenario noc --log   # any of the above, plus the full MCP frame log
+
+npm run demo:session -- noc-remote          # a full MCP session with no LLM involved
+```
+
+`demo:session` drives the handshake, discovery, five tool calls and one deliberate error case
+directly, with no model in the loop. It needs no API key, runs identically every time, and is what
+the packet captures record.
+
 ---
 
 ## The custom MCP server
