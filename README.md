@@ -314,7 +314,9 @@ Keys are written to `docs/captures/session.keylog`. Point Wireshark at it under
 *Preferences → Protocols → TLS → (Pre)-Master-Secret log filename*, and the JSON-RPC messages become
 readable inside the TLS stream.
 
-The analysis itself is in [`docs/wireshark-analysis.md`](docs/wireshark-analysis.md).
+The analysis itself is in [`docs/wireshark-analysis.md`](docs/wireshark-analysis.md), and the
+project conclusions, difficulties and lessons learned are in
+[`docs/conclusions.md`](docs/conclusions.md).
 
 ---
 
