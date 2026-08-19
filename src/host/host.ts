@@ -80,7 +80,7 @@ export class McpHost extends EventEmitter {
     this.provider = options.provider;
     this.log = options.log;
     this.configPath = options.configPath;
-    this.maxIterations = options.maxIterations ?? 8;
+    this.maxIterations = options.maxIterations ?? 16;
     this.onStderr = options.onStderr;
   }
 

@@ -237,23 +237,108 @@ protocol can be implemented by hand, and why it runs unchanged over stdio, where
 
 ## 4. Capture B — remote deployment
 
-> **Pending.** This section is completed once the server is deployed and captured. The procedure and
-> the decryption setup are described in section 1; what follows is what the capture is expected to
-> show and will be replaced with measured values.
+Taken against `https://proyecto-1-chat-mcp.onrender.com/mcp` with
+`scripts/capture-remote.ps1`. 85 frames, 29.8 kB.
 
-Points of contrast to document once measured:
+```
+Protocol Hierarchy Statistics
 
-- **Link layer:** a real Ethernet II header appears, with the default gateway's MAC as the
-  destination — the first evidence that the destination is off-segment.
-- **Network layer:** public IPv4 addressing and a TTL below 64, showing the packet was routed;
-  fragmentation behaviour under a 1500-byte MTU.
-- **Transport layer:** a measurable round-trip time in the handshake instead of microseconds, plus
-  the TLS handshake (ClientHello, ServerHello, certificate, key exchange) ahead of any MCP traffic.
-  The free hosting tier sleeps when idle, so the first request after a pause should show a
-  substantially longer connection setup.
-- **Application layer:** without the keylog, only `Application Data` records. With it, the same
-  JSON-RPC messages as capture A — demonstrating that the protocol is genuinely transport- and
-  encryption-agnostic, and that the local and remote servers behave identically.
+frame                 frames:85  bytes:29849
+  eth                 frames:85  bytes:29849
+    ip                frames:85  bytes:29849
+      tcp             frames:85  bytes:29849
+        tls           frames:45  bytes:26090
+          http        frames:30  bytes:10661
+            json      frames:22  bytes:7211
+            data-text-lines frames:5 bytes:2460
+```
+
+The stack has gained two layers relative to capture A: a real `eth` link layer at the bottom, and
+`tls` between TCP and HTTP. The `json` layer only appears at all because the exported session keys
+were supplied; without them Wireshark stops at `tls`.
+
+### 4.1 Side-by-side with capture A
+
+| | A — loopback | B — remote |
+|---|---|---|
+| Protocol chain | `null:ip:tcp` | `eth:ethertype:ip:tcp` |
+| Link layer | BSD Null/Loopback, 4-byte pseudo-header, **no MAC addresses** | Ethernet II, src `c8:53:09:f2:ca:22`, dst `f8:63:d9:b2:3c:b0` |
+| Addresses | `127.0.0.1 → 127.0.0.1` | `192.168.0.7 → 216.24.57.15` |
+| IP TTL | not meaningful | 128 outbound |
+| TCP MSS | 65495 | 1460 |
+| Handshake RTT | ~0.1 ms | **47 ms** |
+| Encryption | none | TLS 1.3, `TLS_AES_256_GCM_SHA384` |
+| Total frames | 48 | 85 |
+| JSON-RPC visible? | directly | only with exported keys |
+
+**The destination MAC is not the server's.** `f8:63:d9:b2:3c:b0` is the default gateway. Ethernet
+addressing is hop-local: the frame is addressed to the next router, while the IP header carries the
+end-to-end destination `216.24.57.15`. This is the clearest observable difference between layer 2
+and layer 3 addressing in the whole project, and it simply cannot appear in a loopback capture.
+
+**MSS drops from 65495 to 1460.** Loopback has a 65535-byte MTU because there is no medium; Ethernet
+has 1500, minus 20 bytes IP and 20 bytes TCP. The practical consequence is visible in the capture:
+responses that travelled as one frame locally are split across several segments here, and the
+`tools/list` response in particular spans multiple TCP segments that Wireshark reassembles.
+
+**RTT goes from microseconds to 47 ms.** The SYN leaves at t=0 and the SYN-ACK returns at t=0.0470.
+Every subsequent request/response pair pays that latency, which is why the loopback session finished
+in 55 ms and this one takes seconds.
+
+### 4.2 The TLS handshake
+
+| Frame | t (s) | Event |
+|---:|---:|---|
+| 1 | 0.0000 | TCP SYN |
+| 2 | 0.0470 | TCP SYN-ACK |
+| 5 | 0.0489 | TLS **ClientHello**, SNI `proyecto-1-chat-mcp.onrender.com` |
+| 7 | 0.0952 | TLS **ServerHello** |
+
+The record layer announces `0x0303` for compatibility, but the `supported_versions` extension
+carries `0x0304` — the session is **TLS 1.3**, with cipher suite `0x1302`
+(`TLS_AES_256_GCM_SHA384`).
+
+Two observations matter here:
+
+**SNI is sent in the clear.** Frame 5 exposes the hostname `proyecto-1-chat-mcp.onrender.com` before
+any encryption is established, because the server needs it to choose a certificate. An observer who
+cannot read a single byte of the MCP traffic still learns exactly which service is being contacted.
+
+**Roughly 95 ms elapses before a single byte of MCP is exchanged.** TCP setup plus TLS negotiation
+is pure overhead from the protocol's point of view — the cost of moving the same JSON-RPC messages
+onto a network that cannot be trusted.
+
+### 4.3 An unplanned finding: transient 404s and recovery
+
+The decrypted HTTP view shows something the loopback capture never could:
+
+| Frame | Request | Response |
+|---:|---|---|
+| 11 | `POST /mcp` | 13 → **404** |
+| 15 | `POST /mcp` | 18 → 200 (initialize succeeds on retry) |
+| 20 | `POST /mcp` | 22 → 202 (`notifications/initialized`) |
+| 23 | `POST /mcp` | 25 → **404** |
+| 27 | `POST /mcp` | 33 → 200 (`tools/list` succeeds on retry) |
+| 35 / 39 | `POST /mcp` | 37 → **404**, 42 → 200 |
+| 49 / 53 / 58 | `POST /mcp` | 51 → **404**, 55 → **404**, 62 → 200 |
+| 80 | `DELETE /mcp` | 82 → 204 |
+
+**Five requests were answered with 404 and every one of them succeeded on retry.** These are not MCP
+errors: they carry `x-render-routing: no-server` and a plain-text body — visible in the hierarchy as
+the five `data-text-lines` frames — and are emitted by the hosting platform's edge when it has no
+instance to route to. The free tier does this intermittently.
+
+This exposed a real defect. The client originally treated any 404 as "the session is gone" and
+aborted. Two fixes followed, both visible in this capture working correctly:
+
+1. A 404 carrying `x-render-routing` is transient and is retried with exponential backoff.
+2. A 404 that genuinely indicates an unknown session now triggers a fresh `initialize` and a replay
+   of the request, which is what the specification actually requires and what the original code
+   failed to do.
+
+The session completed with the same 17 JSON-RPC messages as capture A despite five infrastructure
+failures along the way. This is the single most valuable thing the remote deployment taught the
+project: a correctness bug that a local transport can never surface, because loopback never fails.
 
 ---
 
