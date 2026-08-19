@@ -31,3 +31,6 @@ Thumbs.db
 # Agent tooling
 .agents/
 skills-lock.json
+
+# Vite incremental build cache
+web/tsconfig.tsbuildinfo
