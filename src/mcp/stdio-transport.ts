@@ -55,8 +55,15 @@ export class StdioClientTransport implements Transport {
 
     const useShell = platform === 'win32';
     const args = this.options.args ?? [];
-    const command = useShell ? quoteForWindowsShell(this.options.command) : this.options.command;
-    const spawnArgs = useShell ? args.map(quoteForWindowsShell) : args;
+
+    // With shell: true, Node concatenates the argument array onto the command
+    // line anyway and warns about it (DEP0190). Building the single command
+    // string ourselves - quoting as we go - is the same operation without the
+    // warning, and keeps the quoting rules visible in one place.
+    const command = useShell
+      ? [this.options.command, ...args].map(quoteForWindowsShell).join(' ')
+      : this.options.command;
+    const spawnArgs = useShell ? [] : args;
 
     const child = spawn(command, spawnArgs, {
       cwd: this.options.cwd,

@@ -1,0 +1,36 @@
+{
+  "$comment": "MCP servers the host connects to. Requirement 6 is satisfied by flipping 'enabled' between noc-local and noc-remote: nothing else in the project changes.",
+  "servers": [
+    {
+      "name": "filesystem",
+      "description": "Official Anthropic Filesystem MCP server (requirement 4)",
+      "transport": "stdio",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./sandbox"]
+    },
+    {
+      "name": "git",
+      "description": "Official Anthropic Git MCP server (requirement 4). Launched without --repository so each tool takes an explicit repo_path, which lets the assistant create a brand new repository during the demo.",
+      "transport": "stdio",
+      "enabled": true,
+      "command": "uvx",
+      "args": ["mcp-server-git"]
+    },
+    {
+      "name": "noc-local",
+      "description": "Custom ISP/NOC support desk MCP server over stdio (requirement 5)",
+      "transport": "stdio",
+      "enabled": true,
+      "command": "npx",
+      "args": ["tsx", "./src/server/stdio-main.ts"]
+    },
+    {
+      "name": "noc-remote",
+      "description": "The same NOC server deployed remotely over Streamable HTTP (requirement 6). Enable this and disable noc-local to exercise the remote path.",
+      "transport": "http",
+      "enabled": false,
+      "url": "${NOC_REMOTE_URL}"
+    }
+  ]
+}

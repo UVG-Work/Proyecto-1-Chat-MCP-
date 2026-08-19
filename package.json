@@ -15,7 +15,8 @@
     "web": "npm --prefix web run dev",
     "build": "tsc -p tsconfig.json",
     "start:noc:http": "node dist/server/http-main.js",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "probe": "tsx src/cli/probe.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",

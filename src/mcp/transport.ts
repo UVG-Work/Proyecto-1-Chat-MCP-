@@ -32,4 +32,12 @@ export interface Transport {
 
   /** Shut the channel down cleanly. Must be idempotent. */
   close(): Promise<void>;
+
+  /**
+   * Adopt the protocol revision agreed during initialization. Only transports
+   * that put the version on the wire implement this - HTTP must send
+   * MCP-Protocol-Version on every post-handshake request, while stdio carries
+   * no such framing.
+   */
+  setProtocolVersion?(version: string): void;
 }

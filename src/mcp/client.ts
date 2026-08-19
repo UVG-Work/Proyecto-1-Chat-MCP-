@@ -128,6 +128,8 @@ export class McpClient {
     }
 
     this.negotiatedVersion = offered;
+    // HTTP must carry the negotiated revision on every subsequent request.
+    this.transport.setProtocolVersion?.(offered);
     this.serverInfo = result.serverInfo;
     this.serverCapabilities = result.capabilities ?? {};
     this.instructions = result.instructions;
