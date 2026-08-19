@@ -1,0 +1,32 @@
+# Render blueprint for the remote NOC MCP server (project requirement 6).
+#
+# Deploy either by pointing a new Render Web Service at this repository (Render
+# reads this file automatically), or manually with Environment = Docker.
+#
+# After the first deploy, put the resulting URL in .env:
+#   NOC_REMOTE_URL=https://<service-name>.onrender.com/mcp
+# then enable "noc-remote" and disable "noc-local" in config/servers.json.
+
+services:
+  - type: web
+    name: noc-mcp-server
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # The MCP endpoint path. Must match the path in NOC_REMOTE_URL.
+      - key: MCP_PATH
+        value: /mcp
+      # Set to 1 to answer requests with an SSE stream instead of plain JSON.
+      # Useful for the Wireshark analysis: it produces a long-lived chunked
+      # connection rather than a simple request/response pair.
+      - key: MCP_SSE
+        value: "0"
+      # Browsers sending an Origin are rejected unless listed here. Non-browser
+      # clients send no Origin and are unaffected.
+      - key: MCP_ALLOWED_ORIGINS
+        value: ""
