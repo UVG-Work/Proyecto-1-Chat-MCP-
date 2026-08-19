@@ -1,0 +1,33 @@
+{
+  "name": "mcp-chat-host",
+  "version": "1.0.0",
+  "description": "An MCP host (chatbot) with a hand-written Model Context Protocol implementation - no MCP SDKs. UVG CC3067 Redes, Proyecto 1.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "cli": "tsx src/cli/index.ts",
+    "noc:stdio": "tsx src/server/stdio-main.ts",
+    "noc:http": "tsx src/server/http-main.ts",
+    "api": "tsx src/api/server.ts",
+    "web": "npm --prefix web run dev",
+    "build": "tsc -p tsconfig.json",
+    "start:noc:http": "node dist/server/http-main.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "openai": "^6.9.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

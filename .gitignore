@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+web/node_modules/
+
+# Build output
+dist/
+web/dist/
+
+# Environment / secrets
+.env
+.env.local
+*.key
+
+# TLS keylog for Wireshark decryption (contains session secrets)
+tls-keylog.log
+docs/captures/*.keylog
+
+# Runtime logs
+logs/
+*.log
+
+# Sandbox used for the Filesystem/Git MCP demo
+sandbox/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Agent tooling
+.agents/
+skills-lock.json
