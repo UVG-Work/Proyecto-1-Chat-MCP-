@@ -6,17 +6,7 @@
     <style>
       @page {
         size: A4;
-        margin: 22mm 20mm 20mm 20mm;
-      }
-
-      :root {
-        --ink: #16191f;
-        --ink-2: #4a5261;
-        --ink-3: #6f7887;
-        --rule: #d8dce3;
-        --rule-soft: #e9ecf1;
-        --wash: #f5f7fa;
-        --accent: #1f4e9c;
+        margin: 25mm;
       }
 
       * {
@@ -25,118 +15,94 @@
 
       body {
         margin: 0;
-        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-        font-size: 10.5pt;
-        line-height: 1.55;
-        color: var(--ink);
-      }
-
-      h1,
-      h2,
-      h3 {
-        color: var(--ink);
-        line-height: 1.25;
-        page-break-after: avoid;
-      }
-
-      h2 {
-        font-size: 13.5pt;
-        margin: 26px 0 9px;
-        padding-bottom: 5px;
-        border-bottom: 1px solid var(--rule);
-        letter-spacing: -0.01em;
-      }
-
-      h3 {
-        font-size: 11.5pt;
-        margin: 18px 0 6px;
-        letter-spacing: -0.005em;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #000;
       }
 
       p {
-        margin: 0 0 9px;
+        margin: 0 0 10pt;
         text-align: justify;
+      }
+
+      h2 {
+        font-size: 12pt;
+        font-weight: bold;
+        margin: 18pt 0 8pt;
+        page-break-after: avoid;
+      }
+
+      h3 {
+        font-size: 12pt;
+        font-weight: bold;
+        margin: 14pt 0 6pt;
+        page-break-after: avoid;
       }
 
       ul,
       ol {
-        margin: 0 0 9px;
-        padding-left: 20px;
+        margin: 0 0 10pt;
+        padding-left: 22pt;
       }
 
       li {
-        margin: 3px 0;
+        margin: 2pt 0;
       }
 
-      code {
-        font-family: 'Cascadia Mono', Consolas, monospace;
-        font-size: 9pt;
-        background: var(--wash);
-        border: 1px solid var(--rule-soft);
-        border-radius: 3px;
-        padding: 0.5px 3px;
+      code,
+      pre {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 10.5pt;
+        color: #000;
       }
 
       pre {
-        font-family: 'Cascadia Mono', Consolas, monospace;
-        font-size: 8.5pt;
-        line-height: 1.5;
-        background: var(--wash);
-        border: 1px solid var(--rule-soft);
-        border-radius: 4px;
-        padding: 9px 11px;
+        margin: 0 0 10pt;
+        padding: 6pt 8pt;
+        border: 1px solid #000;
+        line-height: 1.35;
+        white-space: pre;
         overflow-x: auto;
-        margin: 0 0 10px;
         page-break-inside: avoid;
-      }
-
-      pre code {
-        background: none;
-        border: 0;
-        padding: 0;
-        font-size: inherit;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
-        margin: 0 0 12px;
-        font-size: 9.5pt;
+        margin: 0 0 10pt;
+        font-size: 11pt;
         page-break-inside: avoid;
       }
 
       th,
       td {
+        border: 1px solid #000;
+        padding: 4pt 6pt;
         text-align: left;
         vertical-align: top;
-        padding: 5px 8px;
-        border-bottom: 1px solid var(--rule-soft);
       }
 
       th {
-        border-bottom: 1px solid var(--rule);
-        font-weight: 600;
-        font-size: 8.5pt;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: var(--ink-2);
-      }
-
-      td code {
-        white-space: nowrap;
+        font-weight: bold;
       }
 
       .cover {
-        height: 245mm;
+        height: 247mm;
+        text-align: center;
+        page-break-after: always;
         display: flex;
         flex-direction: column;
-        page-break-after: always;
+        align-items: center;
+      }
+
+      .cover img {
+        width: 34mm;
+        margin-bottom: 14pt;
       }
 
       .cover .inst {
-        font-size: 10.5pt;
-        color: var(--ink-2);
-        line-height: 1.7;
+        line-height: 1.6;
       }
 
       .cover .mid {
@@ -145,82 +111,36 @@
       }
 
       .cover h1 {
-        font-size: 26pt;
-        margin: 0 0 6px;
-        letter-spacing: -0.025em;
+        font-size: 16pt;
+        font-weight: bold;
+        margin: 0 0 6pt;
       }
 
       .cover .sub {
-        font-size: 13pt;
-        color: var(--ink-2);
-        margin: 0 0 26px;
-        font-weight: 400;
+        font-size: 12pt;
+        margin: 0 0 18pt;
+        text-align: center;
       }
 
       .cover .scope {
-        border-left: 2px solid var(--accent);
-        padding: 2px 0 2px 14px;
-        font-size: 10.5pt;
-        color: var(--ink-2);
-        max-width: 118mm;
+        text-align: center;
+        max-width: 130mm;
+        margin: 0 auto;
       }
 
-      .cover .who {
-        font-size: 10.5pt;
-        line-height: 1.8;
-      }
-
-      .cover .who b {
-        font-weight: 600;
-      }
-
-      .lead {
-        font-size: 11pt;
-        color: var(--ink-2);
-      }
-
-      .note {
-        background: var(--wash);
-        border-left: 2px solid var(--rule);
-        padding: 9px 12px;
-        margin: 0 0 11px;
-        font-size: 9.5pt;
-        color: var(--ink-2);
-        page-break-inside: avoid;
-      }
-
-      .note b {
-        color: var(--ink);
-      }
-
-      .kv {
-        font-size: 9.5pt;
-      }
-
-      .kv td:first-child {
-        width: 38%;
-        color: var(--ink-2);
-      }
-
-      section {
-        page-break-inside: auto;
+      .cover .foot {
+        line-height: 1.6;
       }
 
       .break {
         page-break-before: always;
       }
-
-      footer {
-        margin-top: 26px;
-        padding-top: 9px;
-        border-top: 1px solid var(--rule-soft);
-        font-size: 8.5pt;
-        color: var(--ink-3);
-      }
     </style>
   </head>
   <body>
     <div class="cover">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAW8AAAIgCAMAAAB9BBgCAAAA81BMVEX///8tRBg7REm9ehH58ujVqXK9exn//vzFhi++egngwJy/eRjKk0L79vDZsn/Afx7r1bjhwZnt7u4mPw0fOgDFhyTSpGfNmlD29/XMmQDw4czgwXrXr4LUqTn06MfHkEZmdld3fYHh5N6XoY7QnlwVNACVnZDO0NHW2tK6wrRZakvcuZAuOT7HzcJETlOprK2Nk5dYXmJCVy+vt6m+wcIdKjEAKwB8iXAPISlNYTpnbXBmc11wf2SCiItFVzeHlXwAJQCFj344UCI4SyWbn50lQgB2gG7fwpDq4dXv37Lnz4bo0JLYsEv379cAHAAAGCIAAACs7oKjAAAgAElEQVR4nO29CVvjurYtGtOZvrFcoMer8wgyTmwXprEpskNMspIAq865d7/7/v+veWrdyrLTh7UzvvWtguC4GZam5pySxmycXO5vsCyc6o3Lg6O9DZaDo4PTxvHR0d7BBsvA3tHRMeZ77+bX4QaLx6+bvT3C9/buTkPfYNFo7Oxux3xvsHhwvvc2fC8eeqOxad9Lxobv5WLD93Kx4Xu52PC9XGz4Xi42fC8XG76Xi38i3/qqb0CB78E3NFK/GMiQMKob2U+hgRZ8U1PhO/AN/VYY/4LCTqfT8rNHGH7YsnyY/d1dx3a+/nxDdxiYlvjNb9qhP7T7VkJuwwi/Rp7rGMnvvVEzdIzGGmLd+YZhb2wCTfDt981Ro+F4JujEhziR9hmmyPV7muauJdmNdedbD7sBZlsTfKPINAf4JbRMzRYmxR2Zn076K/gbTuFM64L15ruBm6k7Tvh2TY3w3XCBBgL2UfgXCNL0hjYAazlSMqw53w1iQoDgG3Y4336gaWOX/tXWQJgaGN1PzQxlp1kTrD/fjhfzbeAfKd/xZ7ALgJdq3gb+vbuutptg/flGvZhvhJt1zDf4wj9YmgZaqYNDW0t8mXXEt+Ibt14NNBuc7x7+AP9tPAiHwxZ3tjVi6y38e8oZXyt8L74j/CP2B2O+XdzgNTAybTMYkEESW3OM4NUE/eF6WpVvxbeOzYX2CjnfETYn+J++rzt4SDWH+POBqYGuo6NPDZiDtWzh34rvBqI867rPxkt9iPn1cMN2SbPG/gr5cxP/HpqaZq+lE/69+G5gooHZjbqY3rFP7QvlG/bxQNqCDeyqU77hJx9Y1w7fjO+G02p63vAL892HDeOL800bdsdI+Pb4wLp2+G58N3TkOCSeJ25fwnfEDEmf2xPYIQHoJj84DXJ8049w8/0kw6Gw33SgjFBsvynf3kputwLfkW89BNorDdpJuNMn46JlUgfF4vwTvjf2ezqk4nkOIwA28/aII9gniULCN34D6BV73w7j23ZXcrsVWH++/b6W5dvompqYbsC8aqSld0yWRmkCmqjFfAPPWMeZzO/BdypHAp2u7YUilkF9kwY6nklpb6CA/g49c7yWzXvd+YbIGX6apu35iFIMndao30pFMr5nBiHytRFr8bqLmXdRaPbDtQwv151v5FpDCiskZtm1BsMwGzdih7zb9Dpxfgq1vG7UHG7yVVMBGpDBMCBp3Q4q8Egc8vTcMCS/rynba893JdZvRFTj+/Bdj1l9gmNXge/D9z8DG76Xiw3fy8WG7+Viw/dyseF7udjwvVxs+F4upuNbP9kgxkTB1VR87xyebhDj4mTBfOu/DrYPtjHo//7jcfBzwXxfHx/t7R1tQIGZOJvAokzD9/n+0d7Zjw0ozvb2ziYwKJPyrVO+984uNupLFI3D7aNF8t2I+d6A4vCgBt96bHE2fM+IWnwnqM03TDYhbfhOYVF8O8kupA3fKVTzrRup2dS6fMNOsp5jw3cK1XwjKzWbXca3Y3V6aXjjDd9SqPnG46RuRZV8Q2usgSw2fMtR1b6dJqjkG1p031EGG77lUPINUfMVUL6FQyjl2zULdG/4LkE53zrymzbQtMr2DZtAM03bHCUw7Q3fcpTyjcImlVqowbcJxsMwdP0Ebuht+JaihG+n5TG2NWBW8Y1eR1Zht2i48b+lkPLtDAXbptn0mhV8u6/D4npHtOFbCgnf/lcf8LZtDxzoD6r4ziha8JFV38TzUhT4dj2NsQ2ASfZYNAwrpccitd+2WkFkw3cKWb6NMLB50x57odWhdiItHCfj2/jc8F0bWb7dXkB9aRB8uXoj7BTsstwfbOUPw/Yk+eqG7xRy9gT6w8AEfSbYV5PvRtgt7vV3Esm/Dd8pFOw39FvdfkhNdl2+jY5XINza+CdSSPwTiELPI4NkXb4bjjceuGQfjAAKg028I4XU/9YNtzvuIMY39GGjaj4NWiMznR3UzE08L0dpPO97mtYhPDuDCn+QQU81byccbtq3HIr8oNMZd10Iw06N+YYCBhu+pVDmY9HQG3nV+W8ZnA3fUlTMNyDLs6fiu7GJ56WonL90elX5qips+E6her7Y71SMl7pUui/5cMN3CtV8Q6diPYQxlHyLrj9hbuSG7xTmsN4HNovhvL5ZfyKHim+9uFB553J7+yrPdzB0UA4W2PAthYpvx3IIkWnzLOfbHnnNNLqjTXxZAiXfrd7rKPAy66ukfEeun44urTHYrIcogdp+I7dpm80qvrP2Ww+JwvyGbzmqxkv0ReKdJF8l4dvoZL7RGYPNep9SVMc7QVTRvvV0vQnYpfNxZncTX0pRyTccVtmTFHRnVFwjtOE7hWr/O6zJt06qDVG6wXiQ9iQ3fKcwP77JygmN0u1l5+s3fKeQ5bsoHzcB36jDbEnTz8ZJG75TyK2HkJRaqsu332R0d/Ln2PCdQpbvUFLEoJJv1prdgNJtW4UusuE7hRzfzcw0O4Hbr/IHCXRuuuOlVvomHytFju/iRgXNrME3itgWBy+2JZv9gHLk+B4V+QaVfOsOo3ucFA3SN/PFcsyBb+h6Nl114oXJ/oZNPlaOvD0BRVTxjSKeho1idP8Z+3cMw/H9kKBF/x+6voOks4d5uK18zWSOHN+g38yhW2m/YX6yAcPpfnO+kWtZX1HP6/bJ/i9gst1gQdfr9YZDy3cqNGP69qtk0XCjwLdVmKlBrTr+SQHfef8OCjs9j9RypEvzssYVwzS1oO91QkVZWH+smXX4diX+N8rsb6jiW7x36XpkK995JoKsUKXjVX+Pwqtbn8EZBJRWiaeW5V3TuoOymmukvkwtvlFRC9uYiG8JEr47tmR4qAuzIzm3/1rz23adsqLQGYxss4LqFOmmHYSyFAip6VuL70rMxvcAjDTTNKsaT64l4W9o2HZqUr5N8mclRYD8eVRdpZgswzYlO6UrKDcjP0+5QdzjmfhWzu/oMkMm3Z9GxvpWa/jljeo+lznyvoYt5h3IBnyDnLA19IISpoAZROz7FeUWodMSW5dkp6FvVd5UgN21/DQFONbWZuA7u95H5p/Iuioq90+g4bjWuE4bBwH2BIzKYhY6dPywo0kYN3FIIOvwhTPQbTQlb8wGI6/Zwa+1ZXWaHqkOmx9EzXGv5YrLQIvM307Pd3Y9m4zvSOKSVvgn0PGqm7jZnKBwiOF08mcEY5UPkYLT6Zd1D9MbuGRVCCt8YmBP13EH3me+K+B+9GURyqH/pbEZxTK+K/TwfK/S/+5GYR5Wv8r/hs2qFm56dVpm8g8Ms7IgpFRu9QlI7qEvH1FMuxsaku6FaQ+bBQMGQICdc6/PTzUd307UN6vm52EgMWrV8aUhyR1kTjGauIRzRocFjOs1brcvJRuAcam7RwCtoPCW0v66gu/Sc/qeBmrkTyR8s/UQ6vWavtqimJNWNMNXi8xJv486crsN+kUNhjxcTzEKTcQ3Icpwu9RKzcA3Qxnfhqd047pTVChHSZ8xoxrHQ78rfelgHNUpH627USnjtfhO7B1xRvnO7hp8C3fJjN2mGnzDgaqBm8XNiNWAVnxKUIMwwyox3F7d8nUQG/IZ+BZnccIuH4Ex6dV8Ux83BavjjWrkq9yi7FX6fqcpauaIBg6i6q87XyVeSa3GzYHCkndWm2+yw1jIn2hD1+pUrh90RZk4AQPVmW/wVXxPV28VCa+nxtf9Mpe0MOOthO5IbVJdvnW30xeCHCMLO8CV+SpDFmjXmU9zFHTTuqsTgFtCUoqboZKzEr9kEkPGL4qGkoZTk2+3OeZsm12P7y+uat+y+BLW0CtwAgXf5mR8CwgfvFvFd1gST0rTYpVX1Qonq8W3K6JaADxXun9+pnxVDkq+gwlsaAquZJCXIB8bzUY3ywhOwTd0e6R5j/sRaV0z8Z24Okvl22fnBB0l33oZ3XWGWfl184NBXfvtD/smnwybhW+U0FXKN1I54NPyzddDF5cdpVBKt+lNNFSmkU8I1fdP/JYX0UTPLHzX0T9BqhTKlHw7XjXfMCy5LuhPN2ikrzw539jDCT2v5XC+dVSRj5UADSvzVY2V8a2H45JrAmuWSq9+Js6eLH+CfC8YRlSPA4WTzhc7g34tfeQV8e3K8g+U7t4UKYT0iado3/GeS+hENrXjzmAyvv0mEdRbX779UdlVx1OFWCmklwNOkR9EHTLB0onqzxdDGI5YImBWvkFzupGrkm/ULbsomM4VTAEOZ+Ibh46DsW3XXn9iOFbAB/6Z7cmi+IZRaZKsToarAqknmopvfIbBuCbfyB2KaWAz8OroKa2Cb4k0vCCoTgK3Cn48FE/Jd76eQBnfTtjkE7bADFq+Y60n3/5n6RXNqV3vNOL3OS3ftfwTf+gJiV+zS5fA1MlXLZ9vxRQHmEfzTk2+TM13I33n0vUnYRQLKr82fUg9nDr1jpbP97D8gq+zW28KkWSenu80ZHw7gM1VY86lifr14dstT9gAbzbfm0NvQL4soxbfjpEVPWHzmJX7G0KS5Rp7lpyiteEb9con8NQJl0nA51Dr5WMlD1lnfazuD/uBXwyG6Sfrwrcu250kMJqTOYnnUGvxHYb5mbG83mOZf6L7LW/oSvvkuvCtSkeCaC7eCbsF9Xq2DN+jyMphENTdP++0vK9kAVmN/YDL5VsPFcsBzHCWTFUW0PqszbdmFlE7vtRR2BRGvI6+5nL5Lg/kMUYzJGLl91Czfcu62gR6HNAhwsqNevtJlsq3bimaNygKmM8AOFSt/54n3wROBDwrrLP+ZKl8Q9ViLlNS0WYqiL3tte0JfdbsPo6J90uhQb/WfsCl8q1q3ppWufthIug9xX6S7Pz8aGDlVhZXrkeWAEUa5XuN/EHlatxZ5tFksGq2b8Mddjt+1qubdL6BAjbXrH0r13KB6aeJ5UBjUHt+vuU1w/RC9en2p9WpT7JMviPlWtyvqa6lQGc0km+Ik+RPkNvpDuPtKNX7d+SoUX9niXyjvoJuDQymupYCyHHk+RhpvspwrG4vlH1hruurlsi3KpTXtPF8h0sVSvKD0Ai7waD4yNL1g346ySUWTtZZ77M8vr+Um4WCOQ+XCijysb5nNvmNTKKvybBe8w3KlVwa6M95uFSgjG/SwIEG8huW5eu//UKSy6iz/nt5fCsS3+Ra3lSXmgpyvqFjjZgDZdpUjTeuFy3d3+C1crCG6xVftpTmZE5TabUg4zuZaQefzVZmE2PJ/p1ikmut4ktYsnFEXKuOlsGcUOTbCb8E22aUn4CQ8y15hrXi21Gab61ay2B+yPPtxDPt5mfkF575e/LtK823Zs4zOViB3PxlPNNumh3Z5vWy/YAFutaKb9VMw0r55vtQAACD5H6r7Xd/wJNbXryTXlsnvlsVfE91pekgyX+TmfbU3VbOF8NAjDf6VxwYm2vEtzFcW75p6eJsJO9X5QdhV4w3Tr8rOsM68a1c94wRTHWl6VDgO8IBjpHAcYbVehycb9TBz8kJXye+HdXM5XLDneJ8sff1leg2Rr1uUK0/SPlG4dAjjveXRX3IteJb7Z6sku+uGwsjt9tOm5Rq7VfWg6H2Oxx0OoMB/R8e7o114luxKJZeaonhZZ5vSaLMrdw/HxRnW9fKP1HO7eBj5579VmAO69lgUMhnGmsV76wv3zIts2p9tsBMKyroEPneOuVPlAurVst3JUr4BsMkRIPuwPO85vrMX0L1Uojvx7cVeaBrCcYhG27XZ/7y2/ANUa18VYPK8rmlc1IbvlNQ8u02v4ZWZnGEYr64dEXYhu8Usnz72H/uRLFYFoSDvzSt1vpvBTZ8p1Bcj+xlVs37n9XrB2UtW9/Ybyny+cH83JIeVu4vhrLpEWPjn0iR47u40ghV1jsyOpK9Af76rIdYY/87HCG6FksA1al/Cb2wWDAjWp94Z43jy5CIiDrYn6boUJ+6sn4aDPq9PGrpPS6Q74z8YAXfoDnVlaZDju8mpO60OwJmECKqxVyDb0m9hBXH8xn1QqXO4WrzsUKxyrHjJeg1+JY8xFrxPbf8t+NPCxHElPDd6Pbiz2q0b74FhStgr1v7Vq8e1EC39tm7r/Z0eP3iJOb4jhCbRoNRh8+qOb0a7bvPDH4w5j943RXrn2T5Vi62xwfXPnu3pGZGBQCwS/geBRxj8dOo2v/uWrzPWJ4r+k+del7L4hvObX7e6gyHw8jTyiuZFB/ENEdeM47ZpetPsl+o9L9jTUor0Uj31ojvyvU+tTcD0j6PHD/s1ayKZI6iFilyh6Dcfk9Vj5GHpIbVD+JDF+EPGvm95hJ0hJ5p+sNITQqocV6K5L0YrlwYP0+3lS9nM4/9ruyMDin2IA7VFzFfjMqEA2cEgGoHXaCbpg6VC4/F5/0sSmbk7QkeSrOoq88WEpsWrzS1FjFfjMpqEpWeRKDecRVHmUF2R1Oh3k/+rIHEJObjnfySWMPv1OHbEG/bgTqE0AH9BezfQQNSJrE25SZ2m3o9skhj4KmP7A4GXz2vrzo3wCcbwGw1P7WbqQG38AQFvqerxwiZNaOyH1FI7CXoL0aPw3Ctr6BW8TVz/JWUNVNvT2MLUKCDz12ieQ9AzyraBkdphkypJHZuvkHykEalPhuyqGEFXtgDxP/BvR70kj/P2T+BbqdGG//suSl+nBIe+bX68bl9SzZGmJ60MJiurtgkVUfN7eeWrYeo0kfmCllm5DRi5WEzlUafju9u+aJsQ0pK9utZvR4iIKDiOzlYVtgNWPJ70VXrQEseYC7rIaghIfWYIK9Gkyl9Nn+9XlbxUIlc41J/YZyJRnMvE4zLivHoqgJCoCftoHPhm2w+YebN6L6awHzNVJpbhD5yRYReECDwyyS/GTKTWlmzDAKpXaBQxVHgS2a+8/a7Q6DYbVuWj02U8P1OM1fnbWq+FZJSSEmfxPorl4CDITuIXTAz/5Z2tPJQK2LV4TvETlSk2tws51u9/7ycb1UrrdD/Vs9JFvlW1rICvYzFcNLnVj2aku96+j4VdWvk+Sq1Tnkp38oCahV8QxXdTI8q0z10ZfvOylellMVM5dbM2fkGFTv35fkTdb6nnG9V3q5K375cWJoyWHgOZYfIdtDEzplN5T3Mzne3SF3l+li9Qnm1nG/VvrEqvpFy0qZY7U5p8UGGnMTOVahuqiZG6/EtKfdTR89UiVK+1XnSCr5La+gwAosKSaoGnh3c4vmgKhVINDPfkqUklfWiqzAd35X16pT6jZLya0gRDWaDE1HUsVLWana+u50C6HoflT6EA2zTtk22S82IsC/uZR62nG9fQUEl30prhKPdggChUvAxPeQLB7yyIu/sfOe0B+vpDzoAjDusgfifNHH1OqgRX+qi+NZ0fFckRczCqKKaNk4EH/X4xcgTTpkzzsz3VPMNaCRmz1iZPKJTUyd/ogx4qgW5oVLVROLJKbKEIOUHi0rt1eV4VsR3KPIPXNB86IbeuEb+W+kQ1hBALxZBzNx3YSgyOorXm6QTEVcjqS4VOAd7MoU+Mmy2dPF1AkKUk5LfK+dbJSQAqsusQqUKmF2MDBUWKGXvueNTQ7Rtdr694iSpV73+hLdlOjfOi5ANEglFBd+lleNISF5dUMFVZaFky6YUacKk2hEbVIBXrQg+B3+wqG9fqVfg9zJ5HtYswlp8qyxCjfrzUDmjNZZ48GXVy1OrZLl3Ip0Ny2F2vqeJd1w+l0MdXNGq6vENFfMArzUWoFhKAy7bp10+KywcGmbkay1ym4P/bRSyoJXxvMFKqbDmLbRyvFr2W9XB66hK6UqDIkulOuMywnnlYshchlrlwWfnu6oqtpTvEWXGpXQ3+WON6vgnynkAU7ZtIg91Wlb2yG7p5Ccr6GXVb97z8E8CmWpVAvn8peciFNL8ER91nG6qL6v4Vq0pGNVYZqZ6YvmUFrRKq7uSF8yHhHqSbbPz/fn6OZSJFghI/W//cxT12GoIakWg76XvV8m3ooHaNUashnKV00h2Blhqw0iAw1yemtWmZuYb+b7vyhZFCMjXs1mfbOGTTSJgw+pptl1nvSb9brk2Caijc6RcAyIvywDLwh6Sn2IV1ux65WFm5lsGw6/U/4ahaQNg2jSTaLgEqS8p+VY18Mp8USMJvuXIJ9G541rWKcDQZQkJxWKMNGbnW/Jaa9UTMKwoGpTcpJpvQ5Ej7Nfo1cqJyXxSQDxe6UQer31Ws/rRAtq37lfqKVVBzTfza+TIzeNKodwsAsqmYweqJVp1m/f8+YZO0568HkwOFXwrKgrjDl5JuK5Mg5caYksR2abFLpWYM9+G3yFLAav41qV3V9d+V6jpWpUmRZkGB5IJWXbTbnHdmkBtufu58o3CCNDJg6n2z8Ma++c5dFXWalyZ9IeKoq2qONEpq4YJvuruL5kj3w726kQeuHL/PPl/rt/WqScgUO4Rk8v3KoxpqXvHvl6+udIoGzWjWs53Y458I8vjAwqo3t8APUkbqrN/PoFqqwAYWypvwa1YS2+XRxO6/yp/VbIHkmFOfDudPmfbtCO/st4oDMzAy6FW/bQUlHkQs+uW9XC3cotJiRoBe4VGU+qnZOdsyzEPvnXf47sLgTYirncN/UFQmGautZ87DUvpoNmBhQyYaebQQM5gVGMj5FiV19VDT3ph07Rka+GzMMrX+wBQMj2U5RsabpP1MfyFnkcNc2W96Kn3z2cQ9pWpPtP2BiFRCCHA//pWNLJrbSzR1NUZ0FC+P8UcWarEho6csDS0BaY3lFRzJsjp2zfZMwCzPwxhWJxCLF9vPyvfDb9igx0wbXMUeM1m0wuCT7v2VjXgqRsq9Ifyc5laFPpIRpvhuK1oVHIHwBxFsn1QDIX6gKRWBsCvB6bVC2KU2O/iBv3J+caGq8a+HOnGPaB8U5UTv9CN5NwBM+gNQ9dBSQ9Hjhu2vjyt7HWbdlfZL/L2G/qtwPbY4oC6fHc7Th4vdfQK0iAXhI5Xb+NpDnagXt1dPdNv+GXRDzDB2PN6X19fQwv/74vsSCxVLAA26PgyTdhyvslTh55Hw7q6fMsG8zr1i4uAllnPJqfZxjGorlpLCOpUE1VtCSKLzAjHmPvyXbHY3H1GfuUgK/MHdSMMxgMk+DYq9B4NmceFCN/sixPwzaZfJthEDLQ+TQGqs4SFxcmS634Jp2xyUH8sGKTfql4WMpTFl7iDRR3Kd7U/KBsc9ORLE/FNY61xrcEQW+2+qBppqHYIVlTfptSwCmug7wUT6ZsAYm/62MjXVbMoz5/gqKfr47Zduf6kChPyTUftZl+t64I7uOZ9WXGTUmveVeezxcq6ELl4NBzVEJUhNsYMur1hK1RP+Wahyg86lueFfmW9DF2697bGfm4FkB+2oi72sMmTg/RT4se0wcjrtNJTSBUaVdVrtVhJDTbBbPhuOGxi0m2zYLDpgmFyB9gxxUwr5x6lwHzvKx479F6r8yeygMKY3B/MASIHP7g1iKJ+EKPfjAat0PcdI9di1Ro+Vcs8+NKwRFyUXNwPrVYURd0ghS7+wLJCImaE8rdQB/ovJd/Emo4Xpq9ZBxAaRlpH0jBgJq6Pf3ZVm9mr1rKwvRIFO08ubmR1LI38DUyGSr6xZaxdfycFo+78/NxgKBfLmup+z+b0xLbXBQLzfaTiWyc2pTo/OJf4UnEPdf4UKvmW1fxNnoDNMCm2Es8LVXznscD8yaxQqwzaKhvgv9LmvYQ6PP8gvhtDBd3qjcIs0Vc1qM4DOb7VsX+jPt+19DXnDKev4Fu1fJ5NG0wgszk9cnyX5xE5Suy3FhSwfL7VIh2K3U9sNq/WcsVZkee7ajZczvdXUf97FXz7KhccfJV9DbHlAXWW486MPN9a7ysR8f4aWPmJQ/l+KUmC+XMFfDdULnh5ltDiSzSXcYd5vk0QDcTG4gEJqHNT1fL135JbraP3OHcokyhEk0Bmw7lfM6q7CGIm5PnOLz1Azazdk+e/SZyQ/aID6q/3mR/gBCInMVjiu8Z2z3kgzzfKNwHdorep2j8PB4Ungc3+1PnYWaDeXiK1GAbbslWhvDEv5Ph2ip0KeWHFfAMOFzrZcBkNzH799YNzBFLGmJEsqGeJb/nK/PmjOt7RW5XrkdEI9FIJdxRGmVhtiXxDtaarZMTkecXREmIdghrxJa0RIyDl2+iQSdUvK3RdNxx8eWOQidWWyLfaJZQ1YpY3LxFTmz8kfOfH8NBMGXX5/A5Jr9FJvPGY/JCL1ZbJt7r0+ahgULiIyjiZbV0scnwXpit0bE/+Sg0lJft3cmvegZY+zzL5boSq2tDmIM8pE/3he/6XgBzfkq2ATgCq9ZRQJzPplU1sLpVv5eL9QgwpRLDUS97miLw/GBo5OF0zLRu+c7e9fSfdL9Xnc+rAHEc19TUXAuWW+nwQyab103q9C0aeb9CMMvA+QXa9fQnf2BRZzWD0OQqaQzfXOZfLt6/MEua2dLJlK8UifQtDIX9SWFicXUxQzjdZMUqnUQs+wHL5hsosYW57CVuW9bm05l3gu5jxMTOb0BV8l2K5fKs0bPJzOGxz8jLr1VXybWbTaqV86+W/LZnvCURomPP4upxQnqJgT8zs3G8+UpfxDSsS9UvmW51ESdtqR9LkF4w8310rzKwrzh8v5bupbiDL5rtCCjlpQJ2lTVsm9zbpfJqM7+BLOeAsm++KwjixS8gS3zWlN+aEqvgyDznfJfU7OJbON1ImUeJUSYv9vpR5HYEc37Byfl7Kdz/qelYp40vnW1k3REvEKUHOvizj1iZdfyK13y5EbrM/nEqPYxGolSVk4pRmaxlpqhgKvqHMrsn45vUYuwGQD5zL59tQbi9hIjQGtfK19prMEQq+HZmbJ23fzAJ2XdTRRpKdwMvnW6WpIjQ6fOacDJfavIv2m4H87ERO/HMMRXxJqmYgqx+E+T1DK+BbqcVORWhYrY5lN+8c39DqBt0g8GgjdUajLkaQGb8r+CaJQhBY2Q0WK+Bbqa1OdbGYhn196Y05Ib9+MAJgzLciOwEttbeJfJ8AACAASURBVJ2dZa3i2/BbATCDYXqvxwr4rsgSerpuJfM6y0TeflsgtsBiR0xmKlXNNwq/xqx23eirnr7molCxvcRhqqVVW73nj7z9/koSloLvTEAgHS8ZtV0rEU159Wrr4S0IFVlCthJrubEOQT6+7CczS47YtpCe1Zb6gzQFhEbjWDSlmTHgK+HbUFZg1LrsTpfdvIv52MTpdgKLCjcOvYr5HRghIprCmw4IcinF1fBdUYGR0c0a1zI9whzfw5QSnFCg8rsV85cwCAIhUQMkcf1q+EaqEZPzvdRQniLLtxGl5s4Qt+SOV8m3KMekRbIsymr4bihlxOjtLm/aMkae75Qvosd+Snr9STnf5qgTSlObK+JbXc1ZS1dsWB5yfH9JBuwafBO2Pzt+SSJ5RXw3lPW+yBbBpY+WRb4l9+COqu2JaXbKt1qtim+lRseS53UEcvH88LPQRmGrar0PDOxIKvPEsSq+obJcOZCuTl40cv5Jy+zmifMr1/vArrqlrIrvClHDZWxHK6AQ75hBpqnCENiV8aVS/3KFfBsKjY6ScuWLRo5v/QsAs+MjtnYQIaL9mNksIs2fTFvfddFQZQmBXP5y0cjnq/yAqIxpHl082AU4jAGZjUTfYH1VCk6pBa+QWFoYCvM7XHhFLB7M97uy9T4FizKBHvXiYJSvjFi89IYUBb7hIONF5SdApHzLtC6cKfXZ5gu3jO5xetPdElGcv4RhSgPXzEu9115fZa1iv2sBZRody1yimYFs/w4eJE1WSdcubKcviS+7eYy0teC7TIRmJbEOgXx+3rGifr8fSdIhJfFlESvQ45BBvr1kKdIbUsxlvc+a6M1IIS3usPx5HYF/PN/SAoTBCjJVDPPhu1jzeJ56YbNBspZwOdIbUsyH715YQHdd+C5qdJQWnVoCCN8V9eoykOerJO1lbfhuFDbALkl6Q4qT08r6gBnI4x0J3/ba8F1IogTOKiIdhj93R9vHExwv57uY+0EpPaU/N9vbv2a5ydkAc3ybdaujLQLXx3vbuxMcL+e7uP18kNoHpuN3ejrTXc4EPVdGqnZ1tEXg+mzv4HyC42V86+Fn3iL6IF268hJ/p346ce5wMhYcLEt6Qwb98ODoYBIqpPlYx87ubUBWYPZSv1/s7e1P8lLnDCOz43i0OmcQ04dN6yTmW8438kzQ/wp9hCBCTtjxNADST3W9d7T9a2VDVHb1/ZL36+RwfTCZOZHbEyLmz9Rm+kRxhuTNPzMG5vjo6OZ6Trc8BTJZwqVJb0hwcrx99GMiyyrlmywbz/kA2THpHL/WwxU28EQOB/RX6JxQHi4m4qFkPs3JRM2g0Ij2t7dv/sx8u1MjyRKuYg1bjJODo+2ryRyHsvlLJ6mIBUyvUA6EvNgVWvCkBKyiGubCoe/iWP58MhZK54tJ9V1STcQ2vZZTOOfJ3fbR9gpdFJevjFiqNkEe59t7BxNMs1Mo5ueR71qWFbal1WjOz3AcuzofHPLV9/ZqZuUpzvePtif2GpTrIfT87sHUn35hi3I56S3OD2wzMWiubrS8vjk6ommkeYyXdb54sLfCqN6g0w7lxboXjn9fbR9N0eDk/mAdkPd7sDrCSZawuszUwnB9g5vbFft5kgY+dfvG9gs7+3uTeZ9zBNHoWM0STYI/V9icXp1M/sUZ+CZj5tHZ6RQXnQui0ai5Kmfwep8Yk2nchVn4bhweHB1tn67IS0GuO0kdvzlCP5+a7tn41g/PjrCXssJMyiqw82v/aHLHW3x5Fr7pm947uFlh4LNk6ERxlzSy3SnN6Gx8k/kkbFPOfq3AiK9ooMZRzt72wd/Tfn1WvvHrPto7Oji+XvLjr4jtnSvcvI5mmGyZme/GyU9sU44OLlY4wbYsnJxjD/jobLqRkmF2vrERv8Mv/eDqfFWe4ZJwcn15gG3JzcUszzkHvvFJfp5tH22fnS7bqCwV16e4H+9t7872kHPhG3e0G+KKH5/+Y13DnV/kCQ9+zNqJ58N3Q9/5extb8e2bVUU/iwVmGz/e9sEun9OavonPiW+Mfx8f4Fva2//7H2fGd073j4hLcDUHezk/vrFrerNHfMOD0z//IDuu7+weHBCv5OaQ/d5I/zMx5sl34+Ti7ow0hIPd6x19Hne3aug715htPEqe3c3klSSYK9/4dIeX2weE8bvz629vV07+YE+XtJ+zy8N5Pcyc+cYnPN892CYh7/Gv8289du6c/7zBbO8dnO3O8UHmzjdl/Ay38e3t/btfE64WWBvo578uz3C7IaPR9TybzQL4Jh3xYp80DUz55Xd0ya9P746x/4ctyY+LHWZJ5tVuFsI3WYJ4foyHdTyu751dfa/Uys7fN/t7pLEckBTFvPvngvimp/51s0+CINwn90//zP3OFwD95M/pPvH+SM+8+XsRzWSBfBMr+PNun1jBvYOD49PzPztrzLm+g30/TDYzg3enC8q+cb73FsJ3g47yd2fkIY62D35cnl/PdfCZG3auzw8vyZBDHKuzuwV6Vozvq73tWZK6Suh/8LNQysmzHO8erplnfoK53j3eJmQfEbIvFurGEr6vGleL3ZCDw7Tzux+0lePOenaz++twPXzzk+uLX7tklGGt4cfl4fWCbd6fK8L35d7e1WKXc+Oh6Pz0xwE15tg1P9u/ujy9WGm+fOf8dPfu+IxyjRs2HmCudxY/qJO9lJeN04O9/cX7ybq+c3H3Y5uEn2RQOjra37/aXYWzeHJ+enW8f3a0zd/+wf7l+Y6+lJd/vU9WXZ4f7G0vkO/Mk/z7Avdg0qxIuyIN6+DH1Sm26ScnC35iHV9i5/xv7DEdHIh3jjvazaV45csgnO3X3Dk4mnk/zkSrFg9/0r5MPYIj0sIOtjHrh9d/dnZ2Tmbu1bnvn+CT/sHm7O74B2Ga2GpsrLfPju928SUnutjMd8b2a+o/jhbnoJSA+GC/Lm/OqMvLRlL84z4m4dc59huvMfezEY9p/kPOc/7r8mr/jBF9xLoUpvrn4SrG7JPL7aNjvaGfHky4r21OwKSf/9qN6WB9HDfCs/39m7vLU8wJBWZtpwb7OqOYfOPwkHShq+Mf29R4UNu1R898fIm9o+sVDdU72Hzv6lPs25wDxBPrlCPsA+9vU9YxMXvcuuJfzzD1xzeY/Mvd018MFwkO2T/s85+7u5eXmOP9/bMzeqptdqI92nUOfhzjQIZ0m1mohrOtERU87+wfHV1Nfx/I8qe+DTEFRK3s+enl8T6xsoQuxpVo9Qn2znIgI0DqzwzswwPapO+wnZ7DyKD7HW8mmVr9bvvoB3G8iUzNRPvuczCsIIjCOawP1imwG7F7SVy2gxSPR1k+0xBHpIjHA/AxHgsuiKOnV3g+td6C7kZjYJrjWdb4E7+ELZjHfsr2TNufhiYwbXMUheU67dMAG/iLi79PiaG4u7u5OcbYL+IYWxxsczCI2fn74vx6Z545Ax0aofcZRFY48MxZhFMvt4XfvbO7fXQwiwtOdqCCTvjlvTbdhe2qITbnmg2IKdDRdGFxODScMDJfO6xMF+zMsKliB1tvsUCH7Ca8nOGevwjfITblLdOMVrgrcs6AhGwTJKVmYGd6g7J7kCyt3cGe4QzrbKlkA9UC1oem6a1ScmeugL7vkkdjpZRIO3Kmfrbr/fQ0A2ng0ycJ/T4QUtco0Mw+K7kaWmU1Tr4R9NAmMt7kx4FRoyR0GXItWscWfO9w2psKR6RSNjdxpmZ69CfDH3m9QWVR9jUH0azXaAsazKIldEhcktQCqJ3jo6Ops4REkUQM3USRUWxsb5pU5b05g4O+dDiDZn88blqiazI1GEL1YFpdYJ3Zj/2M/Tg/OJpW1YSVp+Rvv22T4kPsZ1K3z7TcgTe2Rx1VUfu1AHb83A7Q+v0xUe82B4xxnTQm8IV/6thTt5o/ZP93bnzcPZh2nxut/S6k831i7/rsZyKlZpK2jkLPtLU04es2eawj7IuM7IC0Cn9I9uebPdZL3THTyfL7UwsxEx3OglDhyR2Of35OEyn4XZAodxG+NaZzhMiPvL6S4zGrjnwE143rBqkcbNGqiExrWacCFLz2MG1NgRX2zan1Vn6R7fYFZqkGwTTSmS7xvnucRaqoy/QhSQmuuL6Sr9G7Re5g2Apd31kv18VwDJdrTpDnYAWR+ZBE5YQCb9g0uQzjpGbl8ECqlaKT3YUHU2jDEooBN9msSs6Y3hKRwqRyurRG75jLYDnABKOuN7DWzU0nA6NQxKJV+7RP2mxCalB8iEIu6zqhKNw5mTyUraUkO7SP9icmnA2X/CaoHCO33yRUoCIlDvmjCINYAcKBkS9sv3LQingg/YtJu6TTB0w3Vbdog4feRKcl++3LBBsv9ohszYT2FVE5N84mGsXCUgapyTqinivlm/MLydGvSyQb+hZF1CQgoopyO0xvXbiyTObfpj/Tht/SSWMiBsXpT3J1oqMhFTimdusX/uuEonqs7tNYmGnSLph8tc8H9oabKcJuvBJzmL5q5i5gjPSv/K+ptwQN3EPI/4xUzIcsq0MrqnjNJLMEkR8R8TOt2cGI+sBsSp+DhGqxQeEWnD6IpYkChA75X2dcP4TTqYrGz/IDLsiy58l2xPtm4gHStqABGN+m56LQzKiO0gC5WfZKnUGHssLNO3Qt8msI2YsJ/fSB3SD4fLU9K+2moQ4tqJJLK+lUa5bdBRpo8sBFp+OQMBYO5ZslToh7GNdpRcG49shz8ovsIzxVtd8LIoBwOkngQwnkXRQld8lKDnveq02jhRiWGR8hAXQiPJ6aWly9BnXsvqijrHeC1K0bmFr85nJhlDOWycqm5dz0SJNf2wli14rn4Phj0YGIyzCSAaquH75zSvUc1ObikKhs3NUP7WEHJARSU8eEpZhqXYhCDWRkMOkhijt2aCnupAn5dlwh0u+/pptWSH223EiApHyTaryUb2J8nBK+WejOnwQS74rzTeWyInIh3emYtqziggxkC/jRflVWSj8/xoQf19sMAl3HGidaaaRHmrxYnyOStJ1sewhAhXIge38xjWE/Jq8FMqW7XBnf2c4v0BQXRcTSjOQXZgYlHUhwa06LVQMHh8lfwajj15w5PCeqYjV41K+J7sT+r1qxvY+j4Fc8GpHhxOmQ8o+i/hpRwaRJWj9bOpvc+6cql0LHg6TqSDfuHeQNpm0ncYzNQpEyNd8uab5lV3dHqdqOZOQXmmSfVBy41w86fl039uQX0V2qJwl5QjpCXTFaXTdcq0kSgQA7Ad1Q3I8FeIQGM90XUfdEGV3Szi9GPAckLf0ziavo71T0MU+ekm84UFUmpaH7mPdGwverIe4IADPooPppn+sr4njQKYU63znFfuHRwSQbDw0/DEM3eXidREHAIpdjQz6njeazIkUj0VkeoMsPacbNm41gqZKSdGicjG9kKivBssSyLm6U5zkhGvWb1iTpzZNDshb4bAKBxnP6fq6m35zN0jy0ldL/Id5gLVOrrJlDHHo+MqJx/Jyu10ySGuxvE/FtWsjp2kq+aejOJqpw1AxYN4RuZyKyG/rOHdFKuZpo/ubP6T62KftTrximtXz78XPDDm+XNKioGOCZi05/HDbFh0YzpPN2Se3ccr5Heb6pb9r3sKep5Jt2oRFtGU5g8q4EJ5yh2jncP9jDjXvCyQQia7J3tH05za5VIwx7Ztovg5awD3T+tSJgQDTFQr6Lksln33N0mpxpiRsq57vg/1CP7itsjdTtmy40MIn/aXRePX+azq1f75LVXceTbwLH3yTaCPtTbFqFjm9FgW1rAzaT5gy1Ab95afPLf30gfLEw1kDWoyHP/ccMy11tT+ZvWqxX6b66ffOY2EduDwzRNHTvnB4TCYHLqZaEnlwfHFAdmSm+S3IbYac76nudTq/PpnkaRY4MqWnxAUvqGlEcmCOahCGpulg4FqldvzQY3zq2ynl/PQvqvWv9PhhMtTxPv7jZJvsfp95PeLJLFubV8dpLAH3L+8T+uRAzdnM2QFatjZfixs6Nm7yZiIZ6YdpKwX4NvllpccE3jhHIjZSaZNjHJn40mHJ++/yYCgFdzrKc7pqommzjeHOGk6Bw4PIXZmms5hn/1dHkIz+dMvJQ8jagHdJEoZ2ul0IT0wl1Bg3FKd/t5Nr0PcUROaKJGSQrQk6uYvU9a8oFHFTGi4ilCPM7ZRM9Obwj67IP7s5n3uliGNRLTGJwIyjJ3TNvMkpqhVuA5g07JBsQC9vn+Laoq94EGSl2iybLKN8dSBK89Ff5uksUTk42Z2PnnPqA2Amcfa3on1/0zeFBYMZdEH446GrYuPRcxHp1VJootGjJgFb8YsYWL32azvTl+O7G7duMa6rAgFJLo6yOOJv/Kb/s1DPZO+eXVL/juF4SpAr69a9j2lcuD2c6H0SO74etjud5Xy2MPgBlniHJlaTc9zBOxFLL3mQ/E74TX8f5pNYnm+4K2RvNRLVOt3ZGtRYw21RJ6vjX3DaqYMb3mXX6NfPWQWggp439xS6wbbPsBvUh5nsYe9pe3CDpPABv4P20Lw+bGpuNSQewfgDoN914aQYewPsgmKM2/g7X7foxX8VLfeeUiWfdzCQyGX8V+4sIueXtzB2DpLZlmFQ2YhPSLC/dT5lq2AFs9wHtAF38QhzHHQZsckBvYrfDtPu4Y/U127YnmBGrwPXpzRlTApr/GnT99Izu2ji7WoZSkmf24ubd/Iu3V50tuAAsLdsnaTvP9X3f6oxNkybKXY3Mp5H6WGRRGt0Cgqym53UsyxoMLJ9iXkvrri/3iVzXNt121pj/qrGdv69I39k+2L+Yz54NxQ26Iq6BrqeNPeoS6w3DicYEJAaMgn4MTGhnYDR8i46rvkOw2CVF+s75MVVhOFukrujO4S5Vpzog3kqKrfk3eChmPWHoYoRsS0dIf8HAA6/rI4JVrNTSd65PqRbQwaw+RCVOzn+S94ob+dViRe/WbT1Qgp1rHJNQF3l/UVJAaZzgy9HEysGPu8P10o9ZBq5ZFycNbllPT7oTlZDBgf7uxTcUvZsa1xenN0wHbXv3fJmSXCc7h0T0Dg/Oe8eXf/97eRdeIf799x32/mjT/vH38jp2vPedqL4fER3qvbPjv//R+vYNEtdcUT2go+3tH6kQZMlPfU4VoIgaJQmwTv6Zxlw/uf77mEsTnt1MNeM1P+ycn97tJ6J3f+a6mXqJKCFR32HaW0dUYe7qdMHeXy3sMIFbJuCHvcT11BmcAmQD/90P4osdMWnCtTGaO+c8EMI3tr1+OoNT4ARzzaQJacu+PDxfYU1yCUjH26Wid0ThZf9m9+fht3IU0y1X//f5z90bJpe3fcDM5Lq07DROdsTAQrRIiCbXxfdr59cXu3fECaByecuSJpwBJ+d3Z3tcSXF772z/+HQ99DRrAI/9x/tn9L5Zi7n8JnWz/n2xe5WSr6Qqgyeza90tCkSd8Pz06oxpEx4xacKVqFFODx2HvpdEvZwMOFRlcJ+4Ln8WJw4zDfSTnT9/rn9d7gvNrO2Do/2by5+rlVudFkR++Nfd/jZ9FiZJt39FnJcZhdLmAa4Md3q1L9QJt4mE8+XPb+5b6X/IU91RNXOmdHdAFHuJTDLmfRVPRhSbcTvAFu+H0Jsk3Y/YvPNFSyQvCbjXXh/uXrHnS1i/udv9+fPXshoU4fmCKBXeEQ1bIVFIqcYRw/V8ZcZWDzIo4diY67gexVJ2xIW5ubvbPf37cDEZzpOdc6rydndzvL+/J2T1mHItbdV/1ngorwfl3et/Lohg7xmdCmVq54mW4/7x8dUlU7Wb6Q5IW/779PLqhipunnEJQ3YtktM8I0KQ3zA6mB641Z3iNnezT9mgDZ4rmVJhTCqz+YPQf3d5enpxcci0705O8H8p7JxwYd7Di4vTUyIUebz/40d8gliok73RM9qX8Pv8NiHBvIE7OzaqP39SRc1Y+TWWJRVN/6AORDc5Okprb+LPCc241/z8tbSxYu1xQpQcDw8PfxEbQExAzOCeTMS0FMnb2ea26dfhIe0b/6ktugLMPlDtzMOfeJC7YxbirKKNE1vxY5+OvLghHwrtzW+bjl8oynL9RMKUyNMnuM4pml4zJAfszEUkf4McqnWPN5gQM8p1z+ku/oNQk7JNO99ggw3+Y/Hf//N/rxz/vVAjfHL4c+WIN+L893/9X6vHf/33yeJ8ipMLVkNspYg3Zv7Pqrmm+J8FxoE7d2eTpAQWg7NjrqT5v1ZNNcX/WiTfp3TOfTbsVR+i/vYxF6Te+Z///V+rxv/+n38v0oBf717drBp3F2LDxs6//59V498LnjbcuV45NomzfxAMP5xM8+mfiSWxAAf9QIjc/wcj9PqaVlKRap7m0x+bZItv9z+bb9SkLBT0nuaO8DNChuOGk+1D1f0ZamUtHobVmYw4x4sMx/GrqrLoREYghjPFy3E8c5odv07X/pzia0uBTspMvU6k4YE8r5oF3XFbQyID7xHgf0aT64TAod2ZxpD4I7s5xdeWBNh6tcukWqTHW6+tShZQqxm1Qs80W3SHeqvVtydv305gT2UXjLC1SEs36/jktMJJWhHSSpV0Yrhe5BtQ7wIuUaRDq0S4WXkWE0zHm7644RXNQc5norvD5serklhxR1QUx7BpqQIm3z9ZJQ56W50ljMiTAXX6zWVf0yvqZOeAuIZWaJuxYKgxOXNoVCXGu3T4n/Zc5apqwHitrP3V5ZJ8TaAp7C90Et3JjEmMJf9t05V8nD+8+GHhz4b0C1DHHpTqhRb+BltmehiiZzX8tFhpuqhl5uu6/PaKD5W9VR03WqKQlWhHFW8zFE4cAEXLA31eldhvCrfIwK5lfNOGE4a8tqhlJgJ19GN2LYhc+hqMtEMKHddi58COUdpRNbAj6neLHRIi37Jci6qF6cj3xdGJuBU+Yzv3PaOZirzwLREhfu8vXtkcX8lxojD5qxU/FKlgFzKNIPy5G5ekIQ9uiNuhgyh0UnVTyD24kZmQSLR03YKhiLipRq/gK/+gztC2qURjaNqjgOpv+Z3PV5uPCbofjUybmRHdi803+/iTfuwMA+JdQz8ybVH3CH8I+DlQK0i5tyiMukGgFcdqZAX4C/griLgzns2KJqFOLMnuDEe2/TpMtTb8UsIAEIkrqs3mRkQ43we2RqstGu7QC4IgLm0YeeT+uAo1vgAGkQKlNTKE/u0wwM9KjTNqdWnPcazAjkMOfAn7r1eQkIhv+tO284Xrkcfv2TJBi19PqLS63pAJnlmfRG4L0nsZhh3TpJ6f7nqW73JdbmgK8Uw9DFrkWUkhhrDZJbWxDGv0qWmi/IXrdcIhMG2r4TS9flwyB1/us9sdgYISJL5Od2h1ulTsDnW6Y16kyg1sfu/4rvywD9IlHqxPWhPy85OMTkarSR7ECUZD2uD8Hr5SoJk9/rb6X44R2jYtVAuHXStsmnYf6WE3AlyEveF7X74fUOU4J+rihzYaYfczUYnTre7QxY8FhAyz04xcvwnyzrsfDJi5aYKxRUNLSyRawsiHoYmtcjjyBZWkSoPhWLQIqj8mDHdBl5wSm29R/oC4O9hbCVDDavrhyA5RFPl+H/Aie26X/B2fAzmehSKz68evyUEI29y8VcNfQBAaA/PTxwbBwo1OlFXiI4ZDBTQ7Gb6R45N6OdhoIEyQhQLzC7u9bAxy+wN8pXDMFAobepO+8nBEy890PEfHvaPjQqvrI5u3ItQnvFvmyMfNxfUDcwCH+N8eeOVkDQPCkRuX6DF6pBliu1DgmxdZwA1NowJoQIi8Gpgf4xPHQHFVLocLMdJxBo5ow+6aPcLjwORSisgjDRt27KZBLDG5YoAJdvq8mBYaMTkwCKGFPx/xYpN6OCLKvniMG+Wsms/rWOA345CCbPgVUcsEv8xXxpdHVQU7ZjYvCYWFgxY+sw06EffUXI0Sa4mSJ9CmwvY6HY0t3t1wT4p8ohZJLw6blIMBti4QP7VjmmEvIoeAEbNhlsnVmIU0vkXbQmhreb77vHNqoOdQib5RWpic3HQS2wepmhWNyCYCrY7N/hyYvPqB9UoMt2Oyl0RKCLLWM+Z2opkpiuXYXAfdZ64b8ojhTMP45LUrAPdsnYAX2/JMVp5rQKv5ZaqwEv/CoBaO0NFy8OnHI14n1+kzzcgvc8y4gq+JjjAaZyKPDi857r5+kUZkAlaBCdNI+wZu5+xcPq+E1zT5IOXbxErAoOAj4wekzzMAvHfBTDVqODDNmAB81WREQjZRtXRGrPVBm1f3cEyNKFx+9plwLmpyezw02cjismqv4jwW7xaIlYXDX8wnBZoar6IkDJZvsz7qjtgrcvrkd8cb5ey+a6deAB6d+HBuRJ/stXmcK9xRARAyv1HWYx+bPeoM0GZuBGOLlyLH7x7Sh2HGz+gxs2L0RWETWp4DemBY8LUsjRyi97goKHYlMiMqvmthT/VASz0SCSeNsNtjrdU12d90bEfwx+YXb8TOCNBGiHomrQyo97LDYZ/3+Q7jBofDIFvrxtWagjFWzgL3GFZ/LuTetQU+dXIj+eABjyBJT/KAqK4T8iYXjmNq8cvgJlP0dg6fVySz7L4P/aAnbDNzBuitUD5DjfUKVwwJ/uvYhX7Xk6ReDOqOOHg4kwYTojWRs5kpc4L62NmKmuKEwnwbnyAKo+Q6LnNlsC/B5Yr7mZIZSDOpNUfcw4SRmZ0WgXGD63LP1sDtkrp0mE9yFfIm/U6zmHQHZuKL6RobZUh/5u2nZb7Gnptn8tQRHj3SpxjwRoifNRx6cVoNmSbNAeJBmDZz9PXK679qvDM2zX446LbKMynYvEqV3zEBsT3JJEjw6J6udC7GJtcGQSdx8on5RvzpHHZHmRx5CFi36DCj1jBGubJobsAbHLbGX6wCh8kaKDbjHdIR3JE2iiTJffSapCfwQA+40LprsxtFX2aSdfc9YHo6fXeZiqQ9VrjYGYNxFCbk4VGU1fk0We1AVzyUGBKgqY2aoVOemtSHGzf1LgAAFD9JREFUpikN5sOgZ/L8uc4LbTMMMVMJc9hwMV82Mkepj0mI1zSI+GvHHHGfwkyfvsOqRkGN90PcHbLph5bJa4LF4UFof9KvWLznhHHB+Nydmymt71CYEyNiARwZ6pr82Ru05Bvpxrj3pSsaYp+K1STQtEwSqsO6Gr4FqkEOhzyUQ4Ih3wRfpUVOyOeoB8zUr464U0dzQ+GgIcEpxZcpPB16v2NeejEAo/R7Q7y9Ol3WGMnwmfoz8X7ouMObOfl6xn8yvrgPgs0XH5ipW0jODD65DZXPB0Rp6xdxP4N0INo7MFeZxJJFS3i5IMO38Kk6QMsMOgHzYfHdR6xUEDMr2IzzwQmfXF63QMAdpc2J8fXKLqsHFmlyfCzB4TF3oBAts8D6sEUYs6ifb0TI5kWaoEVbBLb+oue5RG/d8WK+aZxHx3NDH/AHwo2YkJkYB3w85dvojbh/wd1CTDcJ8XSU8J3L2XMH1SJRbdz9iJWhfPuANmgIfdYdEfVWSF/hFJBPWwDbet1o9ATfIb0H7D/SrmZQM64jZ8T4xiEdOyd+QZxvv1toC4RCfNNmygLiXs+ctqhJpxd5Xw9Y59eN5hckfIeEeY82HGy48DuIOg3MN/nY8WgyQh+wJBbJ1Bm4cfuEb+aXd8gV8CAQYk591oBgOPbwcAmtZOTGx+OAQve9wZgzRhx2XXdGURcTpw+G5NbpFZvjjEE0SDk0HTXpLcfdjySdsYuGfQ1Pe4UQR64ea1rYLQ4J3+z1QiewKA02yWAgxreOImahQh4EuaQxQWynbdAk5/S6JNHg4ydnfOvGAMiTs5jKJkI49EUsF2rZlutDHLEiUlaFGzqjD7QhjvfD7hCRGq7Aa/sWq6gDe5hv18OmY4Qf0/ctGh4QN5S5G8Rx8v0gJN0CO9rkHHTSG3cLK/RC3L5JZqnj4S7Uw95NYivJ+7GcsGvhtsNaDO4CX741srCPMHSsDiQjMj63NcolNx0N9EOry+yupYkHJ+UcQscKQtItBjhg5154qJFUokvKQWIiLFqAgxhZNGw6mD58e20L8ISWsFS4N4SONyQhx6dFzmnh9h16OJjFzxWETjjqy8ZEwyczl17UHY28aBi6vuN7Tf//DVod1kZb5iczIx1TG3vNUY+OySRufH0N2CoiUu3No07gAEder3+NuHeGXtnohIdLEHTJxVtA07xm4LH4YmgCQD72ycnMDnJeNRsM0/lZPEzYNo6dQo2PfgNTM189l1TTDLokfrTwd218I7kx09HwKblfqn/ZovsaI2xI/mpingF4/XLomOc7TujR14VjIA00vS4rsYdfNgCkXYT4X/svcWO6xpN+Fnko/GJQF2jmX/jdRQB8RvQ8mAX7L9wgJHQ3wq7XjJrDTrPZ7I7Mv15H3a6FjO4r6LDD3TE3kKhpmoHwAZ0Ivx6Luzz6wA7Yzwh/3GwJo4WG/Ef3M2DOKOoAO3HfQhCwe+qYZoTfkfs66mQrPPl9u0vOPAS8PCPuxF3yktEIs8nOqI3wIfnggQzFYkkZDFsiRwHDkdnFl3cCELECSKFHaqizQ3XXsz+7Q34LRuezS4+BQzx6WOLGYKvFXr0DRkPqKoXaK3k85OGGwAe1kdYdutKApsEWnPDVJ1SOn9w8iudzUE+kPYnFiZsRwtYnlc0XPxuOk3yMxw4+wmb+Hp8j/hh/SiwZLJQCwKMROQQbrL74CvsOjJfIZK+YPFbq06SOPf2+zr4uBv/Uk+gofbKSS4iz6YIifk/JLdFPplbft8B4ponJ6hUJ+VmpApJkx3ww3SKJOt+aw15dHEEzD2XiRVfyi1fMZ8rgBkuf+a2LBdQn8TWaYHZfm/M8K0XNtt8CtrR7TvqYlR2p+tvL2NMcBn0f4ei2rObZooHdlCkWIH1j+EOv2e1WL4xbEJzufM33+gM6vj9V4dO5IASVq2g2mB9IuvQ/iu9V6l4gKxrbtq1FEy1T3WBahB3L8h3fsgbVx26wwQYbbLDBBhtssMEGG2ywwQYbbLDBBhtssMEGG2ywGBhtGZD6mDUT+/hOeHx4LuLhMXPMS/7vHyu62X8AGN8PWxyM/YeXzDFtwbP4+2PJyTaoCfTG+X5Wzbw/3r9tJubng6d7xvfvtuKgt/t38SM0jKkX+W6ATTS3KPdP5ce0H7ZiO4PN0FvhACgde2ULwmseJz1fAd/xxccG5aF8QdHH1oN4NOP2fut34TmNt//zL4zf9xS/yc//+j9vEomgp5rH/X//Khwn8BuDff6vbzmavG9VGpTb+1vxI27qW/eF54TtF4J3ZpueH+lv0nabPu6t/Dj6h5db3hLYtzg+np632PeL9/Ed8FhpUNrPv4U5gY/kUYsGhZ+K8XBb1c/ZcfeVx/Gx5TnzIR5A2uyFfU++jWdhUMqOeNy6jw+m1uehJOxZCt8E8OX78t24FS74i/zv8P0+btCIMVDyoEvjG7/478v3i+D7Xf739ltsThofnFH5kUvku/Fy/135hiLGfJY//+PWVvwHbnue5QZlmXzD2/tvyjd2P7gBl96/8XR/GytLKY9cKt+4W35Xvtv3wqDIXHCUMiciGN2S+zJL5dt4+65868KAv8nMRPs+cUceHp4VRy6Xb/jxe8F8O48FvKRv+aX49/Sh+T8nXxXN9kHiocCPhJf279uX+9Ijl8x342XR8SW5zQcWyooWiX98Y5zrYjBjf4/zrPyD+6034jqnvn6fxJMOP9/9k0TK7Pn+UZiZp/tHxC/yIcsXLpfvdskoMl+wO+B79I2Xp7eH31tPqRunHluq+Rntx1tKPpsq+C17gDjkkZiJ9u+Httir9fxgGO8KrpbLN5xejWACsDtIrgRfbrfuHxK7kueb4OVNzTf8EB2maCae7t9jc/LwFnOKX0Jxx9xy+V4O8nzj1vn4cJ80cRnfOGRR8h17KEWDAh8SL+CD/NjmBuVRYlCWwPfSk+9Fvtn933JTIOWbxJAqvo14lidvUNq/n9vxQSQRa9yWk7V4vuFTSWi7MMj41jEHotvL+W68KfmODcp9/otPCSsvD/R7H/zVrIRv9Py74jvzhoxvFvc9UXtawvfLvYrvOIdy/54zEw9JmvaRnYJPCMmCjcXz3X64Lz98IZDyrROvgYWBJXzD30q+kYjpc80WBzviVMY7m9cRtkcyg7x4vj+21oJv5kHTBHYJ341nJd96iUF5SibmsXfCfuQTQvdFthbON0lSVXxn3pDzbTwIrsr45kujSvgWbkdu7gY+p8yJCJ+FQSleY+F8vzyvSftmXsObXs43RxnfhjAomWabmpjHgY4QSnuQvBmKRfNN3Nr14Js7GE6eb5hfM1DGd+x2ZMbBj62HlDkRp+Kv5r5gwBfKt4EeycixHnzzR/jI891+y826l/LdFhmXVLOFqYn5l99xhMNzVkWDsiC+Hz4+nm5v394e7teHbxYh3ub5fslH6KV8Q2HAUx5KamIe25v4zcHfjO9C6LEgvnnGjb/liu/MG0q+8edZvh/zjbCU79igbCVrYB8Tb8BIs8NfzUPeoCzKnrQfHx/f3x7WkO92lm/j9ndtvtuC79ig4DYdTyE//v5I0lMiZ5U3KIsdL42P53XjGzOQ5hs+PtRv36LVbsUJk5Q5abylyRXTmPkJ/f8c/0Tw/cj5fjQMA7U/HgqDmoLveHJSeCiP98mywSw5YlYtdxuL978f1ovvLc731tstHtCf74tOhIJv9JuPTnw63nhKsimP9+9GCk9yg7Jwvo11iS8LfL8/P9MBfQK+9ZxBQSlz8rz1/JaCODK3vWTx+ZPH9WzfuOFBaLzgBj4B342PrEF5uY+z4UZuUfBv7pvlGFs83y/rkR8s8U+M94n4NoS7S4mA7/epSaPc0PgoPDXZpwvk23heZ74za3UYVHxDkUOhNCL8roQL+JYPm9rSJPgy+F6L+YaYb5SLdz4m4VsE6ozGl2Qmrf2QD23ks2pLmL98VGx7WQiUfL/pU8fzBEgsvSdMvCcT8x/FBbGpafrCh//w+XkK1jSfCvmqvMum5DtOym61GzC1yvu2uHJMmgSv4Lv9gdLHlfLdFuNGFd/tp9K889wg55vt8yCNOcu3UTs/SPGYGJS0OXn+XUi98m1WSR9Ifb2Mx4+Henx//ObHVfH99Hvx+51L+Ga+HCzMN8Dcohw136lZnveEjsd7yYYdEfJMwPebuO0Kvm//lb1G2e3i8X1VfFNLQK9eNr+jt59IqymdT3uhNaj4zrGt33g8EM9ivOcHXQKZQVHzbdzX4ztZ81DBd/tZMqc3b5TwTVNn5NPS+bQPOraVzRc/sSD+kbfvredkKMSNXrKWyhAGJfWZmu/Hmnw/PtTk++VBuSl6PpDzTTJ27NHL+Ia3zwq+0RubvYkNSmq9w2NhUQqF2LeZuhU132+xWVLyjeOsLf5jBd8f9/er4ps8AYu+y/g2tt4UfL9wZwTGm9XiLQxycxIvEUp3aSXfOBSvxTe2EuL+1HzjIfv34vVYpHzTyTD24GV8v/ymj1e2nk14fPEsz1Yq2JE+FZ+mTxsUFd/wPZnJUPFtvCf3V7HeHg8ziy9qIeUbP4BY2lrG9xtz3eR8o3jkQYXdry9ldvaNj62Z2yjlm4yvt5nj5Oclx9Xi28DXX0JwL+MbpW6+hG/j/r68fcOnxBLy1WpxszUkwQ4DZzdlQxV8U3/9KXOclG/yvuNrK/kmD7qE5JWEb+P5Prl3Od/Y4LAOIOWb7B0VrHEPJf4de3Elg5KYpk8MSjnfiMx91OCbNNpkJ7+Kb/qcS4j0C3yTNPdDEuZJ+SbOG4sNZHyT3EvC71bWSjz+fpebk7grJGcr4xu2n0W6IXVckW+I2BKTKr6h4TBjtli+qbQO5xvSeS1otF/wld9Y4pR8Bp8Y31BMfUEDtR+pd/4EMX6nv87+zJ4+bsSURfLITNPl7f6pqMxGddscEWI+EuUX8hH/4O0lKwvzImZGH7ngW8lx7Sfet574tXk65zmnUvPy8cYXo5QJVcwH7fenpye28oX8RPD2cP/8JDbvfJBPntlmtKcYt29sU9rz41P89eSvT+/0C6k9ljTzhQMJ4/mBAPNJ/8k0xhf2oViH84DfVht/JLbCPWRxL/BCFsg9VB73+xHeP5Qfd/87PmHJjv854YXMAqfx/vHx0k6KzL7fqvDYzn89c6qYTkg7CG6w2dN9ZNZx5r+N8ICovDpFW3+sPgjDgTVORrDYDYHQyCFVEpgg/+f80cq/Jqd549scSg+Q3Akp9F4NqKvvIT6u6lGSA/8BwAZFHlFukMdcwi1j675Eb2ODRQB+vMk2V24wOVZZQ3ODDeYOOPMgPmf9Uny2OXSyvL+0JnCe3p6fn99i1/mF+KxPHyKUfBJxM3xn/gj1od8/UvmSl3dyhtvHPEdQONJv1AU2PqgX/vSYjLMvQrHDeIq9ZOOD3k9KeQV78vTSOnb3Y5/7jYYxj9Qn/UiGkkcxbd+mj3X7sm6DzOPWM46HcMD/3GZ8PT6QgPJBrNt+E+GwwXWm21u3JODcElTBJxyVttuP7/f5lcfw6YGFuOxNGbfPJJJ9uN+Kpa4eRUBqvIko8OVh6+nFwVF6atHA7W+apMV80+j4gZzniWZ6nugao8dkQlpEk/SmnBd8U+vlRX0IoRhDxGGPLL/zwhNHRb6ZH/jCl6kZtyKrYrxlF/bgRnubbl3GLeNCf3wQ/BT5fvnN9bGc51itBj28ZM78nCyfYny3U0uX2IFvyeaNrcVPp9XHSzFo4Xw33tlkQhnf8Ikt2PxIkirwOZvMM54yv2O+dXEq3hUKfKNkO0QSFj+9pSmW8A3fxU3yu/1ISDZuCzuIVojnonKF4PuJ5enL+G48Us5QWs0+t1CryLf4EXGVowLfT5JZfvT80nhJ59cLfGOjyM5jsBlWIy0N1y6TBF0B2pLO9vjMWuEt472Mb4NlrzJEGG8ZKZpyvnnnKPCN3iQrLR+fjexrLfIt/sx5f8zsf35bbEJ2EjxK5vYenxF2pNpPfLJSwneb/p22ZfiephQHnRmCn97aIlPVyPBNTkKvleO7LZl1Nojjkzlzke/GO20c+tst/zR9go+txrogvjHiR3APjJbIeHt45uNoke97WjPjmfscmYmdl0xOxXja4gVNDH5s/CfesfJ8v0j0JNg506ZKwvcLnXoS3TXboh8lJ10RnrZI9K5Tvm/5/Nvj88tLagdske8HooDOE+o5vts5vp+5/DnkxyYHsgvk+ZZQY7xTG2XcJqZKwnfjgXz2wX/L8v2yhAU/NZG2Jy8x38RMxDSWjpcU8Ok9a0+yfEv9QXaSfPumHLYfnPwttrkr+HIfn1rG9xOZ/Hh7FL+kz7BG9qQtXr2e5hvS7st9t9uYbz7OZ9twxjNON8KGcrx8L4yXzDy95deywo+t23eClBCsjG8Dd5gXYf1T76axVuOlGGAIMnzDD8Fq3FbaUr6z/uBWTX9QqF7G3o0wz095hTH0fCtmYeP1BjK+sWcL4+5kPKypP4gbeExXhm/8nLylxdbvnduKLN/w8Tl+HOOtKt4RV33j3kY8CoqIvJ0whegM92N8tWTElPL98vzyltSjScU7b2/rlGD+2BKJoccM38kt81jwRSz1zvKNxzPRwjGLuUJ2UvsN24/P4hTGO8uStJ+FIXq5f0LibOS6qWJst2IhiZRv4+E5uTy8feYprPZt2Uqk1QA+Prx9kAIqt0Kah/PdeONxDyIJrZeneB98O/cA2MKSmi2P+AQ55xniL92yvcbMxdjCP5GVF4mUbfuNnjz11fbD8zs+3fsDvcxLKiB7FAu5pXzD93+l5IENfFMf9KZu14puDINI9T68PYkKN23eXNGTaIRPz/jvSb70Me+zoae3h63n94JrAV/iBSw0y0HXtjx9ZOSxjcc3cvLMUrBbej3Wy1KjA/wQxicxyC/J39FH5nWjD3pTsro9lfj/Af0yRJZIEdA8AAAAAElFTkSuQmCC" alt="Universidad del Valle de Guatemala" />
+
       <div class="inst">
         Universidad del Valle de Guatemala<br />
         Facultad de Ingeniería<br />
@@ -229,147 +149,75 @@
       </div>
 
       <div class="mid">
-        <h1>Proyecto 1</h1>
-        <p class="sub">Uso de un protocolo existente — Model Context Protocol</p>
-
-        <div class="scope">
-          Entrega parcial. Este documento cubre la primera parte del proyecto: los incisos 4 y 5
-          (servidores MCP locales), junto con los incisos 8 y 10 del reporte aplicados a esa
-          primera parte.
-        </div>
+        <h1>Proyecto 1: Uso de un protocolo existente</h1>
+        <p class="sub">Model Context Protocol</p>
+        <p class="scope">
+          Entrega parcial. Incisos 4 y 5 de la primera parte, e incisos 8 y 10 del reporte
+          aplicados a esa misma parte.
+        </p>
       </div>
 
-      <div class="who">
-        <b>Repositorio:</b> github.com/UVG-Work/Proyecto-1-Chat-MCP-<br />
-        <b>Implementación:</b> TypeScript sobre Node.js, sin SDK de MCP<br />
-        <b>Revisión del protocolo:</b> 2025-11-25
+      <div class="foot">
+        Repositorio: github.com/UVG-Work/Proyecto-1-Chat-MCP-
       </div>
     </div>
 
-    <section>
-      <h2>1. Alcance de esta entrega</h2>
-      <p class="lead">
-        El proyecto consiste en un chatbot que actúa como anfitrión (<i>host</i>) de MCP y utiliza
-        las herramientas expuestas por varios servidores. Esta entrega parcial documenta únicamente
-        la primera parte: el uso de los servidores oficiales de Anthropic y la construcción de un
-        servidor MCP propio basado en un caso de uso de industria.
-      </p>
+    <p>
+      El proyecto consiste en un chatbot que funciona como anfitrión de MCP y utiliza las
+      herramientas expuestas por varios servidores. El protocolo se implementó a mano: el formato e
+      intercambio de mensajes JSON-RPC 2.0, la fase de inicialización, la negociación de versión y
+      el transporte stdio se escribieron desde cero, tanto del lado del cliente como del servidor,
+      sin utilizar ningún SDK de MCP. Este documento cubre únicamente los incisos indicados en la
+      carátula.
+    </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th style="width: 12%">Inciso</th>
-            <th>Contenido</th>
-            <th style="width: 20%">Sección</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>4</td>
-            <td>Uso de los servidores MCP locales oficiales: Filesystem y Git</td>
-            <td>Sección 3</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Servidor MCP propio, ejecutado localmente, basado en un caso de uso de industria</td>
-            <td>Sección 4</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>Especificación del servidor desarrollado: parámetros, endpoints, métodos</td>
-            <td>Sección 5</td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td>Conclusiones y comentarios sobre esta parte del proyecto</td>
-            <td>Sección 6</td>
-          </tr>
-        </tbody>
-      </table>
+    <h2>Inciso 4. Uso de servidores MCP locales existentes</h2>
 
-      <p>
-        Quedan fuera de este documento los incisos 6 y 7 (servidor remoto y análisis con Wireshark),
-        que corresponden a la segunda parte, así como el inciso 9, que depende del análisis de
-        captura de esa segunda parte.
-      </p>
+    <p>
+      El anfitrión se conecta a los dos servidores oficiales mediante el transporte stdio: el
+      cliente lanza cada servidor como un subproceso e intercambia mensajes JSON-RPC delimitados por
+      saltos de línea a través de su entrada y salida estándar.
+    </p>
 
-      <h2>2. Restricción de implementación</h2>
-      <p>
-        El enunciado (sección 3.1) prohíbe el uso de librerías o SDKs que implementen MCP, tales como
-        FastMCP. En consecuencia, en este proyecto se escribieron a mano:
-      </p>
-      <ul>
-        <li>el formato y el intercambio de mensajes JSON-RPC 2.0;</li>
-        <li>la fase de inicialización (<code>initialize</code> y <code>notifications/initialized</code>);</li>
-        <li>la negociación de versión de protocolo y de capacidades;</li>
-        <li>el transporte stdio, tanto del lado del cliente como del servidor.</li>
-      </ul>
-      <p>
-        Es importante señalar que esto aplica al <i>cliente</i> además del servidor. Para cumplir el
-        inciso 4 el cliente escrito a mano debe comunicarse con servidores desarrollados por
-        terceros, lo cual obliga a respetar la especificación con exactitud; cualquier desviación en
-        el formato de trama o en el ciclo de vida impide la conexión.
-      </p>
-      <div class="note">
-        <b>Alcance de la restricción.</b> La prohibición se refiere a implementaciones de MCP. El
-        paquete <code>openai</code> se utiliza únicamente como cliente HTTP hacia la API de
-        OpenRouter para conversar con el modelo de lenguaje, que no forma parte del protocolo MCP.
-        Todo byte de MCP en este proyecto es producido por código propio en <code>src/mcp/</code> y
-        <code>src/server/</code>.
-      </div>
-    </section>
+    <table>
+      <tr>
+        <th>Servidor</th>
+        <th>Implementación</th>
+        <th>Invocación</th>
+        <th>Herramientas</th>
+      </tr>
+      <tr>
+        <td>Filesystem</td>
+        <td>secure-filesystem-server 0.2.0</td>
+        <td><code>npx -y @modelcontextprotocol/server-filesystem ./sandbox</code></td>
+        <td>14</td>
+      </tr>
+      <tr>
+        <td>Git</td>
+        <td>mcp-git 1.29.0</td>
+        <td><code>uvx mcp-server-git</code></td>
+        <td>12</td>
+      </tr>
+    </table>
 
-    <section class="break">
-      <h2>3. Inciso 4: servidores MCP locales oficiales</h2>
+    <p>
+      Ambos negocian la revisión 2025-11-25 del protocolo y declaran la capacidad
+      <code>tools</code>. El servidor de Git es un paquete de Python, por lo que el proyecto
+      requiere <code>uv</code> instalado aunque el resto esté escrito en TypeScript.
+    </p>
 
-      <p>
-        El anfitrión se conecta a los dos servidores oficiales de referencia mediante el transporte
-        stdio: el cliente lanza cada servidor como un subproceso e intercambia mensajes JSON-RPC
-        delimitados por saltos de línea a través de su entrada y salida estándar.
-      </p>
+    <h3>Escenario demostrado</h3>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Servidor</th>
-            <th>Implementación</th>
-            <th>Invocación</th>
-            <th style="width: 12%">Herramientas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Filesystem</td>
-            <td>secure-filesystem-server 0.2.0 (TypeScript)</td>
-            <td><code>npx -y @modelcontextprotocol/server-filesystem ./sandbox</code></td>
-            <td>14</td>
-          </tr>
-          <tr>
-            <td>Git</td>
-            <td>mcp-git 1.29.0 (Python)</td>
-            <td><code>uvx mcp-server-git</code></td>
-            <td>12</td>
-          </tr>
-        </tbody>
-      </table>
+    <p>
+      Se solicita al chatbot, en lenguaje natural, que cree un archivo README, lo agregue al
+      repositorio y realice un commit. El modelo decide por sí mismo qué herramientas usar y en qué
+      orden; el anfitrión únicamente traduce esas decisiones en llamadas <code>tools/call</code> y
+      las enruta al servidor que corresponde.
+    </p>
 
-      <p>
-        Ambos negocian la revisión <code>2025-11-25</code> y declaran la capacidad <code>tools</code>.
-        Conviene notar que el servidor de Git es un paquete de Python y no de Node, por lo que el
-        proyecto requiere <code>uv</code> instalado aunque el resto esté escrito en TypeScript.
-      </p>
-
-      <h3>3.1 Escenario demostrado</h3>
-      <p>
-        Se solicita al chatbot, en lenguaje natural, que cree un archivo README, lo agregue al
-        repositorio y realice un commit. El modelo decide por sí mismo qué herramientas usar y en qué
-        orden; el anfitrión únicamente traduce esas decisiones a llamadas <code>tools/call</code> y
-        las enruta al servidor correspondiente.
-      </p>
-
-      <pre><code>Instrucción: "Inside the demo-repo directory, create a file named README.md
-describing this project. Then add it to the git repository in that same directory
-and commit it with a descriptive message. Finally show me the git log."
+    <pre>Instrucción: "Inside the demo-repo directory, create a file named README.md
+describing this project. Then add it to the git repository in that same
+directory and commit it with a descriptive message. Finally show me the git log."
 
   filesystem__list_allowed_directories   {}                          ok
   filesystem__list_directory             {"path":".../sandbox"}      ok
@@ -381,95 +229,78 @@ and commit it with a descriptive message. Finally show me the git log."
 
 Resultado verificado en disco:
   dc5c5e7  Add README.md describing the MCP chat host for networking course
-  README.md | 22 ++++++++++++++++++++++</code></pre>
+  README.md | 22 ++++++++++++++++++++++</pre>
 
-      <p>
-        El commit existe realmente en el repositorio de prueba y fue creado por el chatbot a través
-        de MCP, no por la línea de comandos. Se observa además que el modelo combina dos servidores
-        distintos en una sola tarea: escribe el archivo con el servidor de Filesystem y lo versiona
-        con el de Git.
-      </p>
+    <p>
+      El commit existe realmente en el repositorio de prueba y fue creado por el chatbot a través de
+      MCP, no desde la línea de comandos. El modelo combina además dos servidores distintos en una
+      sola tarea: escribe el archivo con el servidor de Filesystem y lo versiona con el de Git.
+    </p>
 
-      <h3>3.2 Limitación encontrada</h3>
-      <div class="note">
-        <b>El servidor oficial de Git no expone <code>git_init</code>.</b> La versión 1.29.0 ofrece
-        doce herramientas (<code>git_status</code>, <code>git_diff</code>, <code>git_commit</code>,
-        <code>git_add</code>, <code>git_reset</code>, <code>git_log</code>,
-        <code>git_create_branch</code>, <code>git_checkout</code>, <code>git_show</code>,
-        <code>git_branch</code> y las variantes de diff), ninguna de las cuales crea un repositorio.
-        Por lo tanto la creación del repositorio se realiza mediante un script de preparación
-        (<code>npm run setup:demo</code>), mientras que la creación del README, su incorporación al
-        índice y el commit sí se ejecutan por medio de MCP. Se documenta la limitación en lugar de
-        ocultarla.
-      </div>
+    <h3>Limitación encontrada</h3>
 
-      <h3>3.3 Registro de interacciones</h3>
-      <p>
-        Todas las solicitudes y respuestas con los servidores MCP quedan registradas. En el cliente
-        de terminal, el comando <code>/log</code> muestra cada trama con su marca de tiempo,
-        dirección, servidor y clasificación; <code>/log full</code> incluye la carga JSON completa.
-        El registro se toma en la capa de transporte, de modo que resulta completo por construcción
-        y no por recordar invocarlo en cada punto del código.
-      </p>
-    </section>
+    <p>
+      El servidor oficial de Git, en su versión 1.29.0, no expone una herramienta
+      <code>git_init</code>. Las doce herramientas disponibles son <code>git_status</code>,
+      <code>git_diff</code>, <code>git_diff_staged</code>, <code>git_diff_unstaged</code>,
+      <code>git_commit</code>, <code>git_add</code>, <code>git_reset</code>, <code>git_log</code>,
+      <code>git_create_branch</code>, <code>git_checkout</code>, <code>git_show</code> y
+      <code>git_branch</code>, ninguna de las cuales crea un repositorio. Por esa razón la creación
+      del repositorio se realiza mediante un script de preparación, mientras que la creación del
+      README, su incorporación al índice y el commit sí se ejecutan por medio de MCP.
+    </p>
 
-    <section class="break">
-      <h2>4. Inciso 5: servidor MCP propio</h2>
+    <h2 class="break">Inciso 5. Servidor MCP propio</h2>
 
-      <h3>4.1 Caso de uso de industria</h3>
-      <p>
-        El servidor implementa la <b>mesa de servicio de primer nivel de un proveedor de internet
-        (ISP)</b>. Es un caso de uso real y directamente relacionado con la materia: cuando un
-        abonado llama reportando lentitud, el agente debe identificar la cuenta, consultar la
-        telemetría del circuito, descartar una avería de zona conocida y decidir si la evidencia
-        justifica enviar un técnico.
-      </p>
-      <p>
-        Ese encadenamiento es lo que hace el caso apropiado para MCP: el modelo no invoca una sola
-        herramienta, sino que ordena cinco y decide en cada paso qué hacer con el resultado
-        anterior. Cada una de esas herramientas correspondería, en un operador real, a un sistema
-        distinto.
-      </p>
-      <p>
-        Todos los datos son sintéticos y no contienen información de abonados reales. Los
-        diagnósticos se basan en umbrales determinísticos y no en valores aleatorios, de modo que
-        una demostración produce siempre el mismo resultado.
-      </p>
+    <h3>Caso de uso a nivel de industria</h3>
 
-      <h3>4.2 Herramientas expuestas</h3>
-      <table>
-        <thead>
-          <tr>
-            <th style="width: 30%">Herramienta</th>
-            <th>Propósito</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>lookup_subscriber</code></td>
-            <td>Localiza una cuenta por nombre, identificador, circuito o teléfono. Devuelve el identificador de circuito que requieren las demás herramientas.</td>
-          </tr>
-          <tr>
-            <td><code>get_link_metrics</code></td>
-            <td>Telemetría del enlace: latencia, jitter, pérdida de paquetes, relación señal a ruido, throughput medido, tiempo en servicio y número de caídas.</td>
-          </tr>
-          <tr>
-            <td><code>run_link_diagnostics</code></td>
-            <td>Evalúa la telemetría contra los umbrales del operador y devuelve un diagnóstico con la acción recomendada.</td>
-          </tr>
-          <tr>
-            <td><code>check_zone_outage</code></td>
-            <td>Incidentes conocidos que afectan una zona de servicio, con causa, estado y tiempo estimado de resolución.</td>
-          </tr>
-          <tr>
-            <td><code>open_incident_ticket</code></td>
-            <td>Escala el caso creando un ticket de incidente. Es la única herramienta que modifica estado.</td>
-          </tr>
-        </tbody>
-      </table>
+    <p>
+      El servidor implementa la mesa de servicio de primer nivel de un proveedor de internet. Cuando
+      un abonado llama reportando lentitud, el agente debe identificar la cuenta, consultar la
+      telemetría del circuito, descartar una avería de zona conocida y decidir si la evidencia
+      justifica enviar a un técnico. En un operador real cada una de esas consultas corresponde a un
+      sistema distinto.
+    </p>
 
-      <h3>4.3 Escenario demostrado</h3>
-      <pre><code>Instrucción: "La clienta Maria Elena Ramirez llama porque su internet esta muy
+    <p>
+      Ese encadenamiento es lo que hace al caso apropiado para MCP: el modelo no invoca una sola
+      herramienta, sino que ordena cinco y decide en cada paso qué hacer con el resultado anterior.
+      Todos los datos son sintéticos y los diagnósticos se basan en umbrales determinísticos, de
+      modo que una demostración produce siempre el mismo resultado.
+    </p>
+
+    <h3>Herramientas expuestas</h3>
+
+    <table>
+      <tr>
+        <th>Herramienta</th>
+        <th>Propósito</th>
+      </tr>
+      <tr>
+        <td><code>lookup_subscriber</code></td>
+        <td>Localiza una cuenta por nombre, identificador, circuito o teléfono. Devuelve el identificador de circuito que requieren las demás herramientas.</td>
+      </tr>
+      <tr>
+        <td><code>get_link_metrics</code></td>
+        <td>Telemetría del enlace: latencia, jitter, pérdida de paquetes, relación señal a ruido, throughput medido, tiempo en servicio y número de caídas.</td>
+      </tr>
+      <tr>
+        <td><code>run_link_diagnostics</code></td>
+        <td>Evalúa la telemetría contra los umbrales del operador y devuelve un diagnóstico con la acción recomendada.</td>
+      </tr>
+      <tr>
+        <td><code>check_zone_outage</code></td>
+        <td>Incidentes conocidos que afectan una zona de servicio, con causa, estado y tiempo estimado de resolución.</td>
+      </tr>
+      <tr>
+        <td><code>open_incident_ticket</code></td>
+        <td>Escala el caso creando un ticket de incidente. Es la única herramienta que modifica estado.</td>
+      </tr>
+    </table>
+
+    <h3>Escenario demostrado</h3>
+
+    <pre>Instrucción: "La clienta Maria Elena Ramirez llama porque su internet esta muy
 lento. Investiga que ocurre con su servicio y, si corresponde, abre un ticket."
 
   lookup_subscriber      {"query":"Maria Elena Ramirez"}       ok
@@ -483,175 +314,240 @@ crítico 15 dB), jitter 19.4 ms, 11 caídas en 24 h, throughput 62 de 300 Mbps.
 Sin incidencias de zona que expliquen el síntoma.
 
 Diagnóstico: falla crítica del enlace. Ticket TCK-4401 abierto, severidad alta,
-asignado a Field Operations.</code></pre>
+asignado a Field Operations.</pre>
 
-      <p>
-        El modelo secuencia las cinco llamadas por su cuenta a partir de la descripción del problema
-        y de las descripciones de las herramientas; no existe ninguna lógica en el anfitrión que
-        codifique este orden.
-      </p>
+    <p>
+      El modelo secuencia las cinco llamadas por su cuenta a partir de la descripción del problema y
+      de las descripciones de las herramientas. No existe en el anfitrión ninguna lógica que
+      codifique ese orden.
+    </p>
 
-      <h3>4.4 Datos de prueba</h3>
-      <p>
-        El conjunto de datos está construido de modo que cada abonado ejercita una ruta diagnóstica
-        distinta, permitiendo demostrar los cuatro diagnósticos posibles.
-      </p>
-      <table>
-        <thead>
-          <tr>
-            <th>Abonado</th>
-            <th>Circuito</th>
-            <th>Condición</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>SUB-100482</td>
-            <td><code>GT-CIR-004821</code></td>
-            <td>Degradado: 8.2 % de pérdida, SNR 14.1 dB, 11 caídas</td>
-          </tr>
-          <tr>
-            <td>SUB-100731</td>
-            <td><code>GT-CIR-005190</code></td>
-            <td>Sano: todas las métricas dentro de umbral</td>
-          </tr>
-          <tr>
-            <td>SUB-100955</td>
-            <td><code>GT-CIR-005544</code></td>
-            <td>Caído por avería de zona activa (corte de fibra)</td>
-          </tr>
-          <tr>
-            <td>SUB-101204</td>
-            <td><code>GT-CIR-006012</code></td>
-            <td>Enlace sano pero cuenta suspendida</td>
-          </tr>
-          <tr>
-            <td>SUB-101488</td>
-            <td><code>GT-CIR-006377</code></td>
-            <td>Congestión: 137 ms de latencia y 42.6 ms de jitter sin pérdida</td>
-          </tr>
-        </tbody>
-      </table>
-      <p>
-        Los dos últimos casos son deliberados: una cuenta suspendida y un corte de fibra se parecen,
-        vistos sólo desde la telemetría, a un enlace averiado. Enviar un técnico en cualquiera de
-        los dos casos sería un desplazamiento inútil, por lo que el diagnóstico los distingue de
-        forma explícita.
-      </p>
-    </section>
+    <h3>Datos de prueba</h3>
 
-    <section class="break">
-      <h2>5. Inciso 8: especificación del servidor desarrollado</h2>
+    <p>
+      El conjunto de datos está construido de modo que cada abonado ejercite una ruta diagnóstica
+      distinta, lo que permite demostrar los cuatro diagnósticos posibles.
+    </p>
 
-      <table class="kv">
-        <tbody>
-          <tr><td>Nombre del servidor</td><td><code>noc-support-desk</code></td></tr>
-          <tr><td>Versión</td><td>1.0.0</td></tr>
-          <tr><td>Revisión de MCP</td><td><code>2025-11-25</code>, con negociación hacia atrás a 2025-06-18, 2025-03-26 y 2024-11-05</td></tr>
-          <tr><td>Capacidades declaradas</td><td><code>tools</code> con <code>listChanged: false</code></td></tr>
-          <tr><td>Transporte (esta entrega)</td><td>stdio</td></tr>
-          <tr><td>Punto de entrada</td><td><code>src/server/stdio-main.ts</code>, ejecutable con <code>npm run noc:stdio</code></td></tr>
-        </tbody>
-      </table>
+    <table>
+      <tr>
+        <th>Abonado</th>
+        <th>Circuito</th>
+        <th>Condición</th>
+      </tr>
+      <tr>
+        <td>SUB-100482</td>
+        <td><code>GT-CIR-004821</code></td>
+        <td>Degradado: 8.2 % de pérdida, SNR 14.1 dB, 11 caídas</td>
+      </tr>
+      <tr>
+        <td>SUB-100731</td>
+        <td><code>GT-CIR-005190</code></td>
+        <td>Sano: todas las métricas dentro de umbral</td>
+      </tr>
+      <tr>
+        <td>SUB-100955</td>
+        <td><code>GT-CIR-005544</code></td>
+        <td>Caído por avería de zona activa</td>
+      </tr>
+      <tr>
+        <td>SUB-101204</td>
+        <td><code>GT-CIR-006012</code></td>
+        <td>Enlace sano pero cuenta suspendida</td>
+      </tr>
+      <tr>
+        <td>SUB-101488</td>
+        <td><code>GT-CIR-006377</code></td>
+        <td>Congestión: 137 ms de latencia y 42.6 ms de jitter, sin pérdida</td>
+      </tr>
+    </table>
 
-      <h3>5.1 Métodos soportados</h3>
-      <table>
-        <thead>
-          <tr><th style="width: 32%">Método</th><th style="width: 20%">Tipo</th><th>Comportamiento</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>initialize</code></td><td>solicitud</td><td>Devuelve versión negociada, capacidades, identificación del servidor e instrucciones de uso.</td></tr>
-          <tr><td><code>notifications/initialized</code></td><td>notificación</td><td>Se consume y nunca se responde, conforme a JSON-RPC.</td></tr>
-          <tr><td><code>ping</code></td><td>solicitud</td><td>Devuelve un resultado vacío.</td></tr>
-          <tr><td><code>tools/list</code></td><td>solicitud</td><td>Devuelve las cinco herramientas con su esquema de entrada.</td></tr>
-          <tr><td><code>tools/call</code></td><td>solicitud</td><td>Ejecuta una herramienta y devuelve su resultado.</td></tr>
-        </tbody>
-      </table>
-      <p>Cualquier otro método devuelve el error JSON-RPC <code>-32601</code> (método no encontrado).</p>
+    <p>
+      Los dos últimos casos son deliberados. Una cuenta suspendida y un corte de fibra se parecen,
+      vistos únicamente desde la telemetría, a un enlace averiado; enviar un técnico en cualquiera
+      de los dos casos sería un desplazamiento inútil, por lo que el diagnóstico los distingue de
+      forma explícita.
+    </p>
 
-      <h3>5.2 Parámetros de las herramientas</h3>
-      <table>
-        <thead>
-          <tr><th style="width: 28%">Herramienta</th><th style="width: 24%">Parámetro</th><th style="width: 12%">Tipo</th><th>Descripción</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>lookup_subscriber</code></td><td><code>query</code></td><td>string</td><td>Nombre, <code>SUB-######</code>, <code>GT-CIR-######</code> o teléfono. Requerido.</td></tr>
-          <tr><td><code>get_link_metrics</code></td><td><code>circuit_id</code></td><td>string</td><td>Identificador de circuito. Requerido.</td></tr>
-          <tr><td><code>run_link_diagnostics</code></td><td><code>circuit_id</code></td><td>string</td><td>Identificador de circuito. Requerido.</td></tr>
-          <tr><td><code>check_zone_outage</code></td><td><code>zone</code></td><td>string</td><td>Zona de servicio, por ejemplo <code>ZONA-GUATE-07</code>. Requerido.</td></tr>
-          <tr><td rowspan="3"><code>open_incident_ticket</code></td><td><code>subscriber_id</code></td><td>string</td><td>Identificador exacto del abonado. Requerido.</td></tr>
-          <tr><td><code>summary</code></td><td>string</td><td>Descripción del fallo y su evidencia. Requerido.</td></tr>
-          <tr><td><code>severity</code></td><td>string</td><td>Uno de <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>. Requerido.</td></tr>
-        </tbody>
-      </table>
+    <h2 class="break">Inciso 8. Especificación del servidor desarrollado</h2>
 
-      <h3>5.3 Umbrales de diagnóstico</h3>
-      <table>
-        <thead>
-          <tr><th>Métrica</th><th style="width: 22%">Degradado</th><th style="width: 22%">Crítico</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Pérdida de paquetes</td><td>&ge; 1 %</td><td>&ge; 5 %</td></tr>
-          <tr><td>Latencia</td><td>&ge; 60 ms</td><td>&ge; 120 ms</td></tr>
-          <tr><td>Jitter</td><td>&ge; 15 ms</td><td>&ge; 30 ms</td></tr>
-          <tr><td>Relación señal a ruido</td><td>&le; 20 dB</td><td>&le; 15 dB</td></tr>
-          <tr><td>Caídas en 24 horas</td><td>&ge; 5</td><td>&mdash;</td></tr>
-        </tbody>
-      </table>
+    <table>
+      <tr><td>Nombre del servidor</td><td><code>noc-support-desk</code></td></tr>
+      <tr><td>Versión</td><td>1.0.0</td></tr>
+      <tr><td>Revisión de MCP</td><td>2025-11-25, con negociación hacia atrás a 2025-06-18, 2025-03-26 y 2024-11-05</td></tr>
+      <tr><td>Capacidades declaradas</td><td><code>tools</code>, con <code>listChanged: false</code></td></tr>
+      <tr><td>Transporte</td><td>stdio</td></tr>
+      <tr><td>Punto de entrada</td><td><code>src/server/stdio-main.ts</code></td></tr>
+    </table>
 
-      <p>Los diagnósticos posibles son:</p>
-      <table>
-        <thead>
-          <tr><th style="width: 26%">Diagnóstico</th><th>Significado y acción recomendada</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>healthy</code></td><td>Todo dentro de umbral; revisar el equipo del cliente antes de escalar.</td></tr>
-          <tr><td><code>link-fault</code></td><td>Uno o más umbrales excedidos; abrir ticket con la severidad correspondiente.</td></tr>
-          <tr><td><code>zone-outage</code></td><td>Una avería conocida explica el síntoma; informar el tiempo estimado y no duplicar el ticket.</td></tr>
-          <tr><td><code>account-suspended</code></td><td>El enlace está sano pero la cuenta está suspendida; derivar a facturación.</td></tr>
-        </tbody>
-      </table>
+    <h3>Métodos soportados</h3>
 
-      <h3>5.4 Endpoints y transporte</h3>
-      <p>
-        En esta primera parte el servidor se ejecuta localmente sobre stdio, por lo que no expone
-        endpoints de red. Las reglas de trama son las que fija la especificación:
-      </p>
-      <ul>
-        <li>un mensaje JSON-RPC por línea, codificado en UTF-8;</li>
-        <li>los mensajes no pueden contener saltos de línea incrustados;</li>
-        <li>la salida estándar transporta únicamente mensajes MCP, por lo que todo diagnóstico del servidor se escribe en la salida de error;</li>
-        <li>el cliente no debe interpretar la salida de error como una condición de fallo;</li>
-        <li>cerrar la entrada estándar termina el servidor de forma ordenada.</li>
-      </ul>
-      <div class="note">
-        El mismo servidor está preparado para ejecutarse sobre el transporte Streamable HTTP, en cuyo
-        caso sí expone un endpoint <code>/mcp</code>. Eso corresponde al inciso 6 y se documenta en
-        la entrega final.
-      </div>
+    <table>
+      <tr>
+        <th>Método</th>
+        <th>Tipo</th>
+        <th>Comportamiento</th>
+      </tr>
+      <tr>
+        <td><code>initialize</code></td>
+        <td>solicitud</td>
+        <td>Devuelve la versión negociada, las capacidades, la identificación del servidor y sus instrucciones de uso.</td>
+      </tr>
+      <tr>
+        <td><code>notifications/initialized</code></td>
+        <td>notificación</td>
+        <td>Se consume y nunca se responde, conforme a JSON-RPC.</td>
+      </tr>
+      <tr>
+        <td><code>ping</code></td>
+        <td>solicitud</td>
+        <td>Devuelve un resultado vacío.</td>
+      </tr>
+      <tr>
+        <td><code>tools/list</code></td>
+        <td>solicitud</td>
+        <td>Devuelve las cinco herramientas con su esquema de entrada.</td>
+      </tr>
+      <tr>
+        <td><code>tools/call</code></td>
+        <td>solicitud</td>
+        <td>Ejecuta una herramienta y devuelve su resultado.</td>
+      </tr>
+    </table>
 
-      <h3>5.5 Manejo de errores</h3>
-      <table>
-        <thead>
-          <tr><th style="width: 16%">Código</th><th style="width: 30%">Significado</th><th>Cuándo se produce</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>-32700</code></td><td>Error de análisis</td><td>La carga no es JSON válido.</td></tr>
-          <tr><td><code>-32600</code></td><td>Solicitud inválida</td><td>No es un mensaje JSON-RPC 2.0 válido.</td></tr>
-          <tr><td><code>-32601</code></td><td>Método no encontrado</td><td>Método desconocido.</td></tr>
-          <tr><td><code>-32602</code></td><td>Parámetros inválidos</td><td>Herramienta inexistente, argumento requerido ausente, tipo incorrecto o valor fuera del conjunto permitido.</td></tr>
-          <tr><td><code>-32603</code></td><td>Error interno</td><td>Fallo inesperado del servidor.</td></tr>
-        </tbody>
-      </table>
-      <p>
-        Conviene distinguir dos situaciones que suelen confundirse. Una herramienta que se ejecuta y
-        <i>falla</i> no produce un error de JSON-RPC: devuelve una respuesta exitosa cuyo resultado
-        lleva <code>isError: true</code> junto con un texto explicativo, de modo que el modelo pueda
-        leer el fallo y reaccionar. Los códigos anteriores se reservan para errores de protocolo.
-      </p>
+    <p>Cualquier otro método devuelve el error JSON-RPC -32601, método no encontrado.</p>
 
-      <h3>5.6 Ejemplo de intercambio</h3>
-      <pre><code>--&gt; {"jsonrpc":"2.0","id":1,"method":"initialize",
+    <h3>Parámetros de las herramientas</h3>
+
+    <table>
+      <tr>
+        <th>Herramienta</th>
+        <th>Parámetro</th>
+        <th>Tipo</th>
+        <th>Descripción</th>
+      </tr>
+      <tr>
+        <td><code>lookup_subscriber</code></td>
+        <td><code>query</code></td>
+        <td>string</td>
+        <td>Nombre, identificador SUB-######, circuito GT-CIR-###### o teléfono. Requerido.</td>
+      </tr>
+      <tr>
+        <td><code>get_link_metrics</code></td>
+        <td><code>circuit_id</code></td>
+        <td>string</td>
+        <td>Identificador de circuito. Requerido.</td>
+      </tr>
+      <tr>
+        <td><code>run_link_diagnostics</code></td>
+        <td><code>circuit_id</code></td>
+        <td>string</td>
+        <td>Identificador de circuito. Requerido.</td>
+      </tr>
+      <tr>
+        <td><code>check_zone_outage</code></td>
+        <td><code>zone</code></td>
+        <td>string</td>
+        <td>Zona de servicio, por ejemplo ZONA-GUATE-07. Requerido.</td>
+      </tr>
+      <tr>
+        <td rowspan="3"><code>open_incident_ticket</code></td>
+        <td><code>subscriber_id</code></td>
+        <td>string</td>
+        <td>Identificador exacto del abonado. Requerido.</td>
+      </tr>
+      <tr>
+        <td><code>summary</code></td>
+        <td>string</td>
+        <td>Descripción del fallo y su evidencia. Requerido.</td>
+      </tr>
+      <tr>
+        <td><code>severity</code></td>
+        <td>string</td>
+        <td>Uno de low, medium, high o critical. Requerido.</td>
+      </tr>
+    </table>
+
+    <h3>Umbrales de diagnóstico</h3>
+
+    <table>
+      <tr>
+        <th>Métrica</th>
+        <th>Degradado</th>
+        <th>Crítico</th>
+      </tr>
+      <tr><td>Pérdida de paquetes</td><td>mayor o igual a 1 %</td><td>mayor o igual a 5 %</td></tr>
+      <tr><td>Latencia</td><td>mayor o igual a 60 ms</td><td>mayor o igual a 120 ms</td></tr>
+      <tr><td>Jitter</td><td>mayor o igual a 15 ms</td><td>mayor o igual a 30 ms</td></tr>
+      <tr><td>Relación señal a ruido</td><td>menor o igual a 20 dB</td><td>menor o igual a 15 dB</td></tr>
+      <tr><td>Caídas en 24 horas</td><td>mayor o igual a 5</td><td>no aplica</td></tr>
+    </table>
+
+    <p>Los diagnósticos posibles son los siguientes.</p>
+
+    <table>
+      <tr>
+        <th>Diagnóstico</th>
+        <th>Significado y acción recomendada</th>
+      </tr>
+      <tr>
+        <td><code>healthy</code></td>
+        <td>Todo dentro de umbral. Revisar el equipo del cliente antes de escalar.</td>
+      </tr>
+      <tr>
+        <td><code>link-fault</code></td>
+        <td>Uno o más umbrales excedidos. Abrir ticket con la severidad correspondiente.</td>
+      </tr>
+      <tr>
+        <td><code>zone-outage</code></td>
+        <td>Una avería conocida explica el síntoma. Informar el tiempo estimado y no duplicar el ticket.</td>
+      </tr>
+      <tr>
+        <td><code>account-suspended</code></td>
+        <td>El enlace está sano pero la cuenta está suspendida. Derivar a facturación.</td>
+      </tr>
+    </table>
+
+    <h3>Endpoints y transporte</h3>
+
+    <p>
+      En esta primera parte el servidor se ejecuta localmente sobre stdio, por lo que no expone
+      endpoints de red. Las reglas de trama son las que fija la especificación:
+    </p>
+
+    <ul>
+      <li>un mensaje JSON-RPC por línea, codificado en UTF-8;</li>
+      <li>los mensajes no pueden contener saltos de línea incrustados;</li>
+      <li>la salida estándar transporta únicamente mensajes MCP, por lo que todo diagnóstico del servidor se escribe en la salida de error;</li>
+      <li>el cliente no debe interpretar la salida de error como una condición de fallo;</li>
+      <li>cerrar la entrada estándar termina el servidor de forma ordenada.</li>
+    </ul>
+
+    <h3>Manejo de errores</h3>
+
+    <table>
+      <tr>
+        <th>Código</th>
+        <th>Significado</th>
+        <th>Cuándo se produce</th>
+      </tr>
+      <tr><td>-32700</td><td>Error de análisis</td><td>La carga no es JSON válido.</td></tr>
+      <tr><td>-32600</td><td>Solicitud inválida</td><td>No es un mensaje JSON-RPC 2.0 válido.</td></tr>
+      <tr><td>-32601</td><td>Método no encontrado</td><td>Método desconocido.</td></tr>
+      <tr><td>-32602</td><td>Parámetros inválidos</td><td>Herramienta inexistente, argumento requerido ausente, tipo incorrecto o valor fuera del conjunto permitido.</td></tr>
+      <tr><td>-32603</td><td>Error interno</td><td>Fallo inesperado del servidor.</td></tr>
+    </table>
+
+    <p>
+      Conviene distinguir dos situaciones que suelen confundirse. Una herramienta que se ejecuta y
+      falla no produce un error de JSON-RPC: devuelve una respuesta exitosa cuyo resultado lleva
+      <code>isError: true</code> junto con un texto explicativo, de modo que el modelo pueda leer el
+      fallo y reaccionar. Los códigos anteriores se reservan para errores de protocolo.
+    </p>
+
+    <h3>Ejemplo de intercambio</h3>
+
+    <pre>--&gt; {"jsonrpc":"2.0","id":1,"method":"initialize",
      "params":{"protocolVersion":"2025-11-25","capabilities":{},
                "clientInfo":{"name":"uvg-mcp-chat-host","version":"1.0.0"}}}
 
@@ -670,111 +566,95 @@ asignado a Field Operations.</code></pre>
                "arguments":{"query":"Maria Elena Ramirez"}}}
 &lt;-- {"jsonrpc":"2.0","id":3,"result":{"content":[{"type":"text",
      "text":"Found 1 matching subscriber(s): SUB-100482 ..."}],
-     "structuredContent":{"matches":[ ... ]}}}</code></pre>
+     "structuredContent":{"matches":[ ... ]}}}</pre>
 
-      <p>
-        El campo <code>instructions</code> merece una nota: el servidor describe en él el orden
-        recomendado de uso de sus herramientas, y el anfitrión lo reenvía al modelo. De este modo el
-        servidor documenta su propio uso a través del protocolo, en lugar de que el anfitrión
-        codifique conocimiento sobre un servidor en particular.
-      </p>
-    </section>
+    <p>
+      El campo <code>instructions</code> merece una nota. El servidor describe en él el orden
+      recomendado de uso de sus herramientas y el anfitrión lo reenvía al modelo, de modo que el
+      servidor documenta su propio uso a través del protocolo en lugar de que el anfitrión codifique
+      conocimiento sobre un servidor en particular.
+    </p>
 
-    <section class="break">
-      <h2>6. Inciso 10: conclusiones y comentarios</h2>
+    <h2 class="break">Inciso 10. Conclusiones y comentarios</h2>
 
-      <h3>6.1 Sobre el protocolo</h3>
-      <p>
-        <b>MCP es una convención, no un formato de trama.</b> No hay una cabecera de MCP ni un puerto
-        de MCP. Lo que existe es JSON-RPC 2.0 con un conjunto acordado de nombres de método, un ciclo
-        de vida y una negociación de capacidades. Esa es precisamente la razón por la que es viable
-        implementarlo a mano, y también por la que el mismo código de servidor puede atender
-        transportes distintos sin modificarse.
-      </p>
-      <p>
-        <b>La interoperabilidad es el objetivo del protocolo y se comprueba al conectarse con
-        servidores ajenos.</b> Escribir un servidor propio es cómodo porque uno responde a los
-        mensajes que uno mismo eligió. El inciso 4 obliga a lo contrario: el cliente escrito a mano
-        debe hablar con implementaciones de terceros, y ahí es donde cada ambigüedad de la
-        especificación se convierte en un fallo concreto.
-      </p>
+    <p>
+      MCP es una convención y no un formato de trama. No existe una cabecera de MCP ni un puerto de
+      MCP: lo que hay es JSON-RPC 2.0 con un conjunto acordado de nombres de método, un ciclo de
+      vida y una negociación de capacidades. Esa es precisamente la razón por la que resulta viable
+      implementarlo a mano y por la que el mismo código de servidor puede atender transportes
+      distintos sin modificarse.
+    </p>
 
-      <h3>6.2 Dificultades encontradas</h3>
-      <p>
-        <b>La negociación de versión no puede fijarse.</b> La intuición inicial es enviar la revisión
-        más reciente y esperar la misma de vuelta. La especificación establece que el servidor
-        responde con <i>su</i> revisión preferida y que el cliente debe aceptarla si la soporta, o
-        desconectarse en caso contrario. Un cliente con una única versión fija funciona contra el
-        servidor propio y falla contra los oficiales: el peor tipo de error, porque las pruebas
-        locales nunca lo revelan.
-      </p>
-      <p>
-        <b>La salida estándar es sagrada en stdio.</b> Un servidor no debe escribir en la salida
-        estándar nada que no sea un mensaje MCP. Un simple mensaje de depuración corrompe la trama y
-        rompe la sesión completa. Por eso todos los diagnósticos del servidor propio se escriben en
-        la salida de error, y el cliente trata esa salida como informativa y nunca como una señal de
-        fallo.
-      </p>
-      <p>
-        <b>Las tramas deben reensamblarse, no suponerse.</b> Un solo evento de lectura sobre el flujo
-        puede contener medio mensaje, varios mensajes, o ambas cosas. El transporte acumula lo
-        recibido y divide en los saltos de línea, conservando el resto para la siguiente lectura.
-      </p>
-      <p>
-        <b>Lanzar los servidores oficiales en Windows tiene su detalle.</b> <code>npx</code> y
-        <code>uvx</code> son archivos <code>.cmd</code>, que Node no puede ejecutar directamente
-        desde una restricción de seguridad introducida a raíz de CVE-2024-27980. Es necesario pasar
-        por el intérprete de comandos y encargarse del entrecomillado de los argumentos de forma
-        explícita.
-      </p>
-      <p>
-        <b>Una herramienta ausente obliga a documentar en vez de disimular.</b> El caso de
-        <code>git_init</code>, descrito en la sección 3.2, es el ejemplo: el enunciado sugiere que el
-        chatbot cree el repositorio, pero el servidor oficial actual no ofrece esa operación. Se optó
-        por dejar la creación fuera de MCP, indicarlo con claridad y mantener dentro del protocolo
-        todo lo que sí es posible.
-      </p>
+    <p>
+      La interoperabilidad es el objetivo del protocolo y solo se comprueba al conectarse con
+      servidores ajenos. Escribir un servidor propio es cómodo porque uno responde a los mensajes
+      que uno mismo eligió; el inciso 4 obliga a lo contrario, y es ahí donde cada ambigüedad de la
+      especificación se convierte en un fallo concreto.
+    </p>
 
-      <h3>6.3 Lecciones aprendidas</h3>
-      <p>
-        <b>El diseño del transporte como interfaz paga desde el primer día.</b> Separar el transporte
-        del cliente y del núcleo del servidor permitió que el mismo objeto de servidor atienda stdio
-        y HTTP sin duplicar lógica. Si esa separación se hubiera pospuesto, la segunda parte del
-        proyecto habría implicado reescribir el servidor en lugar de añadir un punto de entrada.
-      </p>
-      <p>
-        <b>Un solo punto de registro produce un registro completo.</b> Al capturar cada trama en la
-        capa de transporte, el requisito de mantener y mostrar un log de todas las interacciones se
-        satisface por construcción, y no depende de recordar registrar en cada lugar del código.
-      </p>
-      <p>
-        <b>Un buen caso de uso para un agente es aquel que requiere encadenar decisiones.</b> Una
-        herramienta aislada no demuestra gran cosa. El valor de MCP se aprecia cuando el modelo debe
-        elegir entre varias herramientas, usar el resultado de una para construir la llamada
-        siguiente y decidir cuándo detenerse. El escenario de la mesa de servicio se diseñó
-        expresamente con esa forma.
-      </p>
-      <p>
-        <b>La descripción de una herramienta es parte de su interfaz.</b> El modelo elige qué llamar
-        leyendo el nombre, la descripción y el esquema de entrada. Una descripción vaga produce
-        llamadas incorrectas con la misma facilidad que un error de programación, de manera que
-        redactarlas con cuidado es trabajo de ingeniería y no de documentación.
-      </p>
+    <p>
+      La negociación de versión no puede fijarse. La intuición inicial es enviar la revisión más
+      reciente y esperar la misma de vuelta, pero la especificación establece que el servidor
+      responde con su revisión preferida y que el cliente debe aceptarla si la soporta o
+      desconectarse en caso contrario. Un cliente con una única versión fija funciona contra el
+      servidor propio y falla contra los oficiales, que es el peor tipo de error porque las pruebas
+      locales nunca lo revelan.
+    </p>
 
-      <h3>6.4 Comentario final sobre esta parte</h3>
-      <p>
-        La primera parte del proyecto deja el protocolo implementado y verificado en las dos
-        direcciones que importan: un cliente propio que se entiende con servidores desarrollados por
-        terceros, y un servidor propio que se entiende con ese mismo cliente. Sobre esa base, la
-        segunda parte consiste en cambiar el transporte y observar el resultado en la red, sin
-        modificar ni la lógica de las herramientas ni el anfitrión.
-      </p>
+    <p>
+      La salida estándar es sagrada en stdio. Un servidor no debe escribir en ella nada que no sea
+      un mensaje MCP, pues un simple mensaje de depuración corrompe la trama y rompe la sesión
+      completa. Por eso todos los diagnósticos del servidor propio se escriben en la salida de
+      error, y el cliente trata esa salida como informativa y nunca como una señal de fallo.
+    </p>
 
-      <footer>
-        Documento correspondiente a la entrega parcial. Incisos 4, 5, 8 y 10 de la primera parte.
-        El código, la especificación completa y el registro de versiones se encuentran en el
-        repositorio del proyecto.
-      </footer>
-    </section>
+    <p>
+      Las tramas deben reensamblarse y no suponerse. Un solo evento de lectura sobre el flujo puede
+      contener medio mensaje, varios mensajes o ambas cosas, de manera que el transporte acumula lo
+      recibido, divide en los saltos de línea y conserva el resto para la lectura siguiente.
+    </p>
+
+    <p>
+      Lanzar los servidores oficiales en Windows tiene su detalle. Tanto <code>npx</code> como
+      <code>uvx</code> son archivos con extensión .cmd, que Node no puede ejecutar directamente por
+      una restricción de seguridad introducida a raíz de CVE-2024-27980, por lo que es necesario
+      pasar por el intérprete de comandos y encargarse del entrecomillado de los argumentos de forma
+      explícita.
+    </p>
+
+    <p>
+      Diseñar el transporte como una interfaz paga desde el primer día. Separarlo del cliente y del
+      núcleo del servidor permite que el mismo objeto de servidor atienda stdio y HTTP sin duplicar
+      lógica; si esa separación se hubiera pospuesto, la segunda parte del proyecto habría implicado
+      reescribir el servidor en lugar de añadirle un punto de entrada.
+    </p>
+
+    <p>
+      Un solo punto de registro produce un registro completo. Al capturar cada trama en la capa de
+      transporte, el requisito de mantener y mostrar un log de todas las interacciones se satisface
+      por construcción y no depende de recordar registrar en cada lugar del código.
+    </p>
+
+    <p>
+      Un buen caso de uso para un agente es aquel que exige encadenar decisiones. Una herramienta
+      aislada no demuestra gran cosa; el valor de MCP se aprecia cuando el modelo debe elegir entre
+      varias herramientas, usar el resultado de una para construir la llamada siguiente y decidir
+      cuándo detenerse. El escenario de la mesa de servicio se diseñó expresamente con esa forma.
+    </p>
+
+    <p>
+      La descripción de una herramienta forma parte de su interfaz. El modelo elige qué llamar
+      leyendo el nombre, la descripción y el esquema de entrada, de modo que una descripción vaga
+      produce llamadas incorrectas con la misma facilidad que un error de programación; redactarlas
+      con cuidado es trabajo de ingeniería y no de documentación.
+    </p>
+
+    <p>
+      Esta primera parte deja el protocolo implementado y verificado en las dos direcciones que
+      importan: un cliente propio que se entiende con servidores desarrollados por terceros, y un
+      servidor propio que se entiende con ese mismo cliente. Sobre esa base, la segunda parte
+      consiste en cambiar el transporte y observar el resultado en la red, sin modificar la lógica
+      de las herramientas ni el anfitrión.
+    </p>
   </body>
 </html>
