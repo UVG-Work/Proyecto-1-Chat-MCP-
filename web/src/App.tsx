@@ -1,28 +1,52 @@
-/**
- * Web chatbot UI (project statement 4.1, the optional User Interface).
- *
- * Two panes: the conversation, and a live view of every MCP JSON-RPC frame.
- * The log is not decoration - it is the visible form of requirement 3, and
- * keeping it beside the chat lets a reader connect a sentence the assistant
- * produced with the protocol traffic that produced it.
- */
-
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
+import {
+  IconChevron,
+  IconCloud,
+  IconInbound,
+  IconOutbound,
+  IconRefresh,
+  IconSend,
+  IconStdio,
+} from './icons';
 import type { ChatMessage, ChatResponse, LogEntry, MessageKind, Status } from './types';
 
-const KIND_COLORS: Record<MessageKind, string> = {
-  synchronization: 'var(--kind-synchronization)',
-  request: 'var(--kind-request)',
-  response: 'var(--kind-response)',
-  error: 'var(--kind-error)',
-  notification: 'var(--kind-notification)',
+const KIND_COLOR: Record<MessageKind, string> = {
+  synchronization: 'var(--sync)',
+  request: 'var(--request)',
+  response: 'var(--response)',
+  error: 'var(--error)',
+  notification: 'var(--notify)',
 };
 
-const SUGGESTIONS = [
-  'Who was Alan Turing?',
-  'La clienta Maria Elena Ramirez dice que su internet esta muy lento. Investiga y abre un ticket si corresponde.',
-  'Create a README.md inside demo-repo describing this project, add it to the git repository and commit it. Then show me the git log.',
+const KIND_ORDER: MessageKind[] = [
+  'synchronization',
+  'request',
+  'response',
+  'notification',
+  'error',
+];
+
+const SEEDS = [
+  {
+    label: 'Who was Alan Turing?',
+    note: 'Answered from the model alone, without touching a tool',
+    prompt: 'Who was Alan Turing?',
+  },
+  {
+    label: 'Diagnose a slow connection',
+    note: 'Chains five tool calls on the NOC server, then opens a ticket',
+    prompt:
+      'La clienta Maria Elena Ramirez dice que su internet esta muy lento. Investiga y abre un ticket si corresponde.',
+  },
+  {
+    label: 'Write a file and commit it',
+    note: 'Uses the Filesystem and Git servers together',
+    prompt:
+      'Create a README.md inside demo-repo describing this project, add it to the git repository and commit it. Then show me the git log.',
+  },
 ];
 
 export default function App() {
@@ -31,41 +55,35 @@ export default function App() {
   const [entries, setEntries] = useState<LogEntry[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
-  const [serverFilter, setServerFilter] = useState('all');
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [filter, setFilter] = useState('all');
+  const [open, setOpen] = useState<number | null>(null);
 
-  const transcriptRef = useRef<HTMLDivElement>(null);
-  const logRef = useRef<HTMLDivElement>(null);
-
-  /* ----------------------------------------------------------- status poll */
+  const threadRef = useRef<HTMLDivElement>(null);
+  const streamRef = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    let stopped = false;
 
     const poll = async () => {
       try {
         const response = await fetch('/api/status');
         const data = (await response.json()) as Status;
-        if (cancelled) return;
+        if (stopped) return;
         setStatus(data);
-        // Startup spawns subprocesses, so keep polling until the host is up.
         if (!data.ready && !data.startupError) setTimeout(poll, 1000);
       } catch {
-        if (!cancelled) setTimeout(poll, 2000);
+        if (!stopped) setTimeout(poll, 2000);
       }
     };
 
     void poll();
     return () => {
-      cancelled = true;
+      stopped = true;
     };
   }, []);
 
-  /* -------------------------------------------------------- live log stream */
-
   useEffect(() => {
-    // Seed with whatever already happened (the handshakes run before the
-    // browser connects), then follow the stream for everything after.
     void fetch('/api/log?limit=500')
       .then((response) => response.json() as Promise<{ entries: LogEntry[] }>)
       .then((data) => setEntries(data.entries))
@@ -79,34 +97,41 @@ export default function App() {
     return () => source.close();
   }, []);
 
-  /* --------------------------------------------------------- auto-scrolling */
-
   useEffect(() => {
-    transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: 'smooth' });
+    threadRef.current?.scrollTo({
+      top: threadRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
   }, [messages]);
 
   useEffect(() => {
-    const element = logRef.current;
-    if (!element) return;
-    // Only follow the tail when the reader is already at the bottom, so
-    // scrolling back to inspect an earlier frame is not yanked away.
-    const nearBottom = element.scrollHeight - element.scrollTop - element.clientHeight < 120;
-    if (nearBottom) element.scrollTop = element.scrollHeight;
+    const el = streamRef.current;
+    if (!el) return;
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 140) {
+      el.scrollTop = el.scrollHeight;
+    }
   }, [entries]);
 
-  /* ------------------------------------------------------------------ send */
+  const grow = useCallback(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 168)}px`;
+  }, []);
 
   const send = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
       if (trimmed.length === 0 || busy) return;
 
+      const stamp = Date.now();
       setInput('');
+      requestAnimationFrame(grow);
       setBusy(true);
       setMessages((current) => [
         ...current,
-        { id: `u-${Date.now()}`, role: 'user', content: trimmed },
-        { id: `a-${Date.now()}`, role: 'assistant', content: '', pending: true },
+        { id: `u${stamp}`, role: 'user', content: trimmed },
+        { id: `a${stamp}`, role: 'assistant', content: '', pending: true },
       ]);
 
       try {
@@ -123,7 +148,12 @@ export default function App() {
           if (!last) return next;
           next[next.length - 1] = data.error
             ? { ...last, role: 'system', content: data.error, pending: false }
-            : { ...last, content: data.reply, executions: data.executions, pending: false };
+            : {
+                ...last,
+                content: data.reply,
+                executions: data.executions,
+                pending: false,
+              };
           return next;
         });
       } catch (error) {
@@ -144,7 +174,7 @@ export default function App() {
         setBusy(false);
       }
     },
-    [busy],
+    [busy, grow],
   );
 
   const reset = useCallback(async () => {
@@ -152,74 +182,81 @@ export default function App() {
     setMessages([]);
   }, []);
 
-  /* ---------------------------------------------------------------- render */
-
-  const serverNames = useMemo(
+  const origins = useMemo(
     () => [...new Set(entries.map((entry) => entry.server))].sort(),
     [entries],
   );
 
-  const visibleEntries = useMemo(
-    () => (serverFilter === 'all' ? entries : entries.filter((e) => e.server === serverFilter)),
-    [entries, serverFilter],
+  const visible = useMemo(
+    () => (filter === 'all' ? entries : entries.filter((e) => e.server === filter)),
+    [entries, filter],
   );
+
+  const connecting = !status || (!status.ready && !status.startupError);
 
   return (
     <div className="app">
       <header className="topbar">
         <div className="brand">
           <h1>MCP Chat Host</h1>
-          <span className="subtitle">UVG CC3067 Redes &middot; Proyecto 1</span>
+          <span>CC3067 Redes</span>
         </div>
 
-        <div className="server-pills">
+        <div className="rail">
           {status?.servers.map((server) => (
             <span
-              className="pill"
+              className="node"
               key={server.name}
-              title={`${server.implementation ?? '?'} v${server.version ?? '?'} - MCP ${server.protocolVersion} - ${server.toolCount} tools`}
+              title={`${server.implementation ?? 'unknown'} v${server.version ?? '?'} · MCP ${server.protocolVersion} · ${server.toolCount} tools`}
             >
-              <span className="dot" />
+              <i className="live" />
+              {server.transport === 'http' ? <IconCloud /> : <IconStdio />}
               {server.name}
-              <span className="transport">{server.transport}</span>
             </span>
           ))}
           {status?.failed.map((failure) => (
-            <span className="pill offline" key={failure.name} title={failure.error}>
-              <span className="dot" />
+            <span className="node down" key={failure.name} title={failure.error}>
+              <i className="live" />
               {failure.name}
             </span>
           ))}
         </div>
 
-        <div className="topbar-spacer" />
-        {status && <span className="model-chip">{status.model}</span>}
-        <button onClick={reset} disabled={messages.length === 0}>
-          New conversation
+        <div className="spacer" />
+        {status && <span className="model">{status.model}</span>}
+        <button className="btn" onClick={reset} disabled={messages.length === 0}>
+          <IconRefresh />
+          Reset
         </button>
       </header>
 
       <div className="panes">
-        <section className="chat-pane">
-          <div className="transcript" ref={transcriptRef}>
+        <section className="chat">
+          <div className="thread" ref={threadRef}>
             {messages.length === 0 && (
-              <div className="empty-state">
-                <h2>{status?.ready ? 'Ready' : 'Connecting to MCP servers...'}</h2>
+              <div className="blank">
+                <h2>{connecting ? 'Connecting to MCP servers' : 'Ready'}</h2>
                 <p>
-                  {status?.ready
-                    ? `${status.toolCount} tools available across ${status.servers.length} MCP servers.`
-                    : 'Spawning local servers and completing the initialize handshake.'}
+                  {connecting
+                    ? 'Spawning the local servers and completing the initialize handshake.'
+                    : `${status?.toolCount ?? 0} tools across ${status?.servers.length ?? 0} servers. Every frame appears in the log on the right.`}
                 </p>
-                {status?.startupError && <p style={{ color: 'var(--kind-error)' }}>{status.startupError}</p>}
-                <div className="suggestions">
-                  {SUGGESTIONS.map((suggestion) => (
+                {status?.startupError && (
+                  <p className="fail-note">{status.startupError}</p>
+                )}
+                <div className="seeds">
+                  {SEEDS.map((seed) => (
                     <button
-                      className="suggestion"
-                      key={suggestion}
-                      onClick={() => void send(suggestion)}
-                      disabled={!status?.ready}
+                      className="seed"
+                      key={seed.label}
+                      onClick={() => void send(seed.prompt)}
+                      disabled={connecting || busy}
                     >
-                      {suggestion}
+                      <span>
+                        <b>{seed.label}</b>
+                        <em>{seed.note}</em>
+                      </span>
+                      <IconChevron />
                     </button>
                   ))}
                 </div>
@@ -227,28 +264,45 @@ export default function App() {
             )}
 
             {messages.map((message) => (
-              <article className={`message ${message.role}`} key={message.id}>
-                <span className="role">{message.role === 'user' ? 'You' : message.role === 'system' ? 'Error' : 'Assistant'}</span>
+              <article
+                className={`turn ${message.role === 'system' ? 'fail' : message.role}`}
+                key={message.id}
+              >
+                <span className="who">
+                  {message.role === 'user'
+                    ? 'You'
+                    : message.role === 'system'
+                      ? 'Failed'
+                      : 'Assistant'}
+                </span>
 
                 {message.executions && message.executions.length > 0 && (
-                  <div className="executions">
+                  <div className="trace">
                     {message.executions.map((execution, index) => (
-                      <div className={`execution${execution.isError ? ' failed' : ''}`} key={index}>
-                        <span className="server">{execution.server}</span>
-                        <span>{execution.tool}</span>
-                        <span className="duration">{execution.durationMs}ms</span>
+                      <div
+                        className={`step${execution.isError ? ' bad' : ''}`}
+                        key={index}
+                        title={execution.error ?? undefined}
+                      >
+                        <i className="tick" />
+                        <span>
+                          <span className="origin">{execution.server}</span> {execution.tool}
+                        </span>
+                        <span className="ms">{execution.durationMs} ms</span>
                       </div>
                     ))}
                   </div>
                 )}
 
-                <div className="bubble">
+                <div className="msg">
                   {message.pending ? (
-                    <span className="typing">
-                      <span />
-                      <span />
-                      <span />
+                    <span className="wait" aria-label="Working">
+                      <i />
+                      <i />
+                      <i />
                     </span>
+                  ) : message.role === 'assistant' ? (
+                    <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
                   ) : (
                     message.content
                   )}
@@ -259,71 +313,96 @@ export default function App() {
 
           <div className="composer">
             <textarea
+              ref={boxRef}
+              rows={1}
               value={input}
-              placeholder={status?.ready ? 'Ask something, or describe a subscriber problem...' : 'Connecting...'}
-              disabled={!status?.ready || busy}
-              onChange={(event) => setInput(event.target.value)}
+              placeholder={connecting ? 'Connecting…' : 'Ask anything, or describe a subscriber problem'}
+              disabled={connecting || busy}
+              onChange={(event) => {
+                setInput(event.target.value);
+                grow();
+              }}
               onKeyDown={(event) => {
-                // Enter sends, Shift+Enter inserts a newline - the convention
-                // users already expect from chat interfaces.
                 if (event.key === 'Enter' && !event.shiftKey) {
                   event.preventDefault();
                   void send(input);
                 }
               }}
             />
-            <button className="primary" onClick={() => void send(input)} disabled={!status?.ready || busy}>
-              Send
+            <button
+              className="btn btn-primary"
+              onClick={() => void send(input)}
+              disabled={connecting || busy || input.trim().length === 0}
+              aria-label="Send message"
+            >
+              <IconSend />
             </button>
           </div>
         </section>
 
-        <aside className="log-pane">
-          <div className="log-header">
-            <h2>MCP protocol log</h2>
-            <span className="log-count">{visibleEntries.length} frames</span>
+        <aside className="log">
+          <div className="log-top">
+            <h2>Protocol log</h2>
+            <span className="count">{visible.length}</span>
             <select
-              className="log-filter"
-              value={serverFilter}
-              onChange={(event) => setServerFilter(event.target.value)}
+              className="pick"
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
+              aria-label="Filter by server"
             >
-              <option value="all">all servers</option>
-              {serverNames.map((name) => (
+              <option value="all">All servers</option>
+              {origins.map((name) => (
                 <option key={name} value={name}>
                   {name}
                 </option>
               ))}
             </select>
-
-            <div className="legend">
-              {(Object.keys(KIND_COLORS) as MessageKind[]).map((kind) => (
-                <span className="legend-item" key={kind}>
-                  <span className="legend-swatch" style={{ background: KIND_COLORS[kind] }} />
-                  {kind}
-                </span>
-              ))}
-            </div>
           </div>
 
-          <div className="log-list" ref={logRef}>
-            {visibleEntries.length === 0 && <div className="log-empty">No frames yet.</div>}
-            {visibleEntries.map((entry) => (
+          <div className="key">
+            {KIND_ORDER.map((kind) => (
+              <span key={kind}>
+                <i style={{ background: KIND_COLOR[kind] }} />
+                {kind}
+              </span>
+            ))}
+          </div>
+
+          <div className="stream" ref={streamRef}>
+            {connecting && visible.length === 0 && (
+              <div className="skeleton" aria-hidden>
+                <i />
+                <i />
+                <i />
+                <i />
+                <i />
+              </div>
+            )}
+
+            {!connecting && visible.length === 0 && (
+              <p className="hollow">
+                No frames yet. Send a message and the handshake and tool calls appear here.
+              </p>
+            )}
+
+            {visible.map((entry) => (
               <div key={entry.seq}>
-                <div
-                  className="log-entry"
-                  style={{ borderLeftColor: KIND_COLORS[entry.kind] }}
-                  onClick={() => setExpanded(expanded === entry.seq ? null : entry.seq)}
+                <button
+                  className={`row${open === entry.seq ? ' open' : ''}`}
+                  onClick={() => setOpen(open === entry.seq ? null : entry.seq)}
                   title={`${entry.kind} over ${entry.transport}`}
                 >
-                  <span className="time">{entry.timestamp.slice(11, 23)}</span>
-                  <span className="arrow" style={{ color: KIND_COLORS[entry.kind] }}>
-                    {entry.direction === 'sent' ? '→' : '←'}
+                  <span className="at">{entry.timestamp.slice(11, 23)}</span>
+                  <span className="dir" style={{ color: KIND_COLOR[entry.kind] }}>
+                    {entry.direction === 'sent' ? <IconOutbound /> : <IconInbound />}
                   </span>
-                  <span className="method">{entry.method ?? (entry.kind === 'error' ? 'error' : 'result')}</span>
-                  <span className="server-tag">{entry.server}</span>
-                </div>
-                {expanded === entry.seq && (
-                  <pre className="log-payload">{JSON.stringify(entry.message, null, 2)}</pre>
+                  <span className="what">
+                    {entry.method ?? (entry.kind === 'error' ? 'error' : 'result')}
+                  </span>
+                  <span className="from">{entry.server}</span>
+                </button>
+                {open === entry.seq && (
+                  <pre className="payload">{JSON.stringify(entry.message, null, 2)}</pre>
                 )}
               </div>
             ))}
