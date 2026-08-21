@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Proyecto 1 - Entrega parcial</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 22mm 20mm 20mm 20mm;
+      }
+
+      :root {
+        --ink: #16191f;
+        --ink-2: #4a5261;
+        --ink-3: #6f7887;
+        --rule: #d8dce3;
+        --rule-soft: #e9ecf1;
+        --wash: #f5f7fa;
+        --accent: #1f4e9c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.55;
+        color: var(--ink);
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--ink);
+        line-height: 1.25;
+        page-break-after: avoid;
+      }
+
+      h2 {
+        font-size: 13.5pt;
+        margin: 26px 0 9px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid var(--rule);
+        letter-spacing: -0.01em;
+      }
+
+      h3 {
+        font-size: 11.5pt;
+        margin: 18px 0 6px;
+        letter-spacing: -0.005em;
+      }
+
+      p {
+        margin: 0 0 9px;
+        text-align: justify;
+      }
+
+      ul,
+      ol {
+        margin: 0 0 9px;
+        padding-left: 20px;
+      }
+
+      li {
+        margin: 3px 0;
+      }
+
+      code {
+        font-family: 'Cascadia Mono', Consolas, monospace;
+        font-size: 9pt;
+        background: var(--wash);
+        border: 1px solid var(--rule-soft);
+        border-radius: 3px;
+        padding: 0.5px 3px;
+      }
+
+      pre {
+        font-family: 'Cascadia Mono', Consolas, monospace;
+        font-size: 8.5pt;
+        line-height: 1.5;
+        background: var(--wash);
+        border: 1px solid var(--rule-soft);
+        border-radius: 4px;
+        padding: 9px 11px;
+        overflow-x: auto;
+        margin: 0 0 10px;
+        page-break-inside: avoid;
+      }
+
+      pre code {
+        background: none;
+        border: 0;
+        padding: 0;
+        font-size: inherit;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 0 12px;
+        font-size: 9.5pt;
+        page-break-inside: avoid;
+      }
+
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 5px 8px;
+        border-bottom: 1px solid var(--rule-soft);
+      }
+
+      th {
+        border-bottom: 1px solid var(--rule);
+        font-weight: 600;
+        font-size: 8.5pt;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ink-2);
+      }
+
+      td code {
+        white-space: nowrap;
+      }
+
+      .cover {
+        height: 245mm;
+        display: flex;
+        flex-direction: column;
+        page-break-after: always;
+      }
+
+      .cover .inst {
+        font-size: 10.5pt;
+        color: var(--ink-2);
+        line-height: 1.7;
+      }
+
+      .cover .mid {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      .cover h1 {
+        font-size: 26pt;
+        margin: 0 0 6px;
+        letter-spacing: -0.025em;
+      }
+
+      .cover .sub {
+        font-size: 13pt;
+        color: var(--ink-2);
+        margin: 0 0 26px;
+        font-weight: 400;
+      }
+
+      .cover .scope {
+        border-left: 2px solid var(--accent);
+        padding: 2px 0 2px 14px;
+        font-size: 10.5pt;
+        color: var(--ink-2);
+        max-width: 118mm;
+      }
+
+      .cover .who {
+        font-size: 10.5pt;
+        line-height: 1.8;
+      }
+
+      .cover .who b {
+        font-weight: 600;
+      }
+
+      .lead {
+        font-size: 11pt;
+        color: var(--ink-2);
+      }
+
+      .note {
+        background: var(--wash);
+        border-left: 2px solid var(--rule);
+        padding: 9px 12px;
+        margin: 0 0 11px;
+        font-size: 9.5pt;
+        color: var(--ink-2);
+        page-break-inside: avoid;
+      }
+
+      .note b {
+        color: var(--ink);
+      }
+
+      .kv {
+        font-size: 9.5pt;
+      }
+
+      .kv td:first-child {
+        width: 38%;
+        color: var(--ink-2);
+      }
+
+      section {
+        page-break-inside: auto;
+      }
+
+      .break {
+        page-break-before: always;
+      }
+
+      footer {
+        margin-top: 26px;
+        padding-top: 9px;
+        border-top: 1px solid var(--rule-soft);
+        font-size: 8.5pt;
+        color: var(--ink-3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cover">
+      <div class="inst">
+        Universidad del Valle de Guatemala<br />
+        Facultad de Ingeniería<br />
+        Departamento de Ciencias de la Computación<br />
+        CC3067 Redes
+      </div>
+
+      <div class="mid">
+        <h1>Proyecto 1</h1>
+        <p class="sub">Uso de un protocolo existente — Model Context Protocol</p>
+
+        <div class="scope">
+          Entrega parcial. Este documento cubre la primera parte del proyecto: los incisos 4 y 5
+          (servidores MCP locales), junto con los incisos 8 y 10 del reporte aplicados a esa
+          primera parte.
+        </div>
+      </div>
+
+      <div class="who">
+        <b>Repositorio:</b> github.com/UVG-Work/Proyecto-1-Chat-MCP-<br />
+        <b>Implementación:</b> TypeScript sobre Node.js, sin SDK de MCP<br />
+        <b>Revisión del protocolo:</b> 2025-11-25
+      </div>
+    </div>
+
+    <section>
+      <h2>1. Alcance de esta entrega</h2>
+      <p class="lead">
+        El proyecto consiste en un chatbot que actúa como anfitrión (<i>host</i>) de MCP y utiliza
+        las herramientas expuestas por varios servidores. Esta entrega parcial documenta únicamente
+        la primera parte: el uso de los servidores oficiales de Anthropic y la construcción de un
+        servidor MCP propio basado en un caso de uso de industria.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 12%">Inciso</th>
+            <th>Contenido</th>
+            <th style="width: 20%">Sección</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>4</td>
+            <td>Uso de los servidores MCP locales oficiales: Filesystem y Git</td>
+            <td>Sección 3</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Servidor MCP propio, ejecutado localmente, basado en un caso de uso de industria</td>
+            <td>Sección 4</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>Especificación del servidor desarrollado: parámetros, endpoints, métodos</td>
+            <td>Sección 5</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>Conclusiones y comentarios sobre esta parte del proyecto</td>
+            <td>Sección 6</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Quedan fuera de este documento los incisos 6 y 7 (servidor remoto y análisis con Wireshark),
+        que corresponden a la segunda parte, así como el inciso 9, que depende del análisis de
+        captura de esa segunda parte.
+      </p>
+
+      <h2>2. Restricción de implementación</h2>
+      <p>
+        El enunciado (sección 3.1) prohíbe el uso de librerías o SDKs que implementen MCP, tales como
+        FastMCP. En consecuencia, en este proyecto se escribieron a mano:
+      </p>
+      <ul>
+        <li>el formato y el intercambio de mensajes JSON-RPC 2.0;</li>
+        <li>la fase de inicialización (<code>initialize</code> y <code>notifications/initialized</code>);</li>
+        <li>la negociación de versión de protocolo y de capacidades;</li>
+        <li>el transporte stdio, tanto del lado del cliente como del servidor.</li>
+      </ul>
+      <p>
+        Es importante señalar que esto aplica al <i>cliente</i> además del servidor. Para cumplir el
+        inciso 4 el cliente escrito a mano debe comunicarse con servidores desarrollados por
+        terceros, lo cual obliga a respetar la especificación con exactitud; cualquier desviación en
+        el formato de trama o en el ciclo de vida impide la conexión.
+      </p>
+      <div class="note">
+        <b>Alcance de la restricción.</b> La prohibición se refiere a implementaciones de MCP. El
+        paquete <code>openai</code> se utiliza únicamente como cliente HTTP hacia la API de
+        OpenRouter para conversar con el modelo de lenguaje, que no forma parte del protocolo MCP.
+        Todo byte de MCP en este proyecto es producido por código propio en <code>src/mcp/</code> y
+        <code>src/server/</code>.
+      </div>
+    </section>
+
+    <section class="break">
+      <h2>3. Inciso 4: servidores MCP locales oficiales</h2>
+
+      <p>
+        El anfitrión se conecta a los dos servidores oficiales de referencia mediante el transporte
+        stdio: el cliente lanza cada servidor como un subproceso e intercambia mensajes JSON-RPC
+        delimitados por saltos de línea a través de su entrada y salida estándar.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Servidor</th>
+            <th>Implementación</th>
+            <th>Invocación</th>
+            <th style="width: 12%">Herramientas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Filesystem</td>
+            <td>secure-filesystem-server 0.2.0 (TypeScript)</td>
+            <td><code>npx -y @modelcontextprotocol/server-filesystem ./sandbox</code></td>
+            <td>14</td>
+          </tr>
+          <tr>
+            <td>Git</td>
+            <td>mcp-git 1.29.0 (Python)</td>
+            <td><code>uvx mcp-server-git</code></td>
+            <td>12</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Ambos negocian la revisión <code>2025-11-25</code> y declaran la capacidad <code>tools</code>.
+        Conviene notar que el servidor de Git es un paquete de Python y no de Node, por lo que el
+        proyecto requiere <code>uv</code> instalado aunque el resto esté escrito en TypeScript.
+      </p>
+
+      <h3>3.1 Escenario demostrado</h3>
+      <p>
+        Se solicita al chatbot, en lenguaje natural, que cree un archivo README, lo agregue al
+        repositorio y realice un commit. El modelo decide por sí mismo qué herramientas usar y en qué
+        orden; el anfitrión únicamente traduce esas decisiones a llamadas <code>tools/call</code> y
+        las enruta al servidor correspondiente.
+      </p>
+
+      <pre><code>Instrucción: "Inside the demo-repo directory, create a file named README.md
+describing this project. Then add it to the git repository in that same directory
+and commit it with a descriptive message. Finally show me the git log."
+
+  filesystem__list_allowed_directories   {}                          ok
+  filesystem__list_directory             {"path":".../sandbox"}      ok
+  filesystem__write_file                 {"path":".../README.md"}    ok
+  git__git_status                        {"repo_path":"..."}         ok
+  git__git_add                           {"files":["README.md"]}     ok
+  git__git_commit                        {"message":"Add README..."} ok
+  git__git_log                           {"repo_path":"..."}         ok
+
+Resultado verificado en disco:
+  dc5c5e7  Add README.md describing the MCP chat host for networking course
+  README.md | 22 ++++++++++++++++++++++</code></pre>
+
+      <p>
+        El commit existe realmente en el repositorio de prueba y fue creado por el chatbot a través
+        de MCP, no por la línea de comandos. Se observa además que el modelo combina dos servidores
+        distintos en una sola tarea: escribe el archivo con el servidor de Filesystem y lo versiona
+        con el de Git.
+      </p>
+
+      <h3>3.2 Limitación encontrada</h3>
+      <div class="note">
+        <b>El servidor oficial de Git no expone <code>git_init</code>.</b> La versión 1.29.0 ofrece
+        doce herramientas (<code>git_status</code>, <code>git_diff</code>, <code>git_commit</code>,
+        <code>git_add</code>, <code>git_reset</code>, <code>git_log</code>,
+        <code>git_create_branch</code>, <code>git_checkout</code>, <code>git_show</code>,
+        <code>git_branch</code> y las variantes de diff), ninguna de las cuales crea un repositorio.
+        Por lo tanto la creación del repositorio se realiza mediante un script de preparación
+        (<code>npm run setup:demo</code>), mientras que la creación del README, su incorporación al
+        índice y el commit sí se ejecutan por medio de MCP. Se documenta la limitación en lugar de
+        ocultarla.
+      </div>
+
+      <h3>3.3 Registro de interacciones</h3>
+      <p>
+        Todas las solicitudes y respuestas con los servidores MCP quedan registradas. En el cliente
+        de terminal, el comando <code>/log</code> muestra cada trama con su marca de tiempo,
+        dirección, servidor y clasificación; <code>/log full</code> incluye la carga JSON completa.
+        El registro se toma en la capa de transporte, de modo que resulta completo por construcción
+        y no por recordar invocarlo en cada punto del código.
+      </p>
+    </section>
+
+    <section class="break">
+      <h2>4. Inciso 5: servidor MCP propio</h2>
+
+      <h3>4.1 Caso de uso de industria</h3>
+      <p>
+        El servidor implementa la <b>mesa de servicio de primer nivel de un proveedor de internet
+        (ISP)</b>. Es un caso de uso real y directamente relacionado con la materia: cuando un
+        abonado llama reportando lentitud, el agente debe identificar la cuenta, consultar la
+        telemetría del circuito, descartar una avería de zona conocida y decidir si la evidencia
+        justifica enviar un técnico.
+      </p>
+      <p>
+        Ese encadenamiento es lo que hace el caso apropiado para MCP: el modelo no invoca una sola
+        herramienta, sino que ordena cinco y decide en cada paso qué hacer con el resultado
+        anterior. Cada una de esas herramientas correspondería, en un operador real, a un sistema
+        distinto.
+      </p>
+      <p>
+        Todos los datos son sintéticos y no contienen información de abonados reales. Los
+        diagnósticos se basan en umbrales determinísticos y no en valores aleatorios, de modo que
+        una demostración produce siempre el mismo resultado.
+      </p>
+
+      <h3>4.2 Herramientas expuestas</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%">Herramienta</th>
+            <th>Propósito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>lookup_subscriber</code></td>
+            <td>Localiza una cuenta por nombre, identificador, circuito o teléfono. Devuelve el identificador de circuito que requieren las demás herramientas.</td>
+          </tr>
+          <tr>
+            <td><code>get_link_metrics</code></td>
+            <td>Telemetría del enlace: latencia, jitter, pérdida de paquetes, relación señal a ruido, throughput medido, tiempo en servicio y número de caídas.</td>
+          </tr>
+          <tr>
+            <td><code>run_link_diagnostics</code></td>
+            <td>Evalúa la telemetría contra los umbrales del operador y devuelve un diagnóstico con la acción recomendada.</td>
+          </tr>
+          <tr>
+            <td><code>check_zone_outage</code></td>
+            <td>Incidentes conocidos que afectan una zona de servicio, con causa, estado y tiempo estimado de resolución.</td>
+          </tr>
+          <tr>
+            <td><code>open_incident_ticket</code></td>
+            <td>Escala el caso creando un ticket de incidente. Es la única herramienta que modifica estado.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.3 Escenario demostrado</h3>
+      <pre><code>Instrucción: "La clienta Maria Elena Ramirez llama porque su internet esta muy
+lento. Investiga que ocurre con su servicio y, si corresponde, abre un ticket."
+
+  lookup_subscriber      {"query":"Maria Elena Ramirez"}       ok
+  get_link_metrics       {"circuit_id":"GT-CIR-004821"}        ok
+  check_zone_outage      {"zone":"ZONA-MIXCO-03"}              ok
+  run_link_diagnostics   {"circuit_id":"GT-CIR-004821"}        ok
+  open_incident_ticket   {"subscriber_id":"SUB-100482", ...}   ok
+
+Hallazgos: pérdida de paquetes 8.2 % (umbral crítico 5 %), SNR 14.1 dB (umbral
+crítico 15 dB), jitter 19.4 ms, 11 caídas en 24 h, throughput 62 de 300 Mbps.
+Sin incidencias de zona que expliquen el síntoma.
+
+Diagnóstico: falla crítica del enlace. Ticket TCK-4401 abierto, severidad alta,
+asignado a Field Operations.</code></pre>
+
+      <p>
+        El modelo secuencia las cinco llamadas por su cuenta a partir de la descripción del problema
+        y de las descripciones de las herramientas; no existe ninguna lógica en el anfitrión que
+        codifique este orden.
+      </p>
+
+      <h3>4.4 Datos de prueba</h3>
+      <p>
+        El conjunto de datos está construido de modo que cada abonado ejercita una ruta diagnóstica
+        distinta, permitiendo demostrar los cuatro diagnósticos posibles.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Abonado</th>
+            <th>Circuito</th>
+            <th>Condición</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SUB-100482</td>
+            <td><code>GT-CIR-004821</code></td>
+            <td>Degradado: 8.2 % de pérdida, SNR 14.1 dB, 11 caídas</td>
+          </tr>
+          <tr>
+            <td>SUB-100731</td>
+            <td><code>GT-CIR-005190</code></td>
+            <td>Sano: todas las métricas dentro de umbral</td>
+          </tr>
+          <tr>
+            <td>SUB-100955</td>
+            <td><code>GT-CIR-005544</code></td>
+            <td>Caído por avería de zona activa (corte de fibra)</td>
+          </tr>
+          <tr>
+            <td>SUB-101204</td>
+            <td><code>GT-CIR-006012</code></td>
+            <td>Enlace sano pero cuenta suspendida</td>
+          </tr>
+          <tr>
+            <td>SUB-101488</td>
+            <td><code>GT-CIR-006377</code></td>
+            <td>Congestión: 137 ms de latencia y 42.6 ms de jitter sin pérdida</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Los dos últimos casos son deliberados: una cuenta suspendida y un corte de fibra se parecen,
+        vistos sólo desde la telemetría, a un enlace averiado. Enviar un técnico en cualquiera de
+        los dos casos sería un desplazamiento inútil, por lo que el diagnóstico los distingue de
+        forma explícita.
+      </p>
+    </section>
+
+    <section class="break">
+      <h2>5. Inciso 8: especificación del servidor desarrollado</h2>
+
+      <table class="kv">
+        <tbody>
+          <tr><td>Nombre del servidor</td><td><code>noc-support-desk</code></td></tr>
+          <tr><td>Versión</td><td>1.0.0</td></tr>
+          <tr><td>Revisión de MCP</td><td><code>2025-11-25</code>, con negociación hacia atrás a 2025-06-18, 2025-03-26 y 2024-11-05</td></tr>
+          <tr><td>Capacidades declaradas</td><td><code>tools</code> con <code>listChanged: false</code></td></tr>
+          <tr><td>Transporte (esta entrega)</td><td>stdio</td></tr>
+          <tr><td>Punto de entrada</td><td><code>src/server/stdio-main.ts</code>, ejecutable con <code>npm run noc:stdio</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3>5.1 Métodos soportados</h3>
+      <table>
+        <thead>
+          <tr><th style="width: 32%">Método</th><th style="width: 20%">Tipo</th><th>Comportamiento</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>initialize</code></td><td>solicitud</td><td>Devuelve versión negociada, capacidades, identificación del servidor e instrucciones de uso.</td></tr>
+          <tr><td><code>notifications/initialized</code></td><td>notificación</td><td>Se consume y nunca se responde, conforme a JSON-RPC.</td></tr>
+          <tr><td><code>ping</code></td><td>solicitud</td><td>Devuelve un resultado vacío.</td></tr>
+          <tr><td><code>tools/list</code></td><td>solicitud</td><td>Devuelve las cinco herramientas con su esquema de entrada.</td></tr>
+          <tr><td><code>tools/call</code></td><td>solicitud</td><td>Ejecuta una herramienta y devuelve su resultado.</td></tr>
+        </tbody>
+      </table>
+      <p>Cualquier otro método devuelve el error JSON-RPC <code>-32601</code> (método no encontrado).</p>
+
+      <h3>5.2 Parámetros de las herramientas</h3>
+      <table>
+        <thead>
+          <tr><th style="width: 28%">Herramienta</th><th style="width: 24%">Parámetro</th><th style="width: 12%">Tipo</th><th>Descripción</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>lookup_subscriber</code></td><td><code>query</code></td><td>string</td><td>Nombre, <code>SUB-######</code>, <code>GT-CIR-######</code> o teléfono. Requerido.</td></tr>
+          <tr><td><code>get_link_metrics</code></td><td><code>circuit_id</code></td><td>string</td><td>Identificador de circuito. Requerido.</td></tr>
+          <tr><td><code>run_link_diagnostics</code></td><td><code>circuit_id</code></td><td>string</td><td>Identificador de circuito. Requerido.</td></tr>
+          <tr><td><code>check_zone_outage</code></td><td><code>zone</code></td><td>string</td><td>Zona de servicio, por ejemplo <code>ZONA-GUATE-07</code>. Requerido.</td></tr>
+          <tr><td rowspan="3"><code>open_incident_ticket</code></td><td><code>subscriber_id</code></td><td>string</td><td>Identificador exacto del abonado. Requerido.</td></tr>
+          <tr><td><code>summary</code></td><td>string</td><td>Descripción del fallo y su evidencia. Requerido.</td></tr>
+          <tr><td><code>severity</code></td><td>string</td><td>Uno de <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>. Requerido.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>5.3 Umbrales de diagnóstico</h3>
+      <table>
+        <thead>
+          <tr><th>Métrica</th><th style="width: 22%">Degradado</th><th style="width: 22%">Crítico</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pérdida de paquetes</td><td>&ge; 1 %</td><td>&ge; 5 %</td></tr>
+          <tr><td>Latencia</td><td>&ge; 60 ms</td><td>&ge; 120 ms</td></tr>
+          <tr><td>Jitter</td><td>&ge; 15 ms</td><td>&ge; 30 ms</td></tr>
+          <tr><td>Relación señal a ruido</td><td>&le; 20 dB</td><td>&le; 15 dB</td></tr>
+          <tr><td>Caídas en 24 horas</td><td>&ge; 5</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+
+      <p>Los diagnósticos posibles son:</p>
+      <table>
+        <thead>
+          <tr><th style="width: 26%">Diagnóstico</th><th>Significado y acción recomendada</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>healthy</code></td><td>Todo dentro de umbral; revisar el equipo del cliente antes de escalar.</td></tr>
+          <tr><td><code>link-fault</code></td><td>Uno o más umbrales excedidos; abrir ticket con la severidad correspondiente.</td></tr>
+          <tr><td><code>zone-outage</code></td><td>Una avería conocida explica el síntoma; informar el tiempo estimado y no duplicar el ticket.</td></tr>
+          <tr><td><code>account-suspended</code></td><td>El enlace está sano pero la cuenta está suspendida; derivar a facturación.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>5.4 Endpoints y transporte</h3>
+      <p>
+        En esta primera parte el servidor se ejecuta localmente sobre stdio, por lo que no expone
+        endpoints de red. Las reglas de trama son las que fija la especificación:
+      </p>
+      <ul>
+        <li>un mensaje JSON-RPC por línea, codificado en UTF-8;</li>
+        <li>los mensajes no pueden contener saltos de línea incrustados;</li>
+        <li>la salida estándar transporta únicamente mensajes MCP, por lo que todo diagnóstico del servidor se escribe en la salida de error;</li>
+        <li>el cliente no debe interpretar la salida de error como una condición de fallo;</li>
+        <li>cerrar la entrada estándar termina el servidor de forma ordenada.</li>
+      </ul>
+      <div class="note">
+        El mismo servidor está preparado para ejecutarse sobre el transporte Streamable HTTP, en cuyo
+        caso sí expone un endpoint <code>/mcp</code>. Eso corresponde al inciso 6 y se documenta en
+        la entrega final.
+      </div>
+
+      <h3>5.5 Manejo de errores</h3>
+      <table>
+        <thead>
+          <tr><th style="width: 16%">Código</th><th style="width: 30%">Significado</th><th>Cuándo se produce</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>-32700</code></td><td>Error de análisis</td><td>La carga no es JSON válido.</td></tr>
+          <tr><td><code>-32600</code></td><td>Solicitud inválida</td><td>No es un mensaje JSON-RPC 2.0 válido.</td></tr>
+          <tr><td><code>-32601</code></td><td>Método no encontrado</td><td>Método desconocido.</td></tr>
+          <tr><td><code>-32602</code></td><td>Parámetros inválidos</td><td>Herramienta inexistente, argumento requerido ausente, tipo incorrecto o valor fuera del conjunto permitido.</td></tr>
+          <tr><td><code>-32603</code></td><td>Error interno</td><td>Fallo inesperado del servidor.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Conviene distinguir dos situaciones que suelen confundirse. Una herramienta que se ejecuta y
+        <i>falla</i> no produce un error de JSON-RPC: devuelve una respuesta exitosa cuyo resultado
+        lleva <code>isError: true</code> junto con un texto explicativo, de modo que el modelo pueda
+        leer el fallo y reaccionar. Los códigos anteriores se reservan para errores de protocolo.
+      </p>
+
+      <h3>5.6 Ejemplo de intercambio</h3>
+      <pre><code>--&gt; {"jsonrpc":"2.0","id":1,"method":"initialize",
+     "params":{"protocolVersion":"2025-11-25","capabilities":{},
+               "clientInfo":{"name":"uvg-mcp-chat-host","version":"1.0.0"}}}
+
+&lt;-- {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-11-25",
+     "capabilities":{"tools":{"listChanged":false}},
+     "serverInfo":{"name":"noc-support-desk","version":"1.0.0"},
+     "instructions":"This server exposes the first-line support desk..."}}
+
+--&gt; {"jsonrpc":"2.0","method":"notifications/initialized"}
+
+--&gt; {"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}
+&lt;-- {"jsonrpc":"2.0","id":2,"result":{"tools":[ ... 5 herramientas ... ]}}
+
+--&gt; {"jsonrpc":"2.0","id":3,"method":"tools/call",
+     "params":{"name":"lookup_subscriber",
+               "arguments":{"query":"Maria Elena Ramirez"}}}
+&lt;-- {"jsonrpc":"2.0","id":3,"result":{"content":[{"type":"text",
+     "text":"Found 1 matching subscriber(s): SUB-100482 ..."}],
+     "structuredContent":{"matches":[ ... ]}}}</code></pre>
+
+      <p>
+        El campo <code>instructions</code> merece una nota: el servidor describe en él el orden
+        recomendado de uso de sus herramientas, y el anfitrión lo reenvía al modelo. De este modo el
+        servidor documenta su propio uso a través del protocolo, en lugar de que el anfitrión
+        codifique conocimiento sobre un servidor en particular.
+      </p>
+    </section>
+
+    <section class="break">
+      <h2>6. Inciso 10: conclusiones y comentarios</h2>
+
+      <h3>6.1 Sobre el protocolo</h3>
+      <p>
+        <b>MCP es una convención, no un formato de trama.</b> No hay una cabecera de MCP ni un puerto
+        de MCP. Lo que existe es JSON-RPC 2.0 con un conjunto acordado de nombres de método, un ciclo
+        de vida y una negociación de capacidades. Esa es precisamente la razón por la que es viable
+        implementarlo a mano, y también por la que el mismo código de servidor puede atender
+        transportes distintos sin modificarse.
+      </p>
+      <p>
+        <b>La interoperabilidad es el objetivo del protocolo y se comprueba al conectarse con
+        servidores ajenos.</b> Escribir un servidor propio es cómodo porque uno responde a los
+        mensajes que uno mismo eligió. El inciso 4 obliga a lo contrario: el cliente escrito a mano
+        debe hablar con implementaciones de terceros, y ahí es donde cada ambigüedad de la
+        especificación se convierte en un fallo concreto.
+      </p>
+
+      <h3>6.2 Dificultades encontradas</h3>
+      <p>
+        <b>La negociación de versión no puede fijarse.</b> La intuición inicial es enviar la revisión
+        más reciente y esperar la misma de vuelta. La especificación establece que el servidor
+        responde con <i>su</i> revisión preferida y que el cliente debe aceptarla si la soporta, o
+        desconectarse en caso contrario. Un cliente con una única versión fija funciona contra el
+        servidor propio y falla contra los oficiales: el peor tipo de error, porque las pruebas
+        locales nunca lo revelan.
+      </p>
+      <p>
+        <b>La salida estándar es sagrada en stdio.</b> Un servidor no debe escribir en la salida
+        estándar nada que no sea un mensaje MCP. Un simple mensaje de depuración corrompe la trama y
+        rompe la sesión completa. Por eso todos los diagnósticos del servidor propio se escriben en
+        la salida de error, y el cliente trata esa salida como informativa y nunca como una señal de
+        fallo.
+      </p>
+      <p>
+        <b>Las tramas deben reensamblarse, no suponerse.</b> Un solo evento de lectura sobre el flujo
+        puede contener medio mensaje, varios mensajes, o ambas cosas. El transporte acumula lo
+        recibido y divide en los saltos de línea, conservando el resto para la siguiente lectura.
+      </p>
+      <p>
+        <b>Lanzar los servidores oficiales en Windows tiene su detalle.</b> <code>npx</code> y
+        <code>uvx</code> son archivos <code>.cmd</code>, que Node no puede ejecutar directamente
+        desde una restricción de seguridad introducida a raíz de CVE-2024-27980. Es necesario pasar
+        por el intérprete de comandos y encargarse del entrecomillado de los argumentos de forma
+        explícita.
+      </p>
+      <p>
+        <b>Una herramienta ausente obliga a documentar en vez de disimular.</b> El caso de
+        <code>git_init</code>, descrito en la sección 3.2, es el ejemplo: el enunciado sugiere que el
+        chatbot cree el repositorio, pero el servidor oficial actual no ofrece esa operación. Se optó
+        por dejar la creación fuera de MCP, indicarlo con claridad y mantener dentro del protocolo
+        todo lo que sí es posible.
+      </p>
+
+      <h3>6.3 Lecciones aprendidas</h3>
+      <p>
+        <b>El diseño del transporte como interfaz paga desde el primer día.</b> Separar el transporte
+        del cliente y del núcleo del servidor permitió que el mismo objeto de servidor atienda stdio
+        y HTTP sin duplicar lógica. Si esa separación se hubiera pospuesto, la segunda parte del
+        proyecto habría implicado reescribir el servidor en lugar de añadir un punto de entrada.
+      </p>
+      <p>
+        <b>Un solo punto de registro produce un registro completo.</b> Al capturar cada trama en la
+        capa de transporte, el requisito de mantener y mostrar un log de todas las interacciones se
+        satisface por construcción, y no depende de recordar registrar en cada lugar del código.
+      </p>
+      <p>
+        <b>Un buen caso de uso para un agente es aquel que requiere encadenar decisiones.</b> Una
+        herramienta aislada no demuestra gran cosa. El valor de MCP se aprecia cuando el modelo debe
+        elegir entre varias herramientas, usar el resultado de una para construir la llamada
+        siguiente y decidir cuándo detenerse. El escenario de la mesa de servicio se diseñó
+        expresamente con esa forma.
+      </p>
+      <p>
+        <b>La descripción de una herramienta es parte de su interfaz.</b> El modelo elige qué llamar
+        leyendo el nombre, la descripción y el esquema de entrada. Una descripción vaga produce
+        llamadas incorrectas con la misma facilidad que un error de programación, de manera que
+        redactarlas con cuidado es trabajo de ingeniería y no de documentación.
+      </p>
+
+      <h3>6.4 Comentario final sobre esta parte</h3>
+      <p>
+        La primera parte del proyecto deja el protocolo implementado y verificado en las dos
+        direcciones que importan: un cliente propio que se entiende con servidores desarrollados por
+        terceros, y un servidor propio que se entiende con ese mismo cliente. Sobre esa base, la
+        segunda parte consiste en cambiar el transporte y observar el resultado en la red, sin
+        modificar ni la lógica de las herramientas ni el anfitrión.
+      </p>
+
+      <footer>
+        Documento correspondiente a la entrega parcial. Incisos 4, 5, 8 y 10 de la primera parte.
+        El código, la especificación completa y el registro de versiones se encuentran en el
+        repositorio del proyecto.
+      </footer>
+    </section>
+  </body>
+</html>
