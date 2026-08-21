@@ -1,15 +1,4 @@
-/**
- * stdio transport (client side).
- *
- * Per the MCP transports specification:
- *   - the client launches the server as a subprocess;
- *   - JSON-RPC messages travel as UTF-8 over the child's stdin/stdout;
- *   - messages are delimited by newlines and must not contain embedded newlines;
- *   - the child may write anything to stderr, and the client must NOT treat
- *     stderr output as an error signal.
- *
- * This is a from-scratch implementation - no MCP SDK (project statement 3.1).
- */
+// stdio transport, client side: launches the server as a subprocess and exchanges newline-delimited JSON-RPC.
 
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { platform } from 'node:process';
@@ -21,20 +10,11 @@ import type { JsonRpcMessage } from './types.js';
 export interface StdioTransportOptions {
   command: string;
   args?: string[];
-  /** Extra environment variables merged over the parent environment. */
   env?: Record<string, string>;
   cwd?: string;
-  /** Receives the child's stderr lines. Informational, never an error. */
   onStderr?: (line: string) => void;
 }
 
-/**
- * Windows cannot spawn shell shims such as npx or uvx directly - they are .cmd
- * files, not executables - so we route through the shell there. When we do, any
- * argument containing whitespace has to be quoted by hand, because the shell
- * re-splits the joined command line. On POSIX we spawn directly and skip all of
- * this, which is both safer and faster.
- */
 function quoteForWindowsShell(value: string): string {
   return /[\s&|<>^]/.test(value) ? `"${value}"` : value;
 }
@@ -121,11 +101,6 @@ export class StdioClientTransport implements Transport {
     });
   }
 
-  /**
-   * Reassemble newline-delimited frames. TCP-style chunking means one "data"
-   * event may hold a partial message, several messages, or both, so the tail is
-   * carried over to the next chunk.
-   */
   private consumeStdout(chunk: string): void {
     this.stdoutBuffer += chunk;
     let newlineIndex = this.stdoutBuffer.indexOf('\n');
@@ -185,10 +160,6 @@ export class StdioClientTransport implements Transport {
     });
   }
 
-  /**
-   * Graceful shutdown per the spec: close stdin first and give the server a
-   * chance to exit on its own, then escalate to SIGTERM and finally SIGKILL.
-   */
   async close(): Promise<void> {
     const child = this.child;
     if (!child || this.closed) {

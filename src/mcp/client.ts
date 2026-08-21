@@ -1,15 +1,4 @@
-/**
- * MCP client - the component that holds a connection to one MCP server and
- * knows how to use it (the "Cliente" in the project statement's three-actor
- * model). Implemented from scratch over the Transport abstraction; no MCP SDK.
- *
- * Responsibilities:
- *   - drive the lifecycle: initialize -> notifications/initialized;
- *   - negotiate the protocol version;
- *   - correlate JSON-RPC responses back to their requests;
- *   - expose tools/list (with pagination) and tools/call;
- *   - hand every frame to the interaction log (requirement 3).
- */
+// MCP client: lifecycle, version negotiation, request correlation, tools/list and tools/call.
 
 import {
   isErrorResponse,
@@ -45,18 +34,12 @@ const CLIENT_INFO: Implementation = {
   version: '1.0.0',
 };
 
-/**
- * We advertise no optional client features. Declaring a capability we do not
- * implement would invite servers to send requests we cannot answer.
- */
 const CLIENT_CAPABILITIES: ClientCapabilities = {};
 
 export interface McpClientOptions {
-  /** Logical name for this server, used throughout the log and the UI. */
   name: string;
   transport: Transport;
   log: InteractionLog;
-  /** Per-request timeout in milliseconds. */
   requestTimeoutMs?: number;
 }
 
@@ -84,7 +67,6 @@ export class McpClient {
   private negotiatedVersion: string = LATEST_PROTOCOL_VERSION;
   private instructions: string | undefined;
 
-  /** Cached tool catalogue, refreshed by listTools(). */
   private tools: Tool[] = [];
 
   constructor(options: McpClientOptions) {
@@ -94,18 +76,6 @@ export class McpClient {
     this.requestTimeoutMs = options.requestTimeoutMs ?? 60_000;
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* Lifecycle                                                              */
-  /* ---------------------------------------------------------------------- */
-
-  /**
-   * Bring the connection up and complete the MCP initialization phase.
-   *
-   * The version dance is the subtle part: we ask for the newest revision we
-   * support, but the server answers with whichever revision it prefers. If that
-   * answer is one we understand we adopt it; otherwise the spec says to
-   * disconnect rather than guess.
-   */
   async connect(): Promise<InitializeResult> {
     await this.transport.start({
       onMessage: (message) => this.handleMessage(message),
@@ -116,11 +86,6 @@ export class McpClient {
     return this.performHandshake();
   }
 
-  /**
-   * The initialization phase itself, separated from bringing the transport up
-   * so it can be replayed on an existing connection when a server forgets our
-   * session.
-   */
   private async performHandshake(): Promise<InitializeResult> {
     const result = (await this.request(McpMethod.Initialize, {
       protocolVersion: LATEST_PROTOCOL_VERSION,
@@ -158,15 +123,6 @@ export class McpClient {
     await this.transport.close();
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* Tools                                                                  */
-  /* ---------------------------------------------------------------------- */
-
-  /**
-   * Fetch the full tool catalogue, following nextCursor until exhausted.
-   * Skipping pagination would silently hide tools on servers that page, so the
-   * loop is not optional.
-   */
   async listTools(): Promise<Tool[]> {
     const collected: Tool[] = [];
     let cursor: string | undefined;
@@ -186,10 +142,6 @@ export class McpClient {
     const result = await this.request(McpMethod.ToolsCall, { name, arguments: args });
     return result as unknown as CallToolResult;
   }
-
-  /* ---------------------------------------------------------------------- */
-  /* Introspection                                                          */
-  /* ---------------------------------------------------------------------- */
 
   get info(): Implementation | undefined {
     return this.serverInfo;
@@ -219,17 +171,6 @@ export class McpClient {
     return this.initialized && !this.closed;
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* JSON-RPC plumbing                                                      */
-  /* ---------------------------------------------------------------------- */
-
-  /**
-   * @param allowSessionRecovery when the server reports that our session is
-   *        gone, re-run the handshake once and replay this request. The MCP
-   *        specification requires exactly this: a 404 against a request
-   *        carrying a session id means "start a new session". Set to false on
-   *        the replay so a persistently broken server cannot loop.
-   */
   private async request(
     method: string,
     params: Record<string, unknown>,

@@ -1,15 +1,4 @@
-/**
- * HTTP bridge for the web UI.
- *
- * The browser cannot spawn stdio subprocesses or hold MCP sessions, so the host
- * stays here in Node and the UI drives it over a small REST surface. Both the
- * CLI and the web UI therefore use the same McpHost instance type and the same
- * interaction log - the web client is a second front end, not a second
- * implementation.
- *
- * Note this server is NOT an MCP server. It is ordinary application plumbing;
- * the MCP endpoints live in src/server/http-main.ts.
- */
+// HTTP bridge that lets the web UI drive the same host as the CLI.
 
 import cors from 'cors';
 import { config as loadEnv } from 'dotenv';
@@ -78,10 +67,6 @@ async function main(): Promise<void> {
     });
   });
 
-  /**
-   * Live log stream. Server-Sent Events rather than polling, so the log panel
-   * updates as each MCP frame crosses the wire.
-   */
   app.get('/api/log/stream', (request: Request, response: Response) => {
     response.writeHead(200, {
       'Content-Type': 'text/event-stream',

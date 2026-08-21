@@ -1,15 +1,4 @@
-/**
- * Scripted MCP session, used to generate traffic for the packet captures
- * (requirement 7) and as a deterministic end-to-end test of a server.
- *
- * It drives a complete session by hand - handshake, discovery, five tool calls,
- * an error case, and an explicit shutdown - with no language model involved, so
- * it needs no API key and produces exactly the same exchange every run. That
- * matters for the capture: the packets can be compared against a known script.
- *
- *   npm run demo:session -- noc-http-local
- *   npm run demo:session -- noc-remote
- */
+// Scripted MCP session with no language model, used for demos and packet captures.
 
 import { config as loadEnv } from 'dotenv';
 
@@ -20,7 +9,6 @@ import { renderContent } from '../host/host.js';
 
 loadEnv();
 
-/** The support-desk scenario from the specification, as explicit calls. */
 const SCRIPT: { tool: string; args: Record<string, unknown>; why: string }[] = [
   { tool: 'lookup_subscriber', args: { query: 'Maria Elena Ramirez' }, why: 'identify the account' },
   { tool: 'get_link_metrics', args: { circuit_id: 'GT-CIR-004821' }, why: 'read live telemetry' },

@@ -1,14 +1,4 @@
-/**
- * Tools exposed by the ISP / NOC support desk MCP server.
- *
- * Industry use case: a first-line support desk for an internet service
- * provider. An agent handling a subscriber complaint can identify the account,
- * read live link telemetry, check whether a known outage explains the symptom,
- * run a diagnostic, and escalate by opening an incident ticket.
- *
- * Diagnostics are deterministic thresholds over the telemetry rather than random
- * values, so a demonstration produces the same answer every time.
- */
+// Tools exposed by the ISP/NOC support desk server.
 
 import { toolResult, textError, type ToolDefinition } from '../core.js';
 import {
@@ -23,11 +13,6 @@ import {
   type Ticket,
 } from '../data/noc-data.js';
 
-/* -------------------------------------------------------------------------- */
-/* Diagnostic thresholds                                                      */
-/* -------------------------------------------------------------------------- */
-
-/** Operator thresholds. Kept in one place so the report can quote them. */
 const THRESHOLDS = {
   packetLossPct: { warn: 1, fail: 5 },
   latencyMs: { warn: 60, fail: 120 },
@@ -45,12 +30,6 @@ interface Finding {
   explanation: string;
 }
 
-/**
- * Evaluate telemetry against the thresholds.
- *
- * Total loss is treated separately: 100% loss is a down link, not a degraded
- * one, and the recommended action is completely different.
- */
 function evaluate(metrics: LinkMetrics): { severity: Severity; findings: Finding[] } {
   const findings: Finding[] = [];
 
@@ -130,10 +109,6 @@ function evaluate(metrics: LinkMetrics): { severity: Severity; findings: Finding
 
   return { severity, findings };
 }
-
-/* -------------------------------------------------------------------------- */
-/* Tool definitions                                                           */
-/* -------------------------------------------------------------------------- */
 
 const lookupSubscriber: ToolDefinition = {
   name: 'lookup_subscriber',

@@ -1,12 +1,4 @@
-/**
- * stdio entry point for the NOC MCP server (project requirement 5).
- *
- * Framing rules from the MCP transports specification:
- *   - one JSON-RPC message per line on stdin and stdout, UTF-8;
- *   - no embedded newlines;
- *   - stdout carries MCP messages and NOTHING else - a stray console.log here
- *     corrupts the stream, which is why every diagnostic below goes to stderr.
- */
+// stdio entry point for the NOC MCP server.
 
 import { makeError, parseMessage } from '../mcp/jsonrpc.js';
 import { JsonRpcErrorCode } from '../mcp/types.js';

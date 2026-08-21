@@ -1,11 +1,4 @@
-/**
- * The host (the "Anfitrion" of the project statement's three-actor model).
- *
- * It owns one MCP client per configured server, merges their tool catalogues
- * into a single list for the language model, and runs the agentic loop: ask the
- * model, execute whatever tools it requests over MCP, feed the results back,
- * repeat until the model answers in prose.
- */
+// The host: owns one client per MCP server, merges their tools, and runs the model/tool loop.
 
 import { EventEmitter } from 'node:events';
 
@@ -17,13 +10,6 @@ import { connectServer } from './connect.js';
 import type { ChatMessage, LlmProvider, LlmTool, LlmToolCall } from './llm/types.js';
 import { Conversation } from './conversation.js';
 
-/**
- * Separator between the server name and the tool name.
- *
- * Namespacing is necessary: two servers may expose the same tool name, and the
- * model only ever sees one flat list. Double underscore keeps the result inside
- * the character set providers accept for function names ([a-zA-Z0-9_-]).
- */
 const NAMESPACE_SEPARATOR = '__';
 
 export interface ConnectedServer {
@@ -47,11 +33,8 @@ export interface ToolExecution {
 }
 
 export interface ChatTurn {
-  /** Final assistant prose. */
   reply: string;
-  /** Every tool executed while producing it, in order. */
   executions: ToolExecution[];
-  /** Model round trips consumed. */
   iterations: number;
 }
 
@@ -59,7 +42,6 @@ export interface HostOptions {
   provider: LlmProvider;
   log: InteractionLog;
   configPath?: string;
-  /** Safety valve on the agentic loop. */
   maxIterations?: number;
   onStderr?: (server: string, line: string) => void;
 }
@@ -84,17 +66,6 @@ export class McpHost extends EventEmitter {
     this.onStderr = options.onStderr;
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* Startup                                                                */
-  /* ---------------------------------------------------------------------- */
-
-  /**
-   * Connect every enabled server.
-   *
-   * Connections run in parallel and a failure is recorded rather than thrown:
-   * one unavailable server (a missing uvx, an unreachable remote) should not
-   * stop the chatbot from working with the others.
-   */
   async start(): Promise<void> {
     const config = loadHostConfig(this.configPath);
     const targets = enabledServers(config);
@@ -125,10 +96,6 @@ export class McpHost extends EventEmitter {
     await Promise.all(this.servers.map((server) => server.client.close()));
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* Introspection                                                          */
-  /* ---------------------------------------------------------------------- */
-
   get connectedServers(): ConnectedServer[] {
     return [...this.servers];
   }
@@ -149,7 +116,6 @@ export class McpHost extends EventEmitter {
     this.conversation?.reset();
   }
 
-  /** Flattened, namespaced catalogue exactly as the model sees it. */
   get toolCatalog(): LlmTool[] {
     const catalog: LlmTool[] = [];
     for (const server of this.servers) {
@@ -164,18 +130,6 @@ export class McpHost extends EventEmitter {
     return catalog;
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* The agentic loop                                                       */
-  /* ---------------------------------------------------------------------- */
-
-  /**
-   * Run one user turn to completion.
-   *
-   * The loop is the heart of the host: the model may need several rounds of
-   * tool calls before it can answer, and each round is a real MCP tools/call to
-   * the owning server. maxIterations stops a model that keeps calling tools
-   * without ever concluding.
-   */
   async chat(userInput: string): Promise<ChatTurn> {
     if (!this.conversation) throw new Error('Host is not started; call start() first');
 
@@ -222,7 +176,6 @@ export class McpHost extends EventEmitter {
     };
   }
 
-  /** Route one namespaced tool call to the client that owns it. */
   private async executeToolCall(call: LlmToolCall): Promise<ToolExecution> {
     const startedAt = Date.now();
     const separatorIndex = call.name.indexOf(NAMESPACE_SEPARATOR);
@@ -277,17 +230,6 @@ export class McpHost extends EventEmitter {
     }
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* Prompting                                                              */
-  /* ---------------------------------------------------------------------- */
-
-  /**
-   * Compose the system prompt from what the servers say about themselves.
-   *
-   * Forwarding each server's `instructions` is the point: a server ships its own
-   * usage guidance through MCP, and the host relays it rather than hard-coding
-   * knowledge about any particular server.
-   */
   private buildSystemPrompt(): string {
     const sections: string[] = [
       'You are an assistant connected to external tools through the Model Context Protocol (MCP).',
@@ -326,11 +268,6 @@ export class McpHost extends EventEmitter {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/* Rendering                                                                  */
-/* -------------------------------------------------------------------------- */
-
-/** Flatten MCP content blocks into the plain text the model receives back. */
 export function renderContent(content: ContentBlock[]): string {
   return content
     .map((block) => {

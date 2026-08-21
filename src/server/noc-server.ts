@@ -1,11 +1,4 @@
-/**
- * The ISP / NOC support desk MCP server.
- *
- * This module builds the server object; it deliberately knows nothing about how
- * messages arrive. stdio-main.ts and http-main.ts both call createNocServer(),
- * which is what makes the local and the remote deployment the same server
- * (project requirement 6) rather than two implementations kept in sync by hand.
- */
+// Builds the ISP/NOC support desk server used by both entry points.
 
 import { McpServer } from './core.js';
 import { NOC_TOOLS } from './tools/noc-tools.js';

@@ -1,21 +1,4 @@
-/**
- * Streamable HTTP entry point for the NOC MCP server (project requirement 6).
- *
- * This is the SAME server object as the stdio entry point - createNocServer() -
- * behind a different transport. Nothing in core.ts or the tool implementations
- * knows which one is in use.
- *
- * Server side of the 2025-11-25 Streamable HTTP transport:
- *   POST   /mcp  - a JSON-RPC request gets application/json or an SSE stream;
- *                  a notification or response gets 202 Accepted with no body.
- *   GET    /mcp  - optional server-initiated SSE stream; 405 when not offered.
- *   DELETE /mcp  - explicit session termination.
- *   GET /health  - liveness probe for the cloud platform (not part of MCP).
- *
- * Written directly on node:http so the bytes on the wire are ours - which is
- * what makes the Wireshark analysis in requirement 7 an analysis of this code
- * rather than of a framework's behaviour.
- */
+// Streamable HTTP entry point for the NOC MCP server.
 
 import { randomUUID } from 'node:crypto';
 import * as http from 'node:http';
@@ -28,17 +11,10 @@ const PORT = Number(process.env['PORT'] ?? process.env['NOC_HTTP_PORT'] ?? 8787)
 const HOST = process.env['HOST'] ?? '0.0.0.0';
 const MCP_PATH = process.env['MCP_PATH'] ?? '/mcp';
 
-/**
- * SSE mode. The spec lets a server answer a request either way; streaming makes
- * the packet capture far more interesting to analyse (a long-lived connection
- * with chunked transfer encoding rather than a plain request/response pair), so
- * it is switchable at run time for the requirement 7 write-up.
- */
 const USE_SSE = process.env['MCP_SSE'] === '1';
 
 const server = createNocServer();
 
-/** Live sessions. The value carries only what session validation needs. */
 const sessions = new Map<string, { createdAt: number; lastSeen: number }>();
 
 const SESSION_TTL_MS = 60 * 60 * 1000;
@@ -47,11 +23,6 @@ function log(message: string): void {
   process.stderr.write(`[noc-http] ${new Date().toISOString()} ${message}\n`);
 }
 
-/**
- * DNS-rebinding protection required by the transport spec: reject a browser
- * Origin we did not expect. Non-browser clients send no Origin at all, which is
- * allowed - the header is only validated when present.
- */
 function isOriginAllowed(origin: string | undefined): boolean {
   if (!origin) return true;
   const allowList = (process.env['MCP_ALLOWED_ORIGINS'] ?? '')
@@ -102,7 +73,6 @@ function sendJson(
   response.end(body);
 }
 
-/** One JSON-RPC message delivered as a single SSE event, then the stream ends. */
 function sendSse(
   response: http.ServerResponse,
   message: JsonRpcMessage,

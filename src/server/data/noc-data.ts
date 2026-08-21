@@ -1,14 +1,4 @@
-/**
- * Synthetic dataset for the ISP / NOC support desk server.
- *
- * Entirely fictional: no real subscriber, address or phone number appears here.
- * The data is held in TypeScript rather than JSON files so it compiles straight
- * into dist/ and the container image needs no asset-copying step.
- *
- * The records are shaped to exercise distinct diagnostic paths: a healthy link,
- * a link degraded by packet loss, a link inside an active zone outage, a link
- * with a suspended account, and a link with high latency but no loss.
- */
+// Synthetic dataset for the NOC support desk. No real subscriber data.
 
 export type ServiceTechnology = 'GPON' | 'DOCSIS-3.1' | 'FTTH' | 'Fixed-Wireless';
 
@@ -32,16 +22,13 @@ export interface Subscriber {
 export interface LinkMetrics {
   circuitId: string;
   technology: ServiceTechnology;
-  /** Round-trip time to the first aggregation hop. */
   latencyMs: number;
   jitterMs: number;
   packetLossPct: number;
-  /** Signal-to-noise ratio; below ~20 dB indicates a physical-layer problem. */
   snrDb: number;
   measuredDownstreamMbps: number;
   measuredUpstreamMbps: number;
   uptimeHours: number;
-  /** Link flaps observed in the last 24 hours. */
   flapsLast24h: number;
 }
 
@@ -207,11 +194,6 @@ export const OUTAGES: Outage[] = [
   },
 ];
 
-/**
- * Ticket store. In-memory on purpose: the container filesystem on the remote
- * host is ephemeral, and persistence adds nothing to what the project needs to
- * demonstrate. Tickets created during a session are visible for that session.
- */
 export const TICKETS: Ticket[] = [];
 
 let ticketCounter = 4400;
@@ -220,10 +202,6 @@ export function nextTicketId(): string {
   ticketCounter += 1;
   return `TCK-${ticketCounter}`;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Lookup helpers                                                             */
-/* -------------------------------------------------------------------------- */
 
 function normalize(value: string): string {
   return value
@@ -236,7 +214,6 @@ function normalize(value: string): string {
     .replace(/[^a-z0-9]/g, '');
 }
 
-/** Find subscribers by id, circuit id, phone number or (partial) name. */
 export function findSubscribers(query: string): Subscriber[] {
   const needle = normalize(query);
   if (needle.length === 0) return [];

@@ -1,17 +1,9 @@
-/**
- * Server configuration loading.
- *
- * Which MCP servers the host connects to is data, not code. That is what makes
- * requirement 6 a one-line change: swapping the custom NOC server from local
- * stdio to the remote deployment means flipping which entry is enabled, with no
- * change to the client, the host, or the server's tool implementations.
- */
+// Loads and validates the MCP server list from config/servers.json.
 
 import { readFileSync } from 'node:fs';
 import { dirname, isAbsolute, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-/** Repository root, derived from this file's location (src/host -> ../..). */
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 export interface StdioServerConfig {
@@ -22,7 +14,6 @@ export interface StdioServerConfig {
   command: string;
   args?: string[];
   env?: Record<string, string>;
-  /** Working directory, relative to the repository root unless absolute. */
   cwd?: string;
 }
 
@@ -31,7 +22,6 @@ export interface HttpServerConfig {
   transport: 'http';
   enabled?: boolean;
   description?: string;
-  /** Full URL of the MCP endpoint, e.g. https://host.example.com/mcp */
   url: string;
   headers?: Record<string, string>;
 }
@@ -42,7 +32,6 @@ export interface HostConfig {
   servers: ServerConfig[];
 }
 
-/** Expand ${VAR} references so URLs and headers can come from the environment. */
 function expandEnv(value: string): string {
   return value.replace(/\$\{([A-Z0-9_]+)\}/gi, (_match, name: string) => process.env[name] ?? '');
 }
@@ -51,14 +40,6 @@ function resolveFromRoot(path: string): string {
   return isAbsolute(path) ? path : resolve(REPO_ROOT, path);
 }
 
-/**
- * Read and validate the server list.
- *
- * Path-like arguments are resolved against the repository root so the host
- * behaves identically no matter which directory it was launched from - a real
- * concern here, because the Filesystem and Git servers take directories as
- * arguments and would otherwise silently point somewhere unexpected.
- */
 export function loadHostConfig(configPath?: string): HostConfig {
   const path = configPath ?? resolve(REPO_ROOT, 'config', 'servers.json');
 
@@ -118,7 +99,6 @@ export function loadHostConfig(configPath?: string): HostConfig {
   return { servers: normalized };
 }
 
-/** Only the entries that are switched on. */
 export function enabledServers(config: HostConfig): ServerConfig[] {
   return config.servers.filter((server) => server.enabled !== false);
 }

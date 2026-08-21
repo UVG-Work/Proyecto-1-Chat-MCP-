@@ -1,13 +1,4 @@
-/**
- * Protocol interaction log (project requirement 3).
- *
- * Every JSON-RPC frame that crosses a transport - in either direction, on both
- * stdio and Streamable HTTP - passes through this recorder. Keeping a single
- * tap point means the log is complete by construction rather than by remembering
- * to call it, and it doubles as the evidence used for the Wireshark write-up
- * (requirement 7) since the decoded application-layer messages captured on the
- * wire should match these entries one for one.
- */
+// Interaction log recording every JSON-RPC frame in both directions.
 
 import { EventEmitter } from 'node:events';
 import { appendFileSync, mkdirSync } from 'node:fs';
@@ -16,17 +7,13 @@ import { dirname } from 'node:path';
 import { classify, isNotification, isRequest, type MessageKind } from './jsonrpc.js';
 import type { JsonRpcMessage } from './types.js';
 
-/** Which way the frame was travelling, from the host's point of view. */
 export type Direction = 'sent' | 'received';
 
 export interface LogEntry {
-  /** Monotonic sequence number, useful when timestamps collide. */
   seq: number;
   timestamp: string;
   direction: Direction;
-  /** Logical name of the MCP server this frame belongs to. */
   server: string;
-  /** Transport that carried it, e.g. "stdio" or "http". */
   transport: string;
   kind: MessageKind;
   method?: string;
@@ -35,18 +22,10 @@ export interface LogEntry {
 }
 
 export interface InteractionLogOptions {
-  /** Append every entry as one JSON object per line (JSON Lines). */
   filePath?: string;
-  /** Cap on entries held in memory. Older entries are dropped first. */
   maxEntries?: number;
 }
 
-/**
- * In-memory interaction log with an optional JSON Lines mirror on disk.
- *
- * Emits an "entry" event per frame so the web UI can stream the log live
- * instead of polling.
- */
 export class InteractionLog extends EventEmitter {
   private readonly entries: LogEntry[] = [];
   private readonly maxEntries: number;
@@ -100,13 +79,11 @@ export class InteractionLog extends EventEmitter {
     return entry;
   }
 
-  /** All entries, oldest first. Pass a count to get only the most recent ones. */
   all(limit?: number): LogEntry[] {
     if (limit === undefined || limit >= this.entries.length) return [...this.entries];
     return this.entries.slice(this.entries.length - limit);
   }
 
-  /** Entries for one MCP server, oldest first. */
   forServer(server: string): LogEntry[] {
     return this.entries.filter((entry) => entry.server === server);
   }
@@ -119,7 +96,6 @@ export class InteractionLog extends EventEmitter {
     return this.entries.length;
   }
 
-  /** Counts per message kind - the summary table used in the report. */
   summary(): Record<MessageKind, number> {
     const totals: Record<MessageKind, number> = {
       synchronization: 0,
@@ -133,7 +109,6 @@ export class InteractionLog extends EventEmitter {
   }
 }
 
-/** One-line rendering used by the CLI. */
 export function formatEntry(entry: LogEntry): string {
   const arrow = entry.direction === 'sent' ? '-->' : '<--';
   const time = entry.timestamp.slice(11, 23);

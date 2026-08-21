@@ -1,10 +1,4 @@
-/**
- * Builds a connected McpClient from a configuration entry.
- *
- * This is the only place that knows which transport implementation belongs to
- * which config shape, which keeps the transport choice out of the host, the
- * client and the CLI.
- */
+// Builds a connected McpClient from a configuration entry.
 
 import { resolve } from 'node:path';
 
@@ -17,7 +11,6 @@ import { REPO_ROOT, type ServerConfig } from './config.js';
 
 export interface ConnectOptions {
   log: InteractionLog;
-  /** Receives stderr lines from stdio servers. Informational only. */
   onStderr?: (server: string, line: string) => void;
   requestTimeoutMs?: number;
 }
@@ -47,7 +40,6 @@ export function createTransport(config: ServerConfig, options: ConnectOptions): 
   });
 }
 
-/** Create a client and complete the MCP initialization handshake. */
 export async function connectServer(
   config: ServerConfig,
   options: ConnectOptions,

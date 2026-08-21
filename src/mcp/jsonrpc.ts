@@ -1,10 +1,4 @@
-/**
- * JSON-RPC 2.0 helpers: message construction, parsing and classification.
- *
- * Written by hand against https://www.jsonrpc.org/specification. Everything the
- * host and the servers put on the wire is built here so that the framing rules
- * live in exactly one place.
- */
+// JSON-RPC 2.0 message construction, classification and framing.
 
 import {
   JSONRPC_VERSION,
@@ -17,10 +11,6 @@ import {
   type JsonRpcSuccessResponse,
   type RequestId,
 } from './types.js';
-
-/* -------------------------------------------------------------------------- */
-/* Construction                                                               */
-/* -------------------------------------------------------------------------- */
 
 export function makeRequest(
   id: RequestId,
@@ -61,15 +51,10 @@ export function makeError(
   };
 }
 
-/* -------------------------------------------------------------------------- */
-/* Classification                                                             */
-/* -------------------------------------------------------------------------- */
-
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-/** True when the value looks like any well-formed JSON-RPC 2.0 message. */
 export function isJsonRpcMessage(value: unknown): value is JsonRpcMessage {
   if (!isObject(value)) return false;
   if (value['jsonrpc'] !== JSONRPC_VERSION) return false;
@@ -99,12 +84,6 @@ export function isErrorResponse(message: JsonRpcMessage): message is JsonRpcErro
   return isResponse(message) && 'error' in message;
 }
 
-/**
- * Human-readable classification used by the interaction log and by the
- * Wireshark write-up (requirements 3 and 7). The project statement asks us to
- * separate synchronization messages from requests and responses, so the
- * lifecycle handshake is called out as its own kind.
- */
 export type MessageKind = 'synchronization' | 'request' | 'response' | 'error' | 'notification';
 
 const SYNCHRONIZATION_METHODS = new Set(['initialize', 'notifications/initialized', 'ping']);
@@ -119,10 +98,6 @@ export function classify(message: JsonRpcMessage): MessageKind {
   return isErrorResponse(message) ? 'error' : 'response';
 }
 
-/* -------------------------------------------------------------------------- */
-/* Parsing                                                                    */
-/* -------------------------------------------------------------------------- */
-
 export class JsonRpcParseError extends Error {
   constructor(
     message: string,
@@ -133,7 +108,6 @@ export class JsonRpcParseError extends Error {
   }
 }
 
-/** Parse one serialized message, rejecting anything that is not valid JSON-RPC. */
 export function parseMessage(raw: string): JsonRpcMessage {
   let parsed: unknown;
   try {
@@ -147,14 +121,6 @@ export function parseMessage(raw: string): JsonRpcMessage {
   return parsed;
 }
 
-/**
- * Serialize a message for the stdio transport.
- *
- * The stdio transport delimits messages with newlines and forbids embedded
- * newlines, so we assert that JSON.stringify produced a single line. It always
- * does (it escapes literal newlines inside strings), but an explicit check here
- * turns a silent framing corruption into a loud failure.
- */
 export function serializeLine(message: JsonRpcMessage): string {
   const json = JSON.stringify(message);
   if (json.includes('\n')) {
@@ -163,7 +129,6 @@ export function serializeLine(message: JsonRpcMessage): string {
   return json + '\n';
 }
 
-/** An Error carrying a JSON-RPC error payload, so servers can map it to a response. */
 export class JsonRpcError extends Error {
   constructor(
     readonly code: number,

@@ -1,14 +1,4 @@
-/**
- * Connection probe.
- *
- * Connects to every enabled MCP server, completes the handshake and prints the
- * negotiated protocol version, the advertised capabilities and the tool
- * catalogue. Run it after changing config/servers.json, or to prove that the
- * remote deployment answers exactly like the local one.
- *
- *   npm run probe            # every enabled server
- *   npm run probe -- git     # only servers whose name contains "git"
- */
+// Connects to every enabled MCP server and prints its tool catalogue.
 
 import { config as loadEnv } from 'dotenv';
 

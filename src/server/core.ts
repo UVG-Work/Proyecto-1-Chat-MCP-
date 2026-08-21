@@ -1,12 +1,4 @@
-/**
- * Minimal MCP server core, written from scratch (no MCP SDK - statement 3.1).
- *
- * The core is deliberately transport-agnostic: it consumes a JSON-RPC message
- * and returns the message to send back (or null for notifications, which must
- * never be answered). stdio-main.ts and http-main.ts are thin shells over this
- * one object, which is what makes requirement 6 literally "the same server"
- * running remotely rather than a second implementation.
- */
+// Transport-agnostic MCP server core: tool registry and JSON-RPC dispatch.
 
 import {
   JsonRpcError,
@@ -65,17 +57,10 @@ export class McpServer {
     return { tools: { listChanged: false } };
   }
 
-  /** Public tool descriptors, without the handlers. */
   listToolDescriptors(): Tool[] {
     return [...this.tools.values()].map(({ handler: _handler, ...descriptor }) => descriptor);
   }
 
-  /**
-   * Handle one inbound message.
-   *
-   * Returns the response to send, or null when nothing should be sent - which
-   * is the case for notifications, per JSON-RPC.
-   */
   async handleMessage(message: JsonRpcMessage): Promise<JsonRpcMessage | null> {
     if (isNotification(message)) {
       // notifications/initialized completes the handshake; nothing to answer.
@@ -126,11 +111,6 @@ export class McpServer {
     }
   }
 
-  /**
-   * Version negotiation, server side: echo the client's revision when we speak
-   * it, otherwise answer with our newest and let the client decide whether it
-   * can continue.
-   */
   private handleInitialize(params: Record<string, unknown>): Record<string, unknown> {
     const requested = params['protocolVersion'];
     const agreed =
@@ -179,16 +159,6 @@ export class McpServer {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/* Argument validation                                                        */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Small JSON Schema check covering the subset this server's tools use:
- * required properties, primitive types and enums. A full validator would be a
- * dependency we do not need, but skipping validation entirely would let a
- * hallucinated argument reach the tool body.
- */
 export function validateAgainstSchema(
   schema: JsonSchemaObject,
   args: Record<string, unknown>,
@@ -240,15 +210,6 @@ function matchesJsonType(value: unknown, expected: string): boolean {
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/* Result helpers                                                             */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Tool results carry both a human-readable text block and structuredContent.
- * The text is what the model reads; the structured copy is what the web UI can
- * render as a table without re-parsing prose.
- */
 export function toolResult(summary: string, data?: Record<string, unknown>): CallToolResult {
   const result: CallToolResult = { content: [{ type: 'text', text: summary }] };
   if (data) result.structuredContent = data;

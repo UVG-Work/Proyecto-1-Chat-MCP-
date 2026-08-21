@@ -1,15 +1,4 @@
-/**
- * Non-interactive chat runner.
- *
- * Feeds a sequence of prompts through the host in one session and prints each
- * reply along with the MCP tool calls it produced. Because the session is
- * shared across prompts, this is also how conversation context (requirement 2)
- * is demonstrated: a later prompt can refer back to an earlier one.
- *
- *   npm run demo:chat -- "Who was Alan Turing?" "What date was he born?"
- *   npm run demo:chat -- --scenario context
- *   npm run demo:chat -- --scenario noc --log
- */
+// Non-interactive chat runner for the demonstration scenarios.
 
 import { config as loadEnv } from 'dotenv';
 
@@ -19,7 +8,6 @@ import { InteractionLog, formatEntry } from '../mcp/log.js';
 
 loadEnv({ quiet: true });
 
-/** Canned scenarios, one per project requirement that needs demonstrating. */
 const SCENARIOS: Record<string, { title: string; prompts: string[] }> = {
   context: {
     title: 'Requirements 1 and 2 - LLM API and session context',

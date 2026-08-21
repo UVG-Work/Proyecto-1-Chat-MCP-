@@ -1,23 +1,4 @@
-/**
- * Streamable HTTP transport (client side), MCP revision 2025-11-25.
- *
- * Specification summary, implemented here by hand:
- *   - one MCP endpoint accepting POST and GET;
- *   - every client message is a POST whose Accept header lists BOTH
- *     application/json and text/event-stream;
- *   - a posted notification or response is answered with 202 Accepted, no body;
- *   - a posted request is answered either with application/json (one message)
- *     or with text/event-stream (an SSE stream ending in the response);
- *   - the server may issue MCP-Session-Id on the InitializeResult, and the
- *     client must echo it on every later request;
- *   - MCP-Protocol-Version must accompany every post-initialization request;
- *   - DELETE terminates the session.
- *
- * Built on node:http / node:https rather than fetch on purpose. Direct socket
- * access lets us export TLS session keys through the keylog event, which is what
- * makes the encrypted capture of the remote server readable in Wireshark
- * (requirement 7) without weakening the deployment to plaintext.
- */
+// Streamable HTTP transport, client side, including TLS key export for packet capture.
 
 import { appendFileSync, mkdirSync } from 'node:fs';
 import * as http from 'node:http';
@@ -29,12 +10,6 @@ import { isJsonRpcMessage } from './jsonrpc.js';
 import type { Transport, TransportHandlers } from './transport.js';
 import { LATEST_PROTOCOL_VERSION, type JsonRpcMessage } from './types.js';
 
-/**
- * Raised when the server reports that our session is gone (HTTP 404 with a
- * session id attached). The specification requires the client to respond by
- * starting a brand new session with a fresh `initialize`, so this is a distinct
- * type that McpClient can recognise and recover from.
- */
 export class McpSessionExpiredError extends Error {
   constructor(message: string) {
     super(message);
@@ -43,26 +18,14 @@ export class McpSessionExpiredError extends Error {
 }
 
 export interface HttpTransportOptions {
-  /** Full URL of the MCP endpoint. */
   url: string;
   headers?: Record<string, string>;
-  /** Attempts for transient infrastructure failures. Default 3. */
   maxRetries?: number;
-  /**
-   * Path to write TLS session keys in NSS key log format. When set (and the URL
-   * is https), Wireshark can decrypt the capture via
-   * Preferences > Protocols > TLS > (Pre)-Master-Secret log filename.
-   */
   tlsKeyLogPath?: string;
-  /** Open the optional GET/SSE stream for server-initiated messages. */
   openServerStream?: boolean;
   requestTimeoutMs?: number;
 }
 
-/**
- * Failures worth retrying: platform-level unavailability and the socket errors
- * a cold-starting container produces. Protocol errors are never retried.
- */
 function isTransient(error: Error): boolean {
   const code = (error as NodeJS.ErrnoException).code;
   if (code && ['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'EPIPE', 'EAI_AGAIN'].includes(code)) {
@@ -96,7 +59,6 @@ export class HttpClientTransport implements Transport {
     // initialize request and establishes the session.
   }
 
-  /** Adopt the revision agreed during initialization for the required header. */
   setProtocolVersion(version: string): void {
     this.protocolVersion = version;
   }
@@ -110,18 +72,6 @@ export class HttpClientTransport implements Transport {
     await this.postWithRetry(message);
   }
 
-  /**
-   * Retry transient infrastructure failures.
-   *
-   * A hosted deployment is not a reliable pipe. The free tier used here
-   * intermittently answers with an edge-level 404 carrying
-   * `x-render-routing: no-server` when it has no instance to route to, and cold
-   * starts surface as connection resets. Neither is a protocol error, and
-   * failing the whole MCP session because of one is wrong.
-   *
-   * A session-expiry 404 is deliberately NOT retried here: it needs a new
-   * handshake, which is the client's job, not the transport's.
-   */
   private async postWithRetry(message: JsonRpcMessage): Promise<void> {
     const maxAttempts = this.options.maxRetries ?? 3;
     let lastError: Error | undefined;
@@ -145,10 +95,6 @@ export class HttpClientTransport implements Transport {
     throw lastError ?? new Error('Request failed');
   }
 
-  /* ---------------------------------------------------------------------- */
-  /* HTTP plumbing                                                          */
-  /* ---------------------------------------------------------------------- */
-
   private buildHeaders(extra: Record<string, string> = {}): Record<string, string> {
     const headers: Record<string, string> = {
       // The spec requires both content types to be advertised, because the
@@ -165,10 +111,6 @@ export class HttpClientTransport implements Transport {
     return headers;
   }
 
-  /**
-   * Attach a TLS key logger to an outgoing request. Node emits keylog lines on
-   * the TLSSocket; appending them in NSS format is all Wireshark needs.
-   */
   private attachKeyLog(request: http.ClientRequest): void {
     const keyLogPath = this.options.tlsKeyLogPath;
     if (!keyLogPath || !this.isSecure) return;
@@ -303,11 +245,6 @@ export class HttpClientTransport implements Transport {
     });
   }
 
-  /**
-   * Minimal Server-Sent Events reader: events are separated by a blank line and
-   * the payload is the concatenation of the "data:" fields. Only the fields MCP
-   * actually uses are interpreted.
-   */
   private consumeSseStream(response: http.IncomingMessage): void {
     let buffer = '';
     response.setEncoding('utf8');
@@ -361,7 +298,6 @@ export class HttpClientTransport implements Transport {
     }
   }
 
-  /** Terminate the session with an explicit DELETE, as the spec recommends. */
   async close(): Promise<void> {
     if (this.closed) return;
     this.closed = true;

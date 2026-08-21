@@ -1,14 +1,4 @@
-/**
- * OpenRouter provider adapter.
- *
- * OpenRouter exposes an OpenAI-compatible Chat Completions API, so the official
- * `openai` client is pointed at its base URL. Note that the project's ban on
- * SDKs (statement 3.1) is specifically about MCP implementations such as
- * FastMCP - the MCP protocol here is hand-written end to end. Talking to the
- * language model is ordinary HTTP API usage and carries no such restriction.
- *
- * Docs: https://openrouter.ai/docs/guides/features/tool-calling
- */
+// OpenRouter provider adapter over the OpenAI-compatible chat completions API.
 
 import OpenAI from 'openai';
 
@@ -20,7 +10,6 @@ const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 export interface OpenRouterOptions {
   apiKey?: string;
   model?: string;
-  /** Sent as HTTP-Referer / X-Title, which OpenRouter uses for attribution. */
   appUrl?: string;
   appTitle?: string;
   temperature?: number;
@@ -112,7 +101,6 @@ function safeParseArguments(raw: string): Record<string, unknown> {
   }
 }
 
-/** MCP inputSchema maps onto an OpenAI function definition almost unchanged. */
 function toOpenAiTool(tool: LlmTool): OpenAI.Chat.Completions.ChatCompletionTool {
   return {
     type: 'function',

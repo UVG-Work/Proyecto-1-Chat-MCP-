@@ -1,20 +1,4 @@
-/**
- * Terminal chatbot (project statement 3.1: the project must run from a command
- * line). Covers requirements 1, 2 and 3: it talks to a language model over its
- * API, keeps conversation context within the session, and can display the full
- * log of MCP requests and responses.
- *
- * Commands:
- *   /help              list commands
- *   /servers           connected MCP servers, transports and negotiated versions
- *   /tools             the tool catalogue exactly as the model receives it
- *   /log [n]           the last n MCP frames (default 40)
- *   /log full          every frame with its complete JSON payload
- *   /log <server>      frames belonging to one server
- *   /stats             message counts by kind
- *   /reset             clear the conversation context
- *   /exit              quit
- */
+// Terminal chatbot with commands for inspecting the MCP interaction log.
 
 import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
@@ -26,10 +10,6 @@ import { McpHost, type ToolExecution } from '../host/host.js';
 import { OpenRouterProvider } from '../host/llm/openrouter.js';
 
 loadEnv();
-
-/* -------------------------------------------------------------------------- */
-/* Terminal styling                                                           */
-/* -------------------------------------------------------------------------- */
 
 const useColor = stdout.isTTY && process.env['NO_COLOR'] === undefined;
 const paint = (code: string) => (text: string) => (useColor ? `\x1b[${code}m${text}\x1b[0m` : text);
@@ -46,10 +26,6 @@ const cyan = paint('36');
 function heading(text: string): void {
   console.log('\n' + bold(text));
 }
-
-/* -------------------------------------------------------------------------- */
-/* Main                                                                       */
-/* -------------------------------------------------------------------------- */
 
 async function main(): Promise<void> {
   const log = new InteractionLog({ filePath: 'logs/mcp-interactions.jsonl' });
@@ -134,11 +110,6 @@ async function main(): Promise<void> {
   console.log(dim('Goodbye.'));
 }
 
-/* -------------------------------------------------------------------------- */
-/* Commands                                                                   */
-/* -------------------------------------------------------------------------- */
-
-/** Returns true when the CLI should exit. */
 function handleCommand(input: string, host: McpHost, log: InteractionLog): boolean {
   const [command = '', ...rest] = input.slice(1).split(/\s+/);
   const argument = rest.join(' ');
